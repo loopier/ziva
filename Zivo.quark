@@ -1,0 +1,9 @@
+(
+  name: "Zivo",
+  summary: "Live coding tools to make life easier",
+  version: "0.0.0",
+  schelp: "Zivo",
+  // dependencies: ["Bjorklund", "Canvas3D", "cruciallib@tags/4.1.4"],
+  license: "GPL",
+  copyright: "Roger Pibernat, 2022"
+)
