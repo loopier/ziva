@@ -1,3 +1,24 @@
+// Live coding in SuperCollider made easy.
+
+// This file defines custom event types to be used with Pbind and a general
+// class to manage resources.
+// Some parts are inspired by SuperDirt by Julian Rohrhuber
+
+// (C) 2022 Roger Pibernat
+
+// Zivo is free software: you can redistribute it and/or modify it
+// under the terms of the GNU General Public License as published by the
+// Free Software Foundation, either version 2 of the License, or (at your
+// option) any later version.
+
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 ZivoEventTypes {
 	*new {
 		Event.addEventType(\sample, { |server|
@@ -20,8 +41,12 @@ Zivo {
 	classvar <> server;
 	classvar <> samplesDir;
 
-	*boot { arg inputChannels = 2, outputChannels = 2, server = Server.default,
-		numBuffers = 16, memSize = 32, maxNodes = 32;
+	*start { |inputChannels = 2, outputChannels = 2, server = Server.default|
+		this.boot(inputChannels, outputChannels, server);
+	}
+
+	*boot { |inputChannels = 2, outputChannels = 2, server = Server.default,
+		numBuffers = 16, memSize = 32, maxNodes = 32|
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 		this.server.waitForBoot{
@@ -30,7 +55,7 @@ Zivo {
 		^this.server;
 	}
 
-	*serverOptions { arg server = Server.default, inputChannels = 2, outputChannels = 2, numBuffers = 16, memSize = 32, maxNodes = 32;
+	*serverOptions { |server = Server.default, inputChannels = 2, outputChannels = 2, numBuffers = 16, memSize = 32, maxNodes = 32|
 		server.options.numBuffers = 1024 * numBuffers; // increase this if you need to load more samples
 		server.options.memSize = 8192 * memSize; // increase this if you get "alloc failed" messages
 		server.options.maxNodes = 1024 * maxNodes;
@@ -60,9 +85,12 @@ Zivo {
 	}
 
 	/// \brief load synthdefs
-	*loadSynths {
+	*loadSynths { |filepath|
 		// load synthdesclib
-		"loading synths".debug;
+		// "loading synths".debug;
+			if(filepath.splitext.last == "scd") {
+				(dirt:this).use { filepath.load }; "loading synthdefs in %\n".postf(filepath)
+			}
 	}
 
 	/// \brief Return a list of all compiled SynthDef names
