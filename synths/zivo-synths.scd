@@ -10,7 +10,7 @@ SynthDef(\playbufm, { |out=0, amp=0.5, pan=0, buf, rate=1, t_trig=1, start=0, at
 	sig = Mix.ar(sig) * amp;
 	// sig = Pan2.ar(sig, pan);
 	Out.ar(out, Pan2.ar(sig,pan));
-}).store;
+}).add;
 
 SynthDef(\playbuf, { |out=0, amp=0.5, pan=0, buf, rate=1, gate=1, start=0, attack=0.01, decayTime=0.3, sustainLevel=0.5, releaseTime=0.01, tape=0|
 	var sig, end, startpos, isForward, frames;
@@ -26,7 +26,7 @@ SynthDef(\playbuf, { |out=0, amp=0.5, pan=0, buf, rate=1, gate=1, start=0, attac
 	// sig = Pan2.ar(sig, pan);
 	sig = Splay.ar(sig, 0.2, center:pan);
 	Out.ar(out, sig);
-}).store;
+}).add;
 
 SynthDef(\playbufflat, { |out=0, amp=0.5, pan=0, buf, rate=1, gate=1, start=0, attack=0.01, decayTime=0.3, sustainLevel=0.5, releaseTime=0.01|
 	var sig, end, startpos, isForward, frames;
@@ -40,5 +40,5 @@ SynthDef(\playbufflat, { |out=0, amp=0.5, pan=0, buf, rate=1, gate=1, start=0, a
 	sig = sig * amp;
 	// sig = Pan2.ar(sig, pan);
 	Out.ar(out, sig);
-}).store;
+}).add;
 )

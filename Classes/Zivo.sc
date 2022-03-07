@@ -41,12 +41,13 @@ Zivo {
 	classvar <> server;
 	classvar <> samplesDir;
 
-	*start { |inputChannels = 2, outputChannels = 2, server = Server.default|
-		this.boot(inputChannels, outputChannels, server);
+	*start { |inputChannels = 2, outputChannels = 2, server = nil|
+		^this.boot(inputChannels, outputChannels, server);
 	}
 
-	*boot { |inputChannels = 2, outputChannels = 2, server = Server.default,
+	*boot { |inputChannels = 2, outputChannels = 2, server = nil,
 		numBuffers = 16, memSize = 32, maxNodes = 32|
+		server = server ? Server.default;
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 		this.server.waitForBoot{
@@ -55,7 +56,8 @@ Zivo {
 		^this.server;
 	}
 
-	*serverOptions { |server = Server.default, inputChannels = 2, outputChannels = 2, numBuffers = 16, memSize = 32, maxNodes = 32|
+	*serverOptions { |server = nil, inputChannels = 2, outputChannels = 2, numBuffers = 16, memSize = 32, maxNodes = 32|
+		server = server ? Server.default;
 		server.options.numBuffers = 1024 * numBuffers; // increase this if you need to load more samples
 		server.options.memSize = 8192 * memSize; // increase this if you get "alloc failed" messages
 		server.options.maxNodes = 1024 * maxNodes;
@@ -63,10 +65,10 @@ Zivo {
 		server.options.numOutputBusChannels = outputChannels;
 	}
 
-	*scope {
+	*scope { |alwaysOnTop = true|
 		server.scope(2).style_(2)
 		.window.bounds_(Rect( 145 + 485, 0, 200, 250))
-		.alwaysOnTop_(true);
+		.alwaysOnTop_(alwaysOnTop);
 	}
 
 	/// \brief load samples
@@ -85,12 +87,17 @@ Zivo {
 	}
 
 	/// \brief load synthdefs
-	*loadSynths { |filepath|
+	*loadSynths { |path|
 		// load synthdesclib
 		// "loading synths".debug;
+		var filePaths;
+		path = path ?? { "../synths".resolveRelative };
+		filePaths = pathMatch(standardizePath(path +/+ "*"));
+		filePaths.do { |filepath|
 			if(filepath.splitext.last == "scd") {
 				(dirt:this).use { filepath.load }; "loading synthdefs in %\n".postf(filepath)
 			}
+		}
 	}
 
 	/// \brief Return a list of all compiled SynthDef names
@@ -121,12 +128,23 @@ Zivo {
 		"listing sounds".debug;
 	}
 
-    *listSynthControls { |synth|
-        "% controls".format(synth).postln;
-        this.synthControls(synth).collect(_.postln)
+	/// \brief return a list of the controls for the given synth
+    *synthControls { |synth|
+        var controls = List();
+        SynthDescLib.global.at(synth).controls.do{ |ctl|
+            controls.add([ctl.name, ctl.defaultValue]);
+        }
+        ^controls
     }
 
+	/// \brief list available methods
+	// *help { |class|
+	// 	class = class ? Pchain;
+	// 	class.methods.collect(_.postln);
+	// }
+
 	*controls { |synth|
-		this.listSynthControls(synth);
+        "% controls".format(synth).postln;
+        this.synthControls(synth).collect(_.postln)
 	}
 }

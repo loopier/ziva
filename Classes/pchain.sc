@@ -103,6 +103,7 @@
 	kick { |pattern| ^Pchain(Pbind(\degree, 0, \octave, 3, \r, pattern), this)}
 	sn { |pattern| ^Pchain(Pbind(\degree, 2, \octave, 3, \r, pattern), this)}
 
+	pingpong { ^Pchain(Pbind(\pan, Pseq([-1,1],inf)), this) }
 
 	gverb { |room = 0.1, size=0.3, wet=1, bus = 5|
 		^Pchain(Pfxb(Pchain(Pbind(\out, bus), this), \gverb, \roomsize, room*100, \revtime, size*10, \mul, wet, \in, bus));
