@@ -6,7 +6,7 @@
 
 // (C) 2022 Roger Pibernat
 
-// Zivo is free software: you can redistribute it and/or modify it
+// Ziva is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
 // Free Software Foundation, either version 2 of the License, or (at your
 // option) any later version.
@@ -19,7 +19,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ZivoEventTypes {
+ZivaEventTypes {
 	*new {
 		Event.addEventType(\sample, { |server|
 			~sound = ~sound ? [];
@@ -37,7 +37,7 @@ ZivoEventTypes {
 	}
 }
 
-Zivo {
+Ziva {
 	classvar <> server;
 	classvar <> samplesDir;
 
@@ -51,7 +51,7 @@ Zivo {
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 		this.server.waitForBoot{
-			Zivo.loadSounds;
+			Ziva.loadSounds;
 		};
 		^this.server;
 	}
