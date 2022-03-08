@@ -1,7 +1,6 @@
 // Live coding in SuperCollider made easy.
 
-// This file defines custom event types to be used with Pbind and a general
-// class to manage resources.
+// A general class to manage live coding resources.
 // Some parts are inspired by SuperDirt by Julian Rohrhuber
 
 // (C) 2022 Roger Pibernat
@@ -19,39 +18,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-ZivaEventTypes {
-	*new {
-		Event.addEventType(\sample, { |server|
-			~sound = ~sound ? [];
-			~n = ~n ? 0;
-			~channels = ~channels ? 2;
-			~instrument = [\playbufm, \playbuf][~channels-1];
-			~buf = ~sound.at(~n.mod(~sound.size));
-			// TODO: !!! ~note modifies rate
-			~type = \note;
-			currentEnvironment.play;
-		},
-			// defaults
-			(legato: 1)
-		);
-	}
-}
-
 Ziva {
 	classvar <> server;
-	classvar <> samplesDir;
+	classvar <> samplesPath;
 
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
 		^this.boot(inputChannels, outputChannels, server);
 	}
 
 	*boot { |inputChannels = 2, outputChannels = 2, server = nil,
-		numBuffers = 16, memSize = 32, maxNodes = 32|
+		numBuffers = 16, memSize = 32, maxNodes = 32, samplesPath = nil|
 		server = server ? Server.default;
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 		this.server.waitForBoot{
-			Ziva.loadSounds;
+			ZivaEventTypes.new;
+			this.loadSounds;
 		};
 		^this.server;
 	}
@@ -74,16 +56,8 @@ Ziva {
 	/// \brief load samples
 	*loadSounds {
 		"loading sounds".debug;
-		this.loadSamples;
 		this.loadSynths;
-	}
-
-	/// \biref load dir contents
-	/// \description a directory with symlinks should work
-	*loadSamples {
-		// load dir contents
-		// a directory with symlinks should work
-		"loading samples".debug;
+		this.loadSamples;
 	}
 
 	/// \brief load synthdefs
@@ -114,6 +88,56 @@ Ziva {
 		};
 
 		^names;
+	}
+
+	/// \brief	Load samples from directory.
+	/// \description
+	///  	Load samples from subfolders in the given path.
+	///  	Samples will be accessed with folder name and index
+	///  	A directory with symlinks should work.
+	/// \returns Dictionary
+	*loadSamples { arg path, server = nil;
+		try {
+			var d = Dictionary.new;
+			server = server ? this.server ? Server.default;
+			PathName(path).entries.do { |item, i|
+				// d.add(item.folderName -> this.loadSamplesArray(item.fullPath, server));
+				currentEnvironment.put(item.folderName.asSymbol, this.loadSamplesArray(item.fullPath, server));
+			};
+			this.listLoadedSamples;
+			// ^d;
+		} {
+			"ERROR: Sample path not set.  Use .loadSamples(PATH).".postln;
+		}
+	}
+
+	/// \brief 	load samples from a directory.
+	/// \description 	Samples must be files within the given path.
+	/// \returns an Array
+	*loadSamplesArray { arg path, server = nil;
+		var a = Array.new;
+		server = server ? this.server ? Server.default;
+		PathName(path).entries.do({ |item, i|
+			// item.fullPath.postln;
+			a = a.add(Buffer.read(server, item.fullPath));
+		});
+		^a;
+	}
+
+	/// \brief	Loads samples from an array of paths into the environment which
+	/// 		will make them available as variables with ~ (~folderName).
+	/// \returns nothing, variables will be available with 'currentEnvironment[NAME]'
+	*loadSamplesAsSymbols { arg paths = [], s = Server.default;
+		paths.do { |path|
+			var name  = PathName(path).folderName;
+			currentEnvironment.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
+		};
+	}
+
+	*listLoadedSamples {
+		currentEnvironment.keys.asArray.sort.do{|k|
+			"% (%)".format(k, currentEnvironment[k].size).postln;
+		}
 	}
 
 	/// \brief list synth names

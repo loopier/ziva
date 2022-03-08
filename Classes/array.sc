@@ -49,9 +49,9 @@
     buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
 
     // add trailing rests
-    every { arg beats=4;
-        ^this++(\r!beats).flat;
-    }
+    // every { arg beats=4;
+    //     ^this++(\r!beats).flat;
+    // }
 
     // walk { arg size, list, stepPattern, directionPattern=1, startPos=0;
     //     // ^Array.fill(size, list.pwalk(stepPattern, directionPattern, startPos).iter);
