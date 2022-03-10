@@ -1,7 +1,10 @@
 // Live coding in SuperCollider made easy.
 
 // A general class to manage live coding resources.
-// Some parts are inspired by SuperDirt by Julian Rohrhuber
+// Some parts are inspired by:
+// - IxiLang by Thor Magnusson
+// - Bacalao by Glen Fraser
+// - SuperDirt by Julian Rohrhuber
 
 // (C) 2022 Roger Pibernat
 
@@ -21,6 +24,12 @@
 Ziva {
 	classvar <> server;
 	classvar <> samplesPath;
+	classvar <> effectDict;
+	classvar <> agents;
+
+	*new { |sound|
+		^super.new.synth(sound);
+	}
 
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
 		^this.boot(inputChannels, outputChannels, server);
@@ -34,6 +43,8 @@ Ziva {
 		this.server.waitForBoot{
 			ZivaEventTypes.new;
 			this.loadSounds;
+			this.makeEffectDict;
+			agents = IdentityDictionary.new;
 		};
 		^this.server;
 	}
@@ -167,8 +178,55 @@ Ziva {
 	// 	class.methods.collect(_.postln);
 	// }
 
+	/// \brief list controls for the given synth
 	*controls { |synth|
         "% controls".format(synth).postln;
         this.synthControls(synth).collect(_.postln)
 	}
+
+	*makeEffectDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
+		effectDict = IdentityDictionary.new;
+		effectDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.85, 0.86, 0.3)};
+		effectDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
+		effectDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
+		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 1, 0.15, 1.3 )};
+		effectDict[\lowpass] 	= {arg sig; RLPF.ar(sig, 1000, 0.2)};
+		effectDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
+		effectDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
+		effectDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
+		effectDict[\technosaw] 	= {arg sig; RLPF.ar(sig, LFSaw.ar(0.2).exprange(880,12000), 0.2)};
+		effectDict[\distort] 	= {arg sig; (3111.33*sig.distort/(1+(2231.23*sig.abs))).distort*0.02};
+		effectDict[\cyberpunk]	= {arg sig; Squiz.ar(sig, 4.5, 5, 0.1)};
+		effectDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
+		effectDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
+	}
+
+	*fx {
+		effectDict.keys.collect(_.postln);
+	}
+
+	*addEffects { |agent, effects|
+		agent.debug("ziva fx");
+		Ndef(agent.asSymbol, {In.ar(\in.kr)}).play;
+		effects.do{|effect, i|
+			if(effectDict.includesKey(effect.asSymbol)) {
+				Ndef(agent.asSymbol)[i] = \filter -> effectDict[effect.asSymbol];
+			}
+		};
+		^Ndef(agent.asSymbol);
+	}
+
+	// *addAgent { |name|
+	// 	// agents.put(name, []);
+	// 	// agents[name].play;
+	// 	this.agents[name.asSymbol] = Ndef(name, {In.ar(\in.kr, 2)});
+	// }
+
+	// synth { |instrument|
+	// 	var pchain = Pchain() <> Pbind(\instrument, instrument);
+	// 	var key = (\agent_++pchain.hash.abs).asSymbol;
+	// 	Ziva.addAgent(key.debug("Agent"));
+	// 	^pchain;
+	// }
+
 }

@@ -19,11 +19,11 @@
 
 ZivaEventTypes {
 	*new {
-		Event.addEventType(\zsample, { |server|
+		Event.addEventType(\sample, { |server|
 			~sound = ~sound ? [];
 			~n = ~n ? 0;
 			~channels = ~channels ? 2;
-			~instrument = [\playbufm, \playbuf][~channels-1];
+			~instrument = [\zivaplaybufm, \zivaplaybuf][~channels-1];
 			// ~instrument = [\zsamplermono, \zsampler][~channels-1];
 			~buf = ~sound.at(~n.mod(~sound.size));
 			// TODO: !!! ~note modifies rate

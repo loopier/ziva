@@ -19,10 +19,75 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 +Pchain {
+
+	// *new { arg ... patterns;
+	// 	var key = (\fx_++this.hash.abs).asSymbol.debug("PCHAIN ===============");
+	// 	this.class.debug("CLASSS");
+	// 	Ndef(key, {In.ar(\in.kr)}).play;
+
+	// 	^super.newCopyArgs(patterns);
+	// }
+
 	// map all methods that are not understood to a Pbind parameter
 	doesNotUnderstand { |selector ...args|
-		selector.debug("Pchain doesNotUnderstand");
+		// selector.debug((this.class ++ " does not understand method").asString);
+
+        // super.findRespondingMethodFor(selector);
+
+		// selector.debug("Pchain doesNotUnderstand");
+		// selector.debug("Trying to set synth parameter")
+		// FIX: call super.doesNotUnderstand
 		^Pchain(Pbind(selector, args[0]), this);
+	}
+
+	>> { |... effects|
+		var key = (\agent_++this.hash.abs).asSymbol;
+		this.class.debug("CLASSS");
+		effects.debug(key);
+
+		Ndef.all.keys.collect(_.postln);
+		Ndef(key, {In.ar(\in.kr)}).play;
+
+		effects.flat.do{|effect, i|
+			if(Ziva.effectDict.includesKey(effect.asSymbol)) {
+				effect.debug(i);
+				Ndef(key)[i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
+			}
+		};
+
+		^Pchain(Pbind(\out, Ndef(key)), this);
+	}
+
+	fx { |bus ... effects|
+		var key = (\fx_++bus).asSymbol;
+		// this.patterns.do{|patt, i|
+		// 	// patt.patternpairs.asCompileString.debug(i);
+		// 	if(patt.patternpairs.class == Array) {
+		// 		patt.patternpairs.class.debug(i);
+		// 	} {
+		// 		patt.patternpairs.patternpairs.debug("pch"++i);
+		// 	}
+		// };
+
+		// effects.debug("fx");
+		// Ziva.effectDict[effects[0]].debug("dict");
+		// Ndef(\fx)[0] = \filter -> effects[0];
+		// this.dump;
+		// Pdef.all[\master].source.debug;
+
+		// this.patterns.do{|p| p.patternpairs.flat.debug("flat")};
+
+		effects.debug(key);
+		// Ziva.addEffects(\one, effects);
+		Ndef(key, {In.ar(\in.kr)}).play;
+		effects.do{|effect, i|
+			if(Ziva.effectDict.includesKey(effect.asSymbol)) {
+				effect.debug(i);
+				Ndef(key)[i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
+			}
+		};
+
+		^Pchain(Pbind(\out, Ndef(key)), this);
 	}
 
 	cc { |cc, value| ^Pchain(Pbind(\ctlNum, cc, \control, value), this) }
@@ -95,10 +160,16 @@
 	stass { ^Pchain(Pbind(\legato, 0.25), this)}
 	pizz { ^Pchain(Pbind(\legato, 0.1), this)}
 
-	rate { |rate| ^Pchain(Pbind(\rate, rate), this)}
-	randrates { |size=8, rates=#[-1,1,-0.5,0.5,2,-2]| ^Pchain(Pbind(\rate, Pseq(Array.fill(size, {rates.choose}).debug("rates "++this.name), inf)), this)}
+	rate { |rate| ^Pchain(Pbind(\rate, rate, \speed, this), this)}
+	randrates { |size=8, rates=#[-1,1,-0.5,0.5,2,-2]|
+		var r = Pseq(Array.fill(size, {rates.choose}).debug("rates "++this.name), inf);
+		^Pchain(Pbind(\rate, r, \speed, r), this);
+	}
 
-	chop { |size=8, chunks=16| ^Pchain(Pbind(\start, Pseq( Array.rand(size, 0, chunks-1).debug("chop "++this.name) / chunks, inf)), this)}
+	chop { |size=8, chunks=16|
+		var chopped = Pseq( Array.rand(size, 0, chunks-1).debug("chop "++this.name) / chunks, inf);
+		^Pchain(Pbind(\start, chopped, \begin, chopped), this);
+	}
 
 	kick { |pattern| ^Pchain(Pbind(\degree, 0, \octave, 3, \r, pattern), this)}
 	sn { |pattern| ^Pchain(Pbind(\degree, 2, \octave, 3, \r, pattern), this)}
