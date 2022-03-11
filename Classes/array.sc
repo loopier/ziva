@@ -19,6 +19,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + Array {
+    ziva {
+        // this.do {|x, i| x.debug(i)}.postln;
+        Ziva.play(this);
+    }
+
+    fx { |... effects|
+        this.debug(effects);
+    }
+
     chooseN { |size=4|
         ^({this.choose}.dup(size));
     }

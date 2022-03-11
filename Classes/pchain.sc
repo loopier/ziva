@@ -18,7 +18,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-+Pchain {
++Pattern {
 
 	// *new { arg ... patterns;
 	// 	var key = (\fx_++this.hash.abs).asSymbol.debug("PCHAIN ===============");
@@ -40,26 +40,35 @@
 		^Pchain(Pbind(selector, args[0]), this);
 	}
 
-	>> { |... effects|
-		var key = (\agent_++this.hash.abs).asSymbol;
-		this.class.debug("CLASSS");
-		effects.debug(key);
-
-		Ndef.all.keys.collect(_.postln);
-		Ndef(key, {In.ar(\in.kr)}).play;
-
-		effects.flat.do{|effect, i|
-			if(Ziva.effectDict.includesKey(effect.asSymbol)) {
-				effect.debug(i);
-				Ndef(key)[i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
-			}
-		};
-
-		^Pchain(Pbind(\out, Ndef(key)), this);
+	fx { |track|
+		var sym = (\t++track).asSymbol;
+		// Ziva.tracks[sym].debug(sym);
+		^Pchain(Pbind(\out, Ziva.tracksDict[sym]), this);
 	}
 
-	fx { |bus ... effects|
-		var key = (\fx_++bus).asSymbol;
+	// >> { |... effects|
+	// 	var key = (\agent_++this.hash.abs).asSymbol;
+	// 	this.class.debug("CLASSS");
+	// 	effects.debug(key);
+
+	// 	Ziva.proxyspace[key] = {In.ar(\in.kr)};
+	// 	Ziva.proxyspace[key].play;
+	// 	// Ndef.all.keys.collect(_.postln);
+	// 	// Ndef(key, {In.ar(\in.kr)}).play;
+
+	// 	effects.flat.do{|effect, i|
+	// 		if(Ziva.effectDict.includesKey(effect.asSymbol)) {
+	// 			effect.debug(i);
+	// 			Ziva.proxyspace[key][i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
+	// 		}
+	// 	};
+
+	// 	^Pchain(Pbind(\out, Ziva.proxyspace[key]), this);
+	// }
+
+	// fx { |bus ... effects|
+		// var key = (\fx_++bus).asSymbol;
+
 		// this.patterns.do{|patt, i|
 		// 	// patt.patternpairs.asCompileString.debug(i);
 		// 	if(patt.patternpairs.class == Array) {
@@ -77,18 +86,18 @@
 
 		// this.patterns.do{|p| p.patternpairs.flat.debug("flat")};
 
-		effects.debug(key);
-		// Ziva.addEffects(\one, effects);
-		Ndef(key, {In.ar(\in.kr)}).play;
-		effects.do{|effect, i|
-			if(Ziva.effectDict.includesKey(effect.asSymbol)) {
-				effect.debug(i);
-				Ndef(key)[i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
-			}
-		};
+		// effects.debug(key);
+		// // Ziva.addEffects(\one, effects);
+		// Ndef(key, {In.ar(\in.kr)}).play;
+		// effects.do{|effect, i|
+		// 	if(Ziva.effectDict.includesKey(effect.asSymbol)) {
+		// 		effect.debug(i);
+		// 		Ndef(key)[i+1] = \filter -> Ziva.effectDict[effect.asSymbol];
+		// 	}
+		// };
 
-		^Pchain(Pbind(\out, Ndef(key)), this);
-	}
+		// ^Pchain(Pbind(\out, Ndef(key)), this);
+	// }
 
 	cc { |cc, value| ^Pchain(Pbind(\ctlNum, cc, \control, value), this) }
 	inst { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }

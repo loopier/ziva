@@ -1,6 +1,6 @@
 (
 SynthDef(\delay, {
-	var in = In.ar(\in.kr(0), 2);
+	var in = In.ar(\in.kr, 2);
 	var out = \out.ir(0);
 	var maxdelaytime = \maxdelaytime.ir(8);
 	var delaytime = \delayt.kr(0.2);
@@ -20,7 +20,22 @@ SynthDef(\delay, {
     // XOut.ar(out, env, (local * (1-wet)) + (del * wet));
 	sig = local;
     sig = sig * EnvGen.kr(Env(#[1, 1, 0], #[1, 1], -3, releaseNode: 1), gate, doneAction: Done.freeSelf);
-    ReplaceOut.ar(out, sig)
+    XOut.ar(out, env, sig);
+}).add;
+
+// ixilang
+SynthDef(\zelay, {
+	var out = \out.kr(0);
+	var in = \in.kr;
+	var amp = \amp.kr(1);
+	var gate = \gate.kr(1);
+	var source = In.ar(in,2);
+	var chorus;
+	var env = Linen.kr(gate, 0.1, amp, 0.1, 2, doneAction: 2);
+	var sig = AllpassC.ar(in, 1, 0.15, 1.3 );
+
+	// XOut.ar(out,env, sig * env);
+	Out.ar(out, sig * env);
 }).add;
 
 SynthDef(\distort, {|out =0 gate= 1|
@@ -72,5 +87,21 @@ SynthDef(\gverb, {
 	var env;
 	env = Linen.kr(gate, 0.05, 2, 0.2, 2);
 	XOut.ar(out, env, GVerb.ar(Mix.ar(in), room, revtime, damp, mul:amp).softclip * env * 0.8);
+}).add;
+
+
+SynthDef(\cyberpunk, {
+	var out = \out.kr(0);
+	var amp = \amp.kr(0.2);
+	var gate = \gate.kr(1);
+	var room = \room.kr(10);
+	var revtime = \revtime.kr(3);
+	var damp = \damp.kr(0.5);
+	// var in = In.ar(\in.kr(0));
+	var in = In.ar(\in.kr(0), 2);
+	var env, sig;
+	env = Linen.kr(gate, 0.05, 2, 0.2, 2);
+	sig = Squiz.ar(in, 4.5, 5, 0.1);
+	XOut.ar(out, env, sig * env * 0.8);
 }).add;
 )

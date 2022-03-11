@@ -25,11 +25,12 @@ Ziva {
 	classvar <> server;
 	classvar <> samplesPath;
 	classvar <> effectDict;
-	classvar <> agents;
+	classvar <> tracksDict;
+	classvar <> fxBusses;
 
-	*new { |sound|
-		^super.new.synth(sound);
-	}
+	// *new { |sound|
+	// 	^super.new.synth(sound);
+	// }
 
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
 		^this.boot(inputChannels, outputChannels, server);
@@ -44,7 +45,7 @@ Ziva {
 			ZivaEventTypes.new;
 			this.loadSounds;
 			this.makeEffectDict;
-			agents = IdentityDictionary.new;
+			this.makeTracks(4);
 		};
 		^this.server;
 	}
@@ -161,6 +162,9 @@ Ziva {
 		// list synths
 		// list samples - name(items)
 		"listing sounds".debug;
+		currentEnvironment.keys.asArray.sort.do{|key|
+			currentEnvironment[key].size.debug(key);
+		};
 	}
 
 	/// \brief return a list of the controls for the given synth
@@ -201,6 +205,41 @@ Ziva {
 		effectDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
 	}
 
+	/// \brief	Construct the fx tracks.
+	/// \description
+	/// 	Make an ndef, and busses to it's input.
+	/// 	The bus is stored in the dictionary for outside access.
+	*makeTracks { |numtracks|
+		this.tracksDict = IdentityDictionary.new;
+		numtracks.do{ |i|
+			var ndefsym = (\track_++i).asSymbol;
+			var tracksym = (\t++i).asSymbol;
+			var bus = Bus.audio(this.server, 2);
+
+			Ndef(ndefsym, { In.ar(bus, 2) }).play;
+			this.tracksDict.put(tracksym, bus);
+		};
+	}
+
+	/// \brief set the effects for the track
+	/// \param 	track	INT		Track number
+	/// \param	effects	ARRAY	Array of effect symbols.
+	*track { |track ... effects|
+		var sym = (\t++track).asSymbol;
+		var ndef = (\track_++track).asSymbol;
+		// clear tracks
+		Ndef(ndef).sources.do{|x, i|
+			"%: %".format(i, tracksDict[sym]).debug("removing");
+			if(i>0) {
+				Ndef(ndef)[i] = nil;
+			};
+		};
+		effects.do{ |effect, i|
+			"t%:% -> % : % : %".format(track, i+1, effect, sym, this.tracksDict[sym]).postln;
+			Ndef(ndef)[i+1] = \filter -> this.effectDict[effect];
+		};
+	}
+
 	*fx {
 		effectDict.keys.collect(_.postln);
 	}
@@ -215,18 +254,5 @@ Ziva {
 		};
 		^Ndef(agent.asSymbol);
 	}
-
-	// *addAgent { |name|
-	// 	// agents.put(name, []);
-	// 	// agents[name].play;
-	// 	this.agents[name.asSymbol] = Ndef(name, {In.ar(\in.kr, 2)});
-	// }
-
-	// synth { |instrument|
-	// 	var pchain = Pchain() <> Pbind(\instrument, instrument);
-	// 	var key = (\agent_++pchain.hash.abs).asSymbol;
-	// 	Ziva.addAgent(key.debug("Agent"));
-	// 	^pchain;
-	// }
 
 }
