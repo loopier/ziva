@@ -47,8 +47,19 @@ Ziva {
 			this.loadSounds;
 			this.makeEffectDict;
 			this.makeTracks(4);
+			// currentEnvironment.r = \r;
 		};
 		^this.server;
+	}
+
+	/// \brief	Stop playing all Pdefs
+	*stop {
+		Pdef.all.collect( _.stop );
+	}
+
+	*clear {
+		Pdef.removeAll;
+		// Server.freeAll;
 	}
 
 	*serverOptions { |server = nil, inputChannels = 2, outputChannels = 2, numBuffers = 16, memSize = 32, maxNodes = 32|
@@ -256,4 +267,11 @@ Ziva {
 		^Ndef(agent.asSymbol);
 	}
 
+	/// \brief	Create a `Pdef(key, Ppar( elements ))` object
+	*pdef { |key, quant=1 ... elements|
+		key = key ? \ziva;
+		elements = elements.flat;
+		elements.debug(key);
+		^Pdef(key, Ppar(elements)).quant_(quant);
+	}
 }

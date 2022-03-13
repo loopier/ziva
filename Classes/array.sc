@@ -19,9 +19,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + Array {
-    ziva {
+    ziva { |key, quant=1|
         // this.do {|x, i| x.debug(i)}.postln;
-        Ziva.play(this);
+        // Ziva.play(this);
+        ^Ziva.pdef(key, quant, this.flat);
     }
 
     fx { |... effects|
