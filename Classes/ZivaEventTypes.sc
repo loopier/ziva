@@ -20,7 +20,7 @@
 ZivaEventTypes {
 	*new {
 		Event.addEventType(\sample, { |server|
-			~sound = ~sound ? [];
+			~sound = Ziva.samples[~sound] ? [];
 			~n = ~n ? 0;
 			~channels = ~channels ? 2;
 			~instrument = [\zivaplaybufm, \zivaplaybuf][~channels-1];

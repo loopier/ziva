@@ -27,6 +27,7 @@ Ziva {
 	classvar <> effectDict;
 	classvar <> tracksDict;
 	classvar <> fxBusses;
+	classvar <> samples;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -110,14 +111,13 @@ Ziva {
 	/// \returns Dictionary
 	*loadSamples { arg path, server = nil;
 		try {
-			var d = Dictionary.new;
+			this.samples = Dictionary.new;
 			server = server ? this.server ? Server.default;
 			PathName(path).entries.do { |item, i|
 				// d.add(item.folderName -> this.loadSamplesArray(item.fullPath, server));
-				currentEnvironment.put(item.folderName.asSymbol, this.loadSamplesArray(item.fullPath, server));
+				this.samples.put(item.folderName.asSymbol, this.loadSamplesArray(item.fullPath, server));
 			};
 			this.listLoadedSamples;
-			// ^d;
 		} {
 			"ERROR: Sample path not set.  Use .loadSamples(PATH).".postln;
 		}
@@ -142,13 +142,13 @@ Ziva {
 	*loadSamplesAsSymbols { arg paths = [], s = Server.default;
 		paths.do { |path|
 			var name  = PathName(path).folderName;
-			currentEnvironment.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
+			this.samples.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
 		};
 	}
 
 	*listLoadedSamples {
-		currentEnvironment.keys.asArray.sort.do{|k|
-			"% (%)".format(k, currentEnvironment[k].size).postln;
+		this.samples.keys.asArray.sort.do{|k|
+			"% (%)".format(k, this.samples[k].size).postln;
 		}
 	}
 
@@ -162,9 +162,10 @@ Ziva {
 		// list synths
 		// list samples - name(items)
 		"listing sounds".debug;
-		currentEnvironment.keys.asArray.sort.do{|key|
-			currentEnvironment[key].size.debug(key);
-		};
+		this.listLoadedSamples;
+		// currentEnvironment.keys.asArray.sort.do{|key|
+		// 	currentEnvironment[key].size.debug(key);
+		// };
 	}
 
 	/// \brief return a list of the controls for the given synth
