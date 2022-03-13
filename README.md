@@ -1,9 +1,7 @@
 # Živa
 
-SuperCollider implementation of the Dirt sampler, originally designed
-for the [TidalCycles](https://github.com/tidalcycles/tidal)
-environment. SuperDirt is a general purpose framework for playing
-samples and synths.
+Setup tools and syntax sugar for easy live coding with SuperCollider patterns.
+It's a general purpose framework for playing samples and synths.
 
 (C) 2022- Roger Pibernat
 
