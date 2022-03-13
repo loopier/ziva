@@ -40,6 +40,10 @@
 		^Pchain(Pbind(selector, args[0]), this);
 	}
 
+	>> { |track|
+		^this.fx(track);
+	}
+
 	fx { |track|
 		var sym = (\t++track).asSymbol;
 		// Ziva.tracks[sym].debug(sym);
