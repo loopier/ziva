@@ -1,8 +1,20 @@
 # Živa
 
-Setup tools and syntax sugar for easy live coding with SuperCollider patterns.
-It's a general purpose framework for playing samples and synths.
+Set of tools and syntax sugar for easy live coding with SuperCollider patterns.
+A general purpose framework for smoothly playing samples and synths.
 
+## Requirements
+
+* SuperCollider: https://github.com/supercollider/supercollider - tested with v3.12.2
+* optional, but recommended (many effect UGens need it): sc3-plugins: https://github.com/supercollider/sc3-plugins/
+* optional, but recommended (for the Dirt-Samples library): SuperDirt quark: https://github.com/musikinformatik/SuperDirt
+
+## Installation from SuperCollider
+```
+Quarks.install("https://github.com/loopier/ziva");
+```
+
+## License
 (C) 2022- Roger Pibernat
 
 Živa is free software: you can redistribute it and/or modify it
@@ -17,14 +29,3 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
-
-## Requirements
-
-* SuperCollider: https://github.com/supercollider/supercollider - tested with 3.12
-* optional, but recommended (many effect UGens need it): sc3-plugins: https://github.com/supercollider/sc3-plugins/
-* optional, but recommended (for the Dirt-Samples library): SuperDirt quark: https://github.com/musikinformatik/SuperDirt
-
-## Installation from SuperCollider
-```
-Quarks.install("https://github.com/loopier/ziva");
-```
