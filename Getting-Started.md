@@ -21,7 +21,7 @@ New samples can be added with new calls to (repeating names will be replaced):
 
 ## Basic functions
 
-Assing a sound to a variable:
+Assing a sample sound to a variable:
 
 `~lola = Pbind(\type, \sample, \sound, \break125);`
 
@@ -127,4 +127,46 @@ Besides samples, regular SynthDefs can also be played. The only condition is for
 ~nala = Pbind(\instrument, \acid);
 [ ~nala ].ziva.play;
 ```
-The [basic functions](#basic-functions) 
+
+The [basic functions](#basic-functions) also work for synths except —obviously— those related to samples. 
+
+In addition there are other functions useful only in synths. For example, playing the root note (degree) of the scale:
+
+`[ ~nala.deg(0) ].ziva.play;`
+
+or a chord
+
+`[ ~nala.deg([0,2,4]) ].ziva.play;`
+
+change the octave (default is 5):
+
+`[ ~nala.oct(4) ].ziva.play;`
+
+Change a parameter specific to this synth:
+
+`[ ~nala.cutoff(2000) ].ziva.play;`
+
+Other synths might have other parameters that can be modified just using their name as a function call: `~nala.nameOfYourSynthArg(value)`.
+
+## Sequencing function parameters
+
+Most parameters for most functions can be sequenced, which is a fancy name for automating changes algorithimacally. In SC this is done with Patterns. There's a **huge** amount of patterns, but a lot can be achieved with a few. To create a pattern just type in an array followed by the pattern you want to apply to it.
+
+`Pseq` sequences values in the array one after the other for ever if not specified otherwise:
+
+`[ ~nala.deg([0,2,4].pseq) ].ziva.play;`
+
+Regular SC syntax can be used — *not all SC patterns have their equivalent in Živa, but all of them can be used with regular SC syntax*:
+
+`[ ~nala.deg(Pseq([0,2,4], inf) ].ziva.play;`
+
+
+`Prand` picks one value on each event (every "hit"):
+
+`[ ~nala.deg([0,2,4].prand) ].ziva.play;`
+
+You can nest patterns within patterns:
+
+`[ ~nala.faster.deg([0,2,r, [6,5,4].pseq(1)].prand) ].ziva.play;`
+
+Other interesting patterns might be `Place, Pstutter, Pshuf, Pxrand, Pwrand, Pslide, Pwalk, ...`. See [Pattern Guide](https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html)  
