@@ -47,7 +47,7 @@ Ziva {
 			this.loadSounds;
 			this.makeEffectDict;
 			this.makeTracks(4);
-			// currentEnvironment.r = \r;
+			"r = \\r".interpret
 		};
 		^this.server;
 	}
