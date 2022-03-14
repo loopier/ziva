@@ -23,7 +23,7 @@ New samples can be added with new calls to (repeating names will be replaced):
 
 Assing a sound to a variable:
 
-`~lola = Pbind(\type, \sample, \sound, \birds);`
+`~lola = Pbind(\type, \sample, \sound, \break125);`
 
 Play the sound:
 
@@ -78,3 +78,23 @@ Play it quiter (mezzo piano);
 `[ ~lola.p ].ziva.play;`
 
 you get the drill.
+
+For custom loudness **(BE CAREFUL!!)**:
+
+```
+[ ~lola.amp(0.2) ].ziva.play;
+// or
+[ ~lola.amp(-12.dbamp) ].ziva.play;
+```
+
+----
+
+Change the speed (negative rates play backwards):
+
+`[ ~lola.rate(1/4) ].ziva.play;`
+
+Change the starting position (0.0 for beginning, 1.0 for end):
+
+`[ ~lola.start(0.3) ].ziva.play;`
+
+---
