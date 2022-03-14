@@ -14,6 +14,10 @@ A general purpose framework for smoothly playing samples and synths.
 Quarks.install("https://github.com/loopier/ziva");
 ```
 
+## Getting started
+
+See [GettingStared.md](./GettingStarted.md).
+
 ## License
 (C) 2022- Roger Pibernat
 
