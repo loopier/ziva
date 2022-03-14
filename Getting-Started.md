@@ -35,49 +35,28 @@ Stop the sound:
 [ nil ].ziva.play;
 // or 
 Ziva.stop;
+// or press CTRL+.
 ```
+
+### Durations
 
 Play the sound fast:
 
 `[ ~lola.fast ].ziva.play;`
 
-Play it faster:
+Other durations are `faster, fastest, slow, slower, slowest`.
 
-`[ ~lola.faster ].ziva.play;`
-
-Play it as fast as you can:
-
-`[ ~lola.fastest ].ziva.play;`
-
-Play it slow:
-
-`[ ~lola.slow ].ziva.play;`
-
-Try playing it slower and as slow as you can :)
-
-Fro custom durations:
+For custom durations:
 
 `[ ~lola.dur(0.628) ].ziva.play;`
  
-----
+### Loudness
 
 Play it loud (mezzo forte):
 
 `[ ~lola.f ].ziva.play;`
 
-Play it louder (forte):
-
-`[ ~lola.ff ].ziva.play;`
-
-Play it even louder (fortíssimo):
-
-`[ ~lola.fff ].ziva.play;`
-
-Play it quiter (mezzo piano);
-
-`[ ~lola.p ].ziva.play;`
-
-you get the drill.
+Try `ff,fff,ffff,p,pp,ppp`.
 
 For custom loudness **(BE CAREFUL!!)**:
 
@@ -87,14 +66,45 @@ For custom loudness **(BE CAREFUL!!)**:
 [ ~lola.amp(-12.dbamp) ].ziva.play;
 ```
 
-----
+### Rhythms
 
-Change the speed (negative rates play backwards):
+Euclidean distribution:
 
-`[ ~lola.rate(1/4) ].ziva.play;`
+`[ ~lola.faster.bj(5,8) ].ziva.play;`
+
+Custom rhythms
+
+`[ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva.play;`
+
+### Miscellanous 
+
+Play once:
+
+`[ ~lola.once ].ziva.play;`
+
+Play 3 times then stop:
+
+`[ ~lola.once(3) ].ziva.play;`
+
+
+
+### Sample parameters
+
+Change the playing speed (negative rates play backwards):
+
+`[ ~lola.rate(0.25) ].ziva.play;`
+
+Pick 4 values from an array of rates, and sequence them endlessly:
+
+`[ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva.play;`
 
 Change the starting position (0.0 for beginning, 1.0 for end):
 
 `[ ~lola.start(0.3) ].ziva.play;`
 
----
+Slice a sample into 16 chunks, then pick 8 randomly (may be repeated) and play them in sequence endlessly:
+
+`[ ~lola.faster.chop(8, 16) ].ziva.play;`
+
+
+
