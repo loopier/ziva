@@ -16,7 +16,7 @@ Quarks.install("https://github.com/loopier/ziva");
 
 ## Getting started
 
-See [GettingStared.md](./GettingStarted.md).
+See [GettingStarted.md](./GettingStarted.md).
 
 ## License
 (C) 2022- Roger Pibernat
