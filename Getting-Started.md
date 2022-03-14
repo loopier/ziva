@@ -38,6 +38,18 @@ Ziva.stop;
 // or press CTRL+.
 ```
 
+Different variations of the same sound can be played simultaneously — forget the functions for now, we'll get to them shortly:
+
+```
+(
+[
+    ~lola.faster.bj(3,8).pan(1),
+    ~lola.faster.bj(5,8).rate(1/2).pan(-1),
+].ziva.play;
+)
+```
+
+
 ### Durations
 
 Play the sound fast:
@@ -89,6 +101,18 @@ Custom rhythms
 
 ### Miscellaneous 
 
+Pan the audio to Left and Right:
+
+```
+[ ~lola.pan(-1) ].ziva.play; // left
+[ ~lola.pan(-0.5) ].ziva.play; 
+[ ~lola.pan(0) ].ziva.play; // center -- default
+[ ~lola.pan(1) ].ziva.play; // right
+```
+Alternate between left and right
+
+`[ ~lola.pingpong ].ziva.play;`
+
 Play once:
 
 `[ ~lola.once ].ziva.play;`
@@ -122,6 +146,10 @@ Slice a sample into 16 chunks, then pick 8 randomly (may be repeated) and play t
 ## Playing a synth
 
 Besides samples, regular SynthDefs can also be played. The only condition is for them to have an envelope with `doneAction:2` (self-releasing upon finnished). If they don't the synth stack will grow and end up collapsing the server (which is also cool).
+
+To get a list of currently loaded synths:
+
+`Ziva.synths;`
 
 ```
 ~nala = Pbind(\instrument, \acid);
@@ -170,3 +198,51 @@ You can nest patterns within patterns:
 `[ ~nala.faster.deg([0,2,r, [6,5,4].pseq(1)].prand) ].ziva.play;`
 
 Other interesting patterns might be `Place, Pstutter, Pshuf, Pxrand, Pwrand, Pslide, Pwalk, ...`. See [Pattern Guide](https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html)  
+
+## Effects
+
+Živa comes with some effects that can be applied to sounds. To list them:
+
+`Ziva.fx;`
+
+Effects can only be applied to tracks, not to sounds.  A track is defined with:
+
+`Ziva.track(0); // this is a track without any effects`
+
+To apply an effect:
+
+`Ziva.track(0, \delay);`
+
+Many effects can be applied, order matters:
+
+```
+Ziva.track(0, \delay, \reverbL); 
+// is not the same as
+Ziva.track(0, \reverbL, \delay); 
+```
+
+To add effects to the playing sounds:
+
+```
+(
+[
+    ~nala >> 0 // point it to the track number
+].ziva.play;
+)
+```
+
+To remove effects from a sound;
+
+```
+(
+[
+    ~nala,      // remove the pointer
+                // or
+    ~nala >> 1, // point it to a track without effects
+].ziva.play;
+)
+```
+
+To remove effects from a track (this will also remove them from the sounds pointing to it):
+
+`Ziva.track(0);`
