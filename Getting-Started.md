@@ -15,7 +15,7 @@ This should list all the sample names (with the number files per name between `(
 
 `Ziva.sounds;`
 
-New samples can be added with new calls to:
+New samples can be added with new calls to (repeating names will be replaced):
 
 `Ziva.loadSamples("/path/to/your/samples/parent/dir");`
 
@@ -54,7 +54,13 @@ Play it slow:
 `[ ~lola.slow ].ziva.play;`
 
 Try playing it slower and as slow as you can :)
+
+Fro custom durations:
+
+`[ ~lola.dur(0.628) ].ziva.play;`
  
+--
+
 Play it loud (mezzo forte):
 
 `[ ~lola.f ].ziva.play;`
