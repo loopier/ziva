@@ -59,7 +59,7 @@ Fro custom durations:
 
 `[ ~lola.dur(0.628) ].ziva.play;`
  
---
+----
 
 Play it loud (mezzo forte):
 
