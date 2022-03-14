@@ -119,3 +119,12 @@ Slice a sample into 16 chunks, then pick 8 randomly (may be repeated) and play t
 
 
 
+## Playing a synth
+
+Besides samples, regular SynthDefs can also be played. The only condition is for them to have an envelope with `doneAction:2` (self-releasing upon finnished). If they don't the synth stack will grow and end up collapsing the server (which is also cool).
+
+```
+~nala = Pbind(\instrument, \acid);
+[ ~nala ].ziva.play;
+```
+The [basic functions](#basic-functions) 
