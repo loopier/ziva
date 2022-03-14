@@ -66,6 +66,16 @@ For custom loudness **(BE CAREFUL!!)**:
 [ ~lola.amp(-12.dbamp) ].ziva.play;
 ```
 
+### Legato
+
+`[ ~lola.stacc ].ziva.play; // play staccato`
+
+Try `pizz, stass, stacc, tenuto, legato, pedal`.
+
+For custom legato:
+
+`[ ~lola.legato(0.628) ].ziva.play;`
+
 ### Rhythms
 
 Euclidean distribution:
@@ -76,7 +86,8 @@ Custom rhythms
 
 `[ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva.play;`
 
-### Miscellanous 
+
+### Miscellaneous 
 
 Play once:
 
