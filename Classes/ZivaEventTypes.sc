@@ -22,8 +22,8 @@ ZivaEventTypes {
 		Event.addEventType(\sample, { |server|
 			~sound = Ziva.samples[~sound] ? [];
 			~n = ~n ? 0;
-			~channels = ~channels ? 2;
-			~instrument = [\zivaplaybufm, \zivaplaybuf][~channels-1];
+			~ch = ~ch ? 2;
+			~instrument = [\zivaplaybufm, \zivaplaybuf][~ch-1];
 			// ~instrument = [\zsamplermono, \zsampler][~channels-1];
 			~buf = ~sound.at(~n.mod(~sound.size));
 			// TODO: !!! ~note modifies rate
