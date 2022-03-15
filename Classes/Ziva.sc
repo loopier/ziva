@@ -23,7 +23,6 @@
 
 Ziva {
 	classvar <> server;
-	classvar <> samplesPath;
 	classvar <> effectDict;
 	classvar <> tracksDict;
 	classvar <> fxBusses;
@@ -38,7 +37,7 @@ Ziva {
 	}
 
 	*boot { |inputChannels = 2, outputChannels = 2, server = nil,
-		numBuffers = 16, memSize = 32, maxNodes = 32, samplesPath = nil|
+		numBuffers = 16, memSize = 32, maxNodes = 32|
 		server = server ? Server.default;
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
@@ -258,17 +257,6 @@ Ziva {
 
 	*fx {
 		effectDict.keys.collect(_.postln);
-	}
-
-	*addEffects { |agent, effects|
-		agent.debug("ziva fx");
-		Ndef(agent.asSymbol, {In.ar(\in.kr)}).play;
-		effects.do{|effect, i|
-			if(effectDict.includesKey(effect.asSymbol)) {
-				Ndef(agent.asSymbol)[i] = \filter -> effectDict[effect.asSymbol];
-			}
-		};
-		^Ndef(agent.asSymbol);
 	}
 
 	/// \brief	Create a Pdef that automatically plays and stores a Ppar
