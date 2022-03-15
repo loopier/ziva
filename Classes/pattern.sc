@@ -22,31 +22,31 @@
 	// These methods work like the Pchain shortcut but they add and multiply
 	// values instead of overriding them.
 	// add Patterns
-	<+ { arg aPattern;
-		if (aPattern.isString) {
-			aPattern = Pixi(aPattern);
-		};
-		aPattern.patternpairs.do{|e, i|
-			if (e.class == Symbol) {
-				^Padd(e, aPattern.patternpairs[i+1], this);
-			} {
-				nil
-			}
-		};
-	}
-	// multiply Patterns
-	<* { arg aPattern;
-		if (aPattern.isString) {
-			aPattern = Pixi(aPattern);
-		};
-		aPattern.patternpairs.do{|e, i|
-			if (e.class == Symbol) {
-				^Pmul(e, aPattern.patternpairs[i+1], this);
-			} {
-				nil
-			}
-		};
-	}
+	// <+ { arg aPattern;
+	// 	if (aPattern.isString) {
+	// 		aPattern = Pixi(aPattern);
+	// 	};
+	// 	aPattern.patternpairs.do{|e, i|
+	// 		if (e.class == Symbol) {
+	// 			^Padd(e, aPattern.patternpairs[i+1], this);
+	// 		} {
+	// 			nil
+	// 		}
+	// 	};
+	// }
+	// // multiply Patterns
+	// <* { arg aPattern;
+	// 	if (aPattern.isString) {
+	// 		aPattern = Pixi(aPattern);
+	// 	};
+	// 	aPattern.patternpairs.do{|e, i|
+	// 		if (e.class == Symbol) {
+	// 			^Pmul(e, aPattern.patternpairs[i+1], this);
+	// 		} {
+	// 			nil
+	// 		}
+	// 	};
+	// }
 
 	// overriding original
 	// compose Patterns
@@ -64,31 +64,31 @@
 
 	// fx { |... pairs|
 	// 	[this, pairs].debug("fx");
+
+
+	// pclump { arg n;
+	// 	^Pclump(n, this);
 	// }
 
-	pclump { arg n;
-		^Pclump(n, this);
-	}
+	// pavaroh { arg aroh, avaroh, stepsPerOctave=12;
+	// 	^Pavaroh(this, aroh, avaroh, stepsPerOctave);
+	// }
 
-	pavaroh { arg aroh, avaroh, stepsPerOctave=12;
-		^Pavaroh(this, aroh, avaroh, stepsPerOctave);
-	}
+	// prorate { arg proportion;
+	// 	^Prorate(proportion, this);
+	// }
 
-	prorate { arg proportion;
-		^Prorate(proportion, this);
-	}
+	// pn {arg repeats=inf, key;
+	// 	^Pn(this, repeats, key);
+	// }
 
-	pn {arg repeats=inf, key;
-		^Pn(this, repeats, key);
-	}
+	// pstutter {arg n;
+	// 	^Pstutter(n, this);
+	// }
 
-	pstutter {arg n;
-		^Pstutter(n, this);
-	}
-
-	pevery {arg n;
-		^Pseq([this] ++ (\r!n),inf);
-	}
+	// pevery {arg n;
+	// 	^Pseq([this] ++ (\r!n),inf);
+	// }
 
 	////////////////////////////////////////////////////////////////////////////
 	// former PCHAIN extension
@@ -120,7 +120,7 @@
 	ins { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
 	i { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
 
-	ixi { |msg| ^Pchain(Pbind(\note, msg.notes(3).pseq, this)) }
+	ixi { |msg, oct=1| ^Pchain(Pbind(\note, msg.notes(oct).pseq), this)}
 	deg { |value| ^Pchain(Pbind(\degree, value), this) }
 	oct { |value| ^Pchain(Pbind(\octave, value), this) }
 
@@ -176,7 +176,7 @@
 	pattern { |pattern| ^Pchain(Pbind(\r, pattern), this)}
 	buleria { |rotate=0| ^Pchain(Pbind(\r, [\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1].rotate(rotate).pseq), this) }
 
-	stopin { |beats| ^Pchain(Pbind(\r, Pseq((1!beats),1)), this) }
+	stopin { |beats=1| ^Pchain(Pbind(\r, Pseq((1!beats),1)), this) }
 
 	pedal { ^Pchain(Pbind(\legato, 4), this)}
 	legato { |amt| ^Pchain(Pbind(\legato, amt ? 1.1), this)}

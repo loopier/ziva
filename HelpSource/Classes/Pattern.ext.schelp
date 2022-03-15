@@ -1,0 +1,245 @@
+INSTANCEMETHODS::
+
+subsection:: Extensions by Živa
+
+method::>>
+send pattern output to track.
+argument::track
+track number.
+
+code::
+Ziva.boot;
+a = Pbind(\legato, 0.1);
+Ziva.track(0, \delay);
+Pdef(\a, a >> 0).play;
+::
+
+method::fx
+same as link::#>>:: with another syntax.
+returns::link::Classes/Pchain::
+
+code::
+Ziva.boot;
+a = Pbind(\legato, 0.1);
+Ziva.track(0, \delay);
+Pdef(\a, a.fx(0)).play;
+::
+
+method::cc
+send MIDI control change
+argument::cc
+control number
+argument::value
+number [0-127]
+returns::link::Classes/Pchain::
+
+method::inst
+same as Pbind(\instrument, ...)
+argument::instrument
+symbol
+returns::link::Classes/Pchain::
+code::
+Ziva.boot;
+a = Pbind();
+Pdef(\a, a.inst(\acid)).play;
+::
+
+method::ins
+same as link::#inst::
+
+method::i
+same as link::#inst::
+
+method::ixi
+converts characters to a sequence of notes.
+argument::msg
+any link::Classes/String::
+argument::oct
+number of octaves before wrapping.
+returns::link::Classes/Pchain::
+code::
+Ziva.boot;
+a = Pbind(\instrument, \acid);
+Pdef(\a, a.fast.ixi("alo")).play
+// translates to
+Pdef(\a, Pbind(
+    \instrument, \acid,
+    \notes, Pseq([0,4,0],inf)
+)).play
+::
+
+method::deg
+chain this pattern to Pbind(\degree, value)
+returns::link::Classes/Pchain::
+method::oct
+chain this pattern to Pbind(\octave, value)
+returns::link::Classes/Pchain::
+
+method::fast
+chain this pattern to Pbind(\dur, 0.5)
+returns::link::Classes/Pchain::
+method::faster
+chain this pattern to Pbind(\dur, 0.25)
+returns::link::Classes/Pchain::
+method::fastest
+chain this pattern to Pbind(\dur, 0.125)
+returns::link::Classes/Pchain::
+method::slow
+chain this pattern to Pbind(\dur, 2)
+returns::link::Classes/Pchain::
+method::slower
+chain this pattern to Pbind(\dur, 4)
+returns::link::Classes/Pchain::
+method::slowest
+chain this pattern to Pbind(\dur, 8)
+returns::link::Classes/Pchain::
+method::ultraslow
+chain this pattern to Pbind(\dur, 16)
+returns::link::Classes/Pchain::
+method::ultraslower
+chain this pattern to Pbind(\dur, 32)
+returns::link::Classes/Pchain::
+method::ultraslowest
+chain this pattern to Pbind(\dur, 64)
+returns::link::Classes/Pchain::
+
+method::low
+lower 1 octave
+returns::link::Classes/Pchain::
+method::lower
+lower 2 octaves
+returns::link::Classes/Pchain::
+method::lowest
+lower 3 octaves
+returns::link::Classes/Pchain::
+method::high
+rise 1 octave
+returns::link::Classes/Pchain::
+method::higher
+rise 2 octaves
+returns::link::Classes/Pchain::
+method::highest
+rise 3 octaves
+returns::link::Classes/Pchain::
+
+method::f
+play mezzo forte
+returns::link::Classes/Pchain::
+method::ff
+play forte
+returns::link::Classes/Pchain::
+method::fff
+fortíssimo
+returns::link::Classes/Pchain::
+method::ffff
+too much
+returns::link::Classes/Pchain::
+method::p
+play mezzo piano
+returns::link::Classes/Pchain::
+method::pp
+play piano
+returns::link::Classes/Pchain::
+method::ppp
+play pianíssimo
+returns::link::Classes/Pchain::
+method::bramp
+brownian distribution random aplitude.
+returns::link::Classes/Pchain::
+method::fadein
+returns::link::Classes/Pchain::
+
+method::once
+play for a given number of events, then stop.
+This justs adds a Pseq([\rest], inf) after the last EMPHASIS::dur::.
+argument::times
+number of events to play before stoping.
+returns::link::Classes/Pchain::
+
+method::bjorklund
+create an euclidean distribution rhtyhm.
+argument::k
+hits
+argument::n
+beats
+argument::rotate
+shift the resulting rhtyhm by this amount of positions. Negative for opposite direction.
+argument::scramble
+shuffle resulting rhythm if set to EMPHASIS::true::.
+argument::sort
+sort resulting rhythm (rests, then hits).
+argument::reverse
+reverse the resulting rhythm.
+returns::link::Classes/Pchain::
+
+method::bj
+same as link::#bjorklund::
+
+method::upbeat
+play only on odd-events.
+returns::link::Classes/Pchain::
+
+method::pattern
+create a rhythm. This can actualy be done with any name.
+code::
+Ziva.boot;
+a = Pbind();
+[ a.pattern([1,r,r,1,r,1,r,1].pseq) ].ziva;
+// same can be done with
+[ a.r([1,r,r,1,r,1,r,1].pseq) ].ziva;
+// or any other function name
+::
+returns::link::Classes/Pchain::
+
+method::buleria
+play a EMPHASIS::bulería/soleá:: rhythic pattern.
+code::
+Ziva.boot;
+a = Pbind();
+[ a.buleria ].ziva;
+::
+returns::link::Classes/Pchain::
+
+method::stopin
+same as link::-once::
+returns::link::Classes/Pchain::
+
+method::pedal
+returns::link::Classes/Pchain::
+method::legato
+returns::link::Classes/Pchain::
+method::tenuto
+returns::link::Classes/Pchain::
+method::stacc
+play staccato
+returns::link::Classes/Pchain::
+method::stass
+play staccatíssimo
+returns::link::Classes/Pchain::
+method::pizz
+play pizzicato
+returns::link::Classes/Pchain::
+
+method::rate
+set sample play speed
+returns::link::Classes/Pchain::
+
+method::randrates
+play sample at a random sequence of playing speeds.
+argument::size
+number of steps in the sequence.
+argument::rates
+list of rates to choose from.
+returns::link::Classes/Pchain::
+
+method::chop
+split the sample in chunks and play a sequence of those chunks.
+argument::size
+number of steps in the sequence.
+argument::chunks
+amount of pieces in which to split the sample.
+returns::link::Classes/Pchain::
+
+method::pingpong
+ping-pong panning effect.
+returns::link::Classes/Pchain::

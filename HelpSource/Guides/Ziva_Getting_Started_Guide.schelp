@@ -1,18 +1,395 @@
 title:: Živa - Getting Started Guide
 summary::inroduction to Živa
 categories:: Live Coding, Guides
-realted:: Classes/Ziva
+related:: Classes/Ziva
 
-
+image::alive.png::
 
 DESCRIPTION::
 
-Živa is meant to make live coding with patterns a bit easier and faster.
+This guide is an introduction to live coding with SuperCollider patterns using Živa.
+Živa is 2 things:
 
-SECTION:: Introduction
+1. a set of tools to quickly setup a live coding environment and interact with it.
 
-Živa is meant to make live coding with patterns a bit easier and faster.
+2. a group of class extensions to add syntactic sugar to make live coding easier and faster.
 
-SUBSECTION:: blablabl
+It an be used with regular SuperCollider code because EMPHASIS::it is:: regular SuperCollider code.
 
-blablabla
+Živa (pronounced EMPHASIS::jee-vah (/ʒi-va/)::) means EMPHASIS::alive:: in Slovenian, and is also a Slovenian woman's name, a pagan godess of slavic mythology. This project was developed during a residency at Ljudmila in Ljubljana, Slovenia.
+
+
+SECTION:: Setting up
+
+SUBSECTION:: Booting the server
+Start the server with customized options for live coding:
+
+code::
+Ziva.boot;
+::
+
+SUBSECTION:: Loading samples
+Load some samples by providing a path to the parent directory containing subdirectories with audio files.
+As an example we'll be using the great SuperDirt sample set. If you haven't already done so, install "SuperDirt" with
+
+code::
+Quarks.install("SuperDirt");
+::
+
+then load its samples with:
+
+code::
+Ziva.loadSamples(Platform.userAppSupportDir ++ "/downloaded-quarks/Dirt-Samples");
+::
+
+This should list all the sample names (with the number of files per name between ()) in the post window. If it doesn't, or you want to invoke it again later, use
+
+code::
+Ziva.sounds;
+::
+
+New samples can be added with new calls to:
+code::
+Ziva.loadSamples("/path/to/your/samples/parent/dir");
+::
+repeating names will be replaced.
+
+SECTION:: Basic functions
+
+Assing a sound to a variable:
+
+code::
+~lola = Psample(\break125, 1);
+::
+
+The second argument is the number of channels in the sample and is optional. It defaults to 2. If your sample is mono and you ommit the second parameter, you will get a warning in the post window that can be fixed by setting it to 1.
+
+Play the sound:
+
+code::
+[ ~lola ].ziva;
+::
+
+Stop the sound:
+
+code::
+[ nil ].ziva;
+// or
+Ziva.stop;
+// or press CTRL+.
+::
+
+Different variations of the same sound and/or different sounds can be played simultaneously — forget the functions for now, we'll get to them shortly:
+
+code::
+(
+[
+    ~lola.faster.bj(3,8).pan(1),
+    ~lola.faster.bj(5,8).rate(1/2).pan(-1),
+    ~manolla.slow.oct(3),
+].ziva;
+)
+::
+
+SUBSECTION:: Durations
+
+Play the sound fast:
+
+code::
+[ ~lola.fast ].ziva;
+::
+
+Other durations are code::
+.faster, .fastest, .slow, .slower, .slowest
+::.
+
+For custom durations:
+
+code::
+[ ~lola.dur(0.628) ].ziva;
+::
+
+SUBSECTION:: Loudness
+
+Play it loud (mezzo forte):
+
+code::
+[ ~lola.f ].ziva;
+::
+
+Try also
+
+code::
+.ff, .fff, .ffff, .p, .pp, .ppp
+::.
+
+For custom loudness STRONG::(BE CAREFUL!!):::
+
+code::
+[ ~lola.amp(0.2) ].ziva;
+// or
+[ ~lola.amp(-12.dbamp) ].ziva;
+::
+
+SUBSECTION:: Legato
+
+code::
+[ ~lola.stacc ].ziva; // play staccato
+::
+
+Others might be
+
+code::
+.pizz, .stass, .stacc, .tenuto, .legato, .pedal
+::.
+
+For custom legato:
+
+code::
+[ ~lola.legato(0.628) ].ziva;
+::
+
+SUBSECTION:: Rhythms
+
+Euclidean distribution:
+
+code::
+[ ~lola.faster.bj(5,8) ].ziva;
+::
+
+Custom rhythms (EMPHASIS::r:: is set to \r -- rest -- by Ziva on startup)
+
+code::
+[ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva;
+::
+
+
+SUBSECTION:: Miscellaneous
+
+Pan the audio to Left and Right:
+
+code::
+[ ~lola.pan(-1) ].ziva; // left
+[ ~lola.pan(-0.5) ].ziva;
+[ ~lola.pan(0) ].ziva; // center -- default
+[ ~lola.pan(1) ].ziva; // right
+::
+Alternate between left and right
+
+code::
+[ ~lola.pingpong ].ziva;
+::
+
+Play once:
+
+code::
+[ ~lola.once ].ziva;
+::
+
+Play 3 times then stop:
+
+code::
+[ ~lola.once(3) ].ziva;
+::
+
+
+
+SUBSECTION:: Sample parameters
+
+Change the playing speed (negative rates play backwards):
+
+code::
+[ ~lola.rate(0.25) ].ziva;
+::
+
+Pick 4 random values from an list of rates, and sequence them endlessly (may be repeadet):
+
+code::
+[ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva;
+::
+
+Change the starting position (0.0 for beginning, 1.0 for end):
+
+code::
+[ ~lola.start(0.3) ].ziva;
+::
+
+Slice a sample into 16 chunks, then pick 8 randomly (may be repeated) and play them in sequence endlessly:
+
+code::
+[ ~lola.faster.chop(8, 16) ].ziva;
+::
+
+
+
+SECTION:: Synths
+
+SUBSECTION:: SynthDefs
+
+EMPHASIS::If you are new to SuperCollider, you may want to skip this part and move on to to:: link::#Playing::
+
+Besides samples, regular SynthDefs can also be played. The only condition is for them to have an envelope with EMPHASIS::doneAction:2:: (self-releasing upon finnished). If they don't, the synth stack will grow and end up collapsing the server, which is cool but may not be desirable.
+
+Here's a template that can be freely used. Just change the EMPHASIS::key:: and EMPHASIS::sig:: and it should be ready to go.
+
+code::
+(
+SynthDef(\asynth, {
+    var out = \out.kr(0);
+    var pan = \pan.kr(0);
+    var freq = \freq.kr(440);
+    var amp = \amp.kr(1) * (-10.dbamp);
+    var atk = \atk.kr(0.01);
+    var dec = \dec.kr(0.3);
+    var sus = \sus.kr(0.5);
+    var rel = \rel.kr(1.0);
+    var gate = \gate.kr(1);
+    var env = EnvGen.ar(
+        Env.adsr(atk, dec, sus, rel),
+        gate: gate,
+        timeScale: timescale,
+        doneAction: 2
+	);
+    var sig, fb;
+
+    sig = VarSaw.ar(freq); // change this
+
+    Out.ar(out, Pan2.ar(sig * env * amp, pan));
+}).add;
+)
+::
+
+SUBSECTION:: Playing
+
+To get a list of currently loaded synths:
+
+code::
+Ziva.synths;
+::
+
+Synths are loaded in a similar way in which samples are:
+
+code::
+~nala = Pbind(\instrument, \acid);
+[ ~nala ].ziva;
+::
+
+The link::#basic functions:: also work for synths except —obviously— those related to samples.
+
+In addition there are other functions useful only in synths. For example, playing a note of the scale (degree):
+
+code::
+[ ~nala.deg(0) ].ziva; // plays the root
+::
+
+or a chord
+
+code::
+[ ~nala.deg([0,2,4]) ].ziva; // plays the root triad
+::
+
+change the octave (default is 5):
+
+code::
+[ ~nala.oct(4) ].ziva;
+::
+
+Change a parameter specific to this synth:
+
+code::
+[ ~nala.cutoff(2000) ].ziva;
+::
+
+Other synths might have other parameters that can be modified just using their name as a function call: code::
+~nala.nameOfYourSynthArg(value)
+::.
+
+SECTION:: Sequencing function parameters
+
+Most parameters for most functions can be sequenced, which is a fancy name for automating changes algorithimacally. In SC this is done with Patterns. There's a STRONG::huge:: amount of patterns, but a lot can be achieved with a few. To create a pattern just type in an list followed by the pattern you want to apply to it.
+
+link::Classes/Pseq:: sequences values in the list one after the other for ever, if not specified otherwise:
+
+code::
+[ ~nala.deg([0,2,4].pseq) ].ziva;
+::
+
+Regular SC syntax can be used. EMPHASIS::NOTE: not all SC patterns have their equivalent in Živa, but all of them can be used with regular SC syntax::
+
+link::Classes/Prand:: picks one value on each event (every "hit"):
+
+code::
+[ ~nala.deg([0,2,4].prand) ].ziva;
+::
+
+The variable EMPHASIS::r:: can be used for rests in patterns:
+
+code::
+[ ~nala.deg([0,2,4,r].prand) ].ziva;
+::
+
+You can nest patterns within patterns:
+
+code::
+[ ~nala.faster.deg([0,2,r, [6,5,4].pseq(1)].prand) ].ziva;
+::
+
+Other interesting patterns might be EMPHASIS:: Place, Pstutter, Pshuf, Pxrand, Pwrand, Pslide, Pwalk, ... ::.
+
+See link::Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary::
+
+SECTION:: Effects
+
+Živa comes with some effects that can be applied to sounds. To list them:
+
+code::
+Ziva.fx;
+::
+
+Effects can only be applied to tracks, not to sounds.  A track is defined with:
+
+code::
+Ziva.track(0); // this is a track without any effects
+::
+
+To apply an effect:
+
+code::
+Ziva.track(0, \delay);
+::
+
+Many effects can be applied, order matters:
+
+code::
+Ziva.track(0, \delay, \reverbL);
+// is not the same as
+Ziva.track(0, \reverbL, \delay);
+::
+
+To add effects to the playing sounds:
+
+code::
+(
+[
+    ~nala >> 0 // point it to the track number
+].ziva;
+)
+::
+
+To remove effects from a sound;
+
+code::
+(
+[
+    ~nala,      // remove the pointer
+                // or
+    ~nala >> 1, // point it to a track without effects
+].ziva;
+)
+::
+
+To remove effects from a track (this will also remove them from the sounds pointing to it):
+
+code::
+Ziva.track(0);
+::
