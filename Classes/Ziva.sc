@@ -1,7 +1,7 @@
 // Live coding in SuperCollider made easy.
 
 // A general class to manage live coding resources.
-// Some parts are inspired by:
+// Some parts are inspired by or directly taken from:
 // - IxiLang by Thor Magnusson
 // - Bacalao by Glen Fraser
 // - SuperDirt by Julian Rohrhuber
@@ -122,7 +122,7 @@ Ziva {
 	/// \returns Dictionary
 	*loadSamples { arg path, server = nil;
 		try {
-			this.samples = Dictionary.new;
+			this.samples = this.samples ? Dictionary.new;
 			server = server ? this.server ? Server.default;
 			PathName(path).entries.do { |item, i|
 				// d.add(item.folderName -> this.loadSamplesArray(item.fullPath, server));
@@ -130,7 +130,8 @@ Ziva {
 			};
 			this.listLoadedSamples;
 		} {
-			"ERROR: Sample path not set.  Use .loadSamples(PATH).".postln;
+			// "ERROR: Sample path not set.  Use .loadSamples(PATH).".postln;
+			"WARNING: The samples list is empty.  Use .loadSamples(PATH).".postln;
 		}
 	}
 
@@ -160,7 +161,8 @@ Ziva {
 	*listLoadedSamples {
 		this.samples.keys.asArray.sort.do{|k|
 			"% (%)".format(k, this.samples[k].size).postln;
-		}
+		};
+		this.samples.size.debug("Total");
 	}
 
 	/// \brief list synth names
@@ -228,8 +230,10 @@ Ziva {
 			var tracksym = (\t++i).asSymbol;
 			var bus = Bus.audio(this.server, 2);
 
+
 			Ndef(ndefsym, { In.ar(bus, 2) }).play;
 			this.tracksDict.put(tracksym, bus);
+			this.tracksDict[tracksym].debug(ndefsym);
 		};
 	}
 
@@ -267,11 +271,11 @@ Ziva {
 		^Ndef(agent.asSymbol);
 	}
 
-	/// \brief	Create a `Pdef(key, Ppar( elements ))` object
+	/// \brief	Create a Pdef that automatically plays and stores a Ppar
 	*pdef { |key, quant=1 ... elements|
 		key = key ? \ziva;
 		elements = elements.flat;
 		elements.debug(key);
-		^Pdef(key, Ppar(elements)).quant_(quant);
+		^Pdef(key, Ppar(elements)).play.quant_(quant);
 	}
 }

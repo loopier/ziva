@@ -186,12 +186,16 @@ Most parameters for most functions can be sequenced, which is a fancy name for a
 
 Regular SC syntax can be used — *not all SC patterns have their equivalent in Živa, but all of them can be used with regular SC syntax*:
 
-`[ ~nala.deg(Pseq([0,2,4], inf) ].ziva.play;`
+
 
 
 `Prand` picks one value on each event (every "hit"):
 
 `[ ~nala.deg([0,2,4].prand) ].ziva.play;`
+
+The variable `r` can be used for rests in patterns:
+
+`[ ~nala.deg([0,2,4,r].prand) ].ziva.play;`
 
 You can nest patterns within patterns:
 
