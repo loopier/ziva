@@ -23,16 +23,18 @@ New samples can be added with new calls to (repeating names will be replaced):
 
 Assing a sample sound to a variable:
 
-`~lola = Pbind(\type, \sample, \sound, \break125);`
+`~lola = Psample(\break125, \ch, 1);`
+
+`\ch` is optional and defaults to `2`. If your sample is mono, you will get a warning in the post window that can be fixed by setting it to `1`.
 
 Play the sound:
 
-`[ ~lola ].ziva.play;`
+`[ ~lola ].ziva;`
 
 Stop the sound:
 
 ```
-[ nil ].ziva.play;
+[ nil ].ziva;
 // or 
 Ziva.stop;
 // or press CTRL+.
@@ -45,7 +47,7 @@ Different variations of the same sound can be played simultaneously — forget t
 [
     ~lola.faster.bj(3,8).pan(1),
     ~lola.faster.bj(5,8).rate(1/2).pan(-1),
-].ziva.play;
+].ziva;
 )
 ```
 
@@ -54,49 +56,49 @@ Different variations of the same sound can be played simultaneously — forget t
 
 Play the sound fast:
 
-`[ ~lola.fast ].ziva.play;`
+`[ ~lola.fast ].ziva;`
 
 Other durations are `faster, fastest, slow, slower, slowest`.
 
 For custom durations:
 
-`[ ~lola.dur(0.628) ].ziva.play;`
+`[ ~lola.dur(0.628) ].ziva;`
  
 ### Loudness
 
 Play it loud (mezzo forte):
 
-`[ ~lola.f ].ziva.play;`
+`[ ~lola.f ].ziva;`
 
 Try `ff,fff,ffff,p,pp,ppp`.
 
 For custom loudness **(BE CAREFUL!!)**:
 
 ```
-[ ~lola.amp(0.2) ].ziva.play;
+[ ~lola.amp(0.2) ].ziva;
 // or
-[ ~lola.amp(-12.dbamp) ].ziva.play;
+[ ~lola.amp(-12.dbamp) ].ziva;
 ```
 
 ### Legato
 
-`[ ~lola.stacc ].ziva.play; // play staccato`
+`[ ~lola.stacc ].ziva; // play staccato`
 
 Try `pizz, stass, stacc, tenuto, legato, pedal`.
 
 For custom legato:
 
-`[ ~lola.legato(0.628) ].ziva.play;`
+`[ ~lola.legato(0.628) ].ziva;`
 
 ### Rhythms
 
 Euclidean distribution:
 
-`[ ~lola.faster.bj(5,8) ].ziva.play;`
+`[ ~lola.faster.bj(5,8) ].ziva;`
 
 Custom rhythms
 
-`[ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva.play;`
+`[ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva;`
 
 
 ### Miscellaneous 
@@ -104,22 +106,22 @@ Custom rhythms
 Pan the audio to Left and Right:
 
 ```
-[ ~lola.pan(-1) ].ziva.play; // left
-[ ~lola.pan(-0.5) ].ziva.play; 
-[ ~lola.pan(0) ].ziva.play; // center -- default
-[ ~lola.pan(1) ].ziva.play; // right
+[ ~lola.pan(-1) ].ziva; // left
+[ ~lola.pan(-0.5) ].ziva; 
+[ ~lola.pan(0) ].ziva; // center -- default
+[ ~lola.pan(1) ].ziva; // right
 ```
 Alternate between left and right
 
-`[ ~lola.pingpong ].ziva.play;`
+`[ ~lola.pingpong ].ziva;`
 
 Play once:
 
-`[ ~lola.once ].ziva.play;`
+`[ ~lola.once ].ziva;`
 
 Play 3 times then stop:
 
-`[ ~lola.once(3) ].ziva.play;`
+`[ ~lola.once(3) ].ziva;`
 
 
 
@@ -127,19 +129,19 @@ Play 3 times then stop:
 
 Change the playing speed (negative rates play backwards):
 
-`[ ~lola.rate(0.25) ].ziva.play;`
+`[ ~lola.rate(0.25) ].ziva;`
 
 Pick 4 values from an array of rates, and sequence them endlessly:
 
-`[ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva.play;`
+`[ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva;`
 
 Change the starting position (0.0 for beginning, 1.0 for end):
 
-`[ ~lola.start(0.3) ].ziva.play;`
+`[ ~lola.start(0.3) ].ziva;`
 
 Slice a sample into 16 chunks, then pick 8 randomly (may be repeated) and play them in sequence endlessly:
 
-`[ ~lola.faster.chop(8, 16) ].ziva.play;`
+`[ ~lola.faster.chop(8, 16) ].ziva;`
 
 
 
@@ -153,26 +155,26 @@ To get a list of currently loaded synths:
 
 ```
 ~nala = Pbind(\instrument, \acid);
-[ ~nala ].ziva.play;
+[ ~nala ].ziva;
 ```
 
 The [basic functions](#basic-functions) also work for synths except —obviously— those related to samples. 
 
 In addition there are other functions useful only in synths. For example, playing the root note (degree) of the scale:
 
-`[ ~nala.deg(0) ].ziva.play;`
+`[ ~nala.deg(0) ].ziva;`
 
 or a chord
 
-`[ ~nala.deg([0,2,4]) ].ziva.play;`
+`[ ~nala.deg([0,2,4]) ].ziva;`
 
 change the octave (default is 5):
 
-`[ ~nala.oct(4) ].ziva.play;`
+`[ ~nala.oct(4) ].ziva;`
 
 Change a parameter specific to this synth:
 
-`[ ~nala.cutoff(2000) ].ziva.play;`
+`[ ~nala.cutoff(2000) ].ziva;`
 
 Other synths might have other parameters that can be modified just using their name as a function call: `~nala.nameOfYourSynthArg(value)`.
 
@@ -182,7 +184,7 @@ Most parameters for most functions can be sequenced, which is a fancy name for a
 
 `Pseq` sequences values in the array one after the other for ever if not specified otherwise:
 
-`[ ~nala.deg([0,2,4].pseq) ].ziva.play;`
+`[ ~nala.deg([0,2,4].pseq) ].ziva;`
 
 Regular SC syntax can be used — *not all SC patterns have their equivalent in Živa, but all of them can be used with regular SC syntax*:
 
@@ -191,15 +193,15 @@ Regular SC syntax can be used — *not all SC patterns have their equivalent in 
 
 `Prand` picks one value on each event (every "hit"):
 
-`[ ~nala.deg([0,2,4].prand) ].ziva.play;`
+`[ ~nala.deg([0,2,4].prand) ].ziva;`
 
 The variable `r` can be used for rests in patterns:
 
-`[ ~nala.deg([0,2,4,r].prand) ].ziva.play;`
+`[ ~nala.deg([0,2,4,r].prand) ].ziva;`
 
 You can nest patterns within patterns:
 
-`[ ~nala.faster.deg([0,2,r, [6,5,4].pseq(1)].prand) ].ziva.play;`
+`[ ~nala.faster.deg([0,2,r, [6,5,4].pseq(1)].prand) ].ziva;`
 
 Other interesting patterns might be `Place, Pstutter, Pshuf, Pxrand, Pwrand, Pslide, Pwalk, ...`. See [Pattern Guide](https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html)  
 
@@ -231,7 +233,7 @@ To add effects to the playing sounds:
 (
 [
     ~nala >> 0 // point it to the track number
-].ziva.play;
+].ziva;
 )
 ```
 
@@ -243,7 +245,7 @@ To remove effects from a sound;
     ~nala,      // remove the pointer
                 // or
     ~nala >> 1, // point it to a track without effects
-].ziva.play;
+].ziva;
 )
 ```
 
