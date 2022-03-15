@@ -25,22 +25,18 @@
         ^Ziva.pdef(key, quant, this.flat);
     }
 
-    fx { |... effects|
-        this.debug(effects);
-    }
-
     chooseN { |size=4|
         ^({this.choose}.dup(size));
     }
 
-    concat { |arr|
-        // var prev = [];
-        // this.do{|n|
-        //     prev = prev ++ n;
-        // }
-        // ^prev;
-        ^(this++arr);
-    }
+    // concat { |arr|
+    //     // var prev = [];
+    //     // this.do{|n|
+    //     //     prev = prev ++ n;
+    //     // }
+    //     // ^prev;
+    //     ^(this++arr);
+    // }
 
     // returns an array of variations of the given array following
     // the algorithm used to compose sextines in poetry.
