@@ -68,6 +68,10 @@
     //     [size, list, stepPattern, directionPattern, startPos].collect(_.debug(_));
     // }
 
+    pdef{ |key|
+        ^Pdef(key, Ppar(this));
+    }
+
     pseq { arg repeats=inf, offset=0;
         ^Pseq(this, repeats, offset);
     }
