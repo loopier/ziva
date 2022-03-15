@@ -1,6 +1,6 @@
 Psample {
 	*new { |sound, ch=2 ... pairs|
-		^Pbind(\type, \sample, \sound, sound, \chans, ch, *pairs);
+		^Pbind(\type, \sample, \sound, sound, \ch, ch, *pairs);
 	}
 }
 
