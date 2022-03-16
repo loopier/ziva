@@ -202,7 +202,7 @@ code::
 [ ~lola.rate(0.25) ].ziva;
 ::
 
-Pick 4 random values from an list of rates, and sequence them endlessly (may be repeadet):
+Pick 4 random values from an list of rates, and sequence them endlessly (may be repeated):
 
 code::
 [ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva;
@@ -300,8 +300,15 @@ code::
 [ ~nala.cutoff(2000) ].ziva;
 ::
 
-Other synths might have other parameters that can be modified just using their name as a function call: code::
-~nala.nameOfYourSynthArg(value)
+Other synths might have other parameters that can be modified just using their name as a function call. The list of available parameters for a synth can be displayed in the post window with:
+
+code::
+Ziva.controls(\acid);
+::
+
+any synth parameter is automatically accepted as a function name. If an argument with that name doesn't exist it will simply be ignored.
+code::
+~nala.nameOfYourSynthArg(value);
 ::.
 
 SECTION:: Sequencing function parameters
