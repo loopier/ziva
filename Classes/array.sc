@@ -52,7 +52,7 @@
         ^sextine.asArray;
     }
 
-    buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
+    // buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
 
     // add trailing rests
     // every { arg beats=4;
