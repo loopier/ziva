@@ -26,7 +26,7 @@ Ziva {
 	classvar <> effectDict;
 	classvar <> tracksDict;
 	classvar <> fxBusses;
-	classvar <> samples;
+	classvar <> samplesDict;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -121,11 +121,11 @@ Ziva {
 	/// \returns Dictionary
 	*loadSamples { arg path, server = nil;
 		try {
-			this.samples = this.samples ? Dictionary.new;
+			this.samplesDict = this.samplesDict ? Dictionary.new;
 			server = server ? this.server ? Server.default;
 			PathName(path).entries.do { |item, i|
 				// d.add(item.folderName -> this.loadSamplesArray(item.fullPath, server));
-				this.samples.put(item.folderName.asSymbol, this.loadSamplesArray(item.fullPath, server));
+				this.samplesDict.put(item.folderName.asSymbol, this.loadSamplesArray(item.fullPath, server));
 			};
 			this.listLoadedSamples;
 		} {
@@ -153,15 +153,15 @@ Ziva {
 	*loadSamplesAsSymbols { arg paths = [], s = Server.default;
 		paths.do { |path|
 			var name  = PathName(path).folderName;
-			this.samples.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
+			this.samplesDict.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
 		};
 	}
 
 	*listLoadedSamples {
-		this.samples.keys.asArray.sort.do{|k|
-			"% (%)".format(k, this.samples[k].size).postln;
+		this.samplesDict.keys.asArray.sort.do{|k|
+			"% (%)".format(k, this.samplesDict[k].size).postln;
 		};
-		this.samples.size.debug("Total");
+		this.samplesDict.size.debug("Total");
 	}
 
 	/// \brief list synth names
