@@ -3,6 +3,8 @@
 // =====================================================================
 
 Ziva.boot;
+// beware: this is my samples path.
+// you will need your own samples, with one directory for every drum part.
 Ziva.loadSamples("~/loopier/samples");
 (
 ~avl = DrumKit(\avl,
@@ -33,7 +35,7 @@ TempoClock.default.tempo = 128/60;
 (
 [
 	// a,
-	~tri.rhythm(\electro2a),
+	~tri.rhythm(\house),
 ].ziva
 )
 ~dk.kick.patternpairs
