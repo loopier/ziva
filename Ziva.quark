@@ -3,7 +3,7 @@
   summary: "Live coding tools to make life easier",
   version: "0.0.0",
   schelp: "Ziva",
-  // dependencies: ["Bjorklund", "Canvas3D", "cruciallib@tags/4.1.4"],
+  dependencies: ["https://github.com/loopier/drumpattern"],
   license: "GPL",
   copyright: "Roger Pibernat, 2022"
 )
