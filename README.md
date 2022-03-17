@@ -8,6 +8,7 @@ A general purpose framework for smoothly playing samples and synths.
 * SuperCollider: https://github.com/supercollider/supercollider - tested with v3.12.2
 * optional, but recommended (many effect UGens need it): sc3-plugins: https://github.com/supercollider/sc3-plugins/
 * optional, but recommended (for the Dirt-Samples library): SuperDirt quark: https://github.com/musikinformatik/SuperDirt
+* optional, but recommended (for the Dirt-Samples library): DrumPattern quark: https://github.com/loopier/drumpattern
 
 ## Installation from SuperCollider
 ```
