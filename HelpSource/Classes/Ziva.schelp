@@ -135,6 +135,20 @@ Ziva.pdef(\bla, Pbind(), Pbind(\octave, 3));
 Pdef(\bla, Ppar([ Pbind(), Pbind(\octave, 3) ])).play.quant_(1);
 ::
 
+METHOD:: lfo
+create an LFO to be plugged to a parameter of any instrument.
+ARGUMENT:: index
+a number. Reusing the number will override previously used ones.
+ARGUMENT:: wave
+shape of the LFO oscillator wave: \sine, \saw, \pulse, \tri, \noise0 (square), \noise1 (linear interpolation), \noise2 (exponential interpolation).
+ARGUMENT:: freq
+frequency of the LFO.
+ARGUMENT:: min
+minimum value of the LFO output.
+ARGUMENT:: max
+maximum value of the LFO output.
+returns:: link::Classes/Ndef::
+
 METHOD:: fx
 post list of available effects.
 

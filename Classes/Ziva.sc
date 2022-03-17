@@ -266,4 +266,16 @@ Ziva {
 		elements.debug(key);
 		^Pdef(key, Ppar(elements)).play.quant_(quant);
 	}
+
+	*lfo { |index, wave=\sine, freq=1, min=0.0, max=1.0|
+		var dict = Dictionary.new;
+		dict.put(\sine, {SinOsc.kr(freq).range(min,max)});
+		dict.put(\saw, {LFSaw.kr(freq).range(min,max)});
+		dict.put(\pulse, {LFPulse.kr(freq).range(min,max)});
+		dict.put(\tri, {LFTri.kr(freq).range(min,max)});
+		dict.put(\noise0, {LFNoise0.kr(freq).range(min,max)});
+		dict.put(\noise1, {LFNoise1.kr(freq).range(min,max)});
+		dict.put(\noise2, {LFNoise2.kr(freq).range(min,max)});
+		^Ndef((\ziva_lfo++index), dict.at(wave));
+	}
 }
