@@ -1,10 +1,10 @@
 // =====================================================================
-// SuperCollider Workspace
+// To run this example you will need a set of samples for every drum part.
+// You will also need to install DrumPatterns that can be found as a
+// quark: Quarks.install("https://github.com/loopier/drumpattern")
 // =====================================================================
 
 Ziva.boot;
-// beware: this is my samples path.
-// you will need your own samples, with one directory for every drum part.
 Ziva.loadSamples("~/loopier/samples");
 (
 ~avl = DrumKit(\avl,
@@ -27,15 +27,15 @@ Ziva.loadSamples("~/loopier/samples");
 	bell: \tribell,
 	cl: \tricl,
 );
-
-a = Pbind(\instrument, \acid);
 )
+// list all available drum pattern names
 DrumPattern.directory;
 TempoClock.default.tempo = 128/60;
 (
 [
-	// a,
+	// the symbol is the DrumPattern name
 	~tri.rhythm(\house),
+	// shortcut: ~tri.r(\house),
 ].ziva
 )
 ~dk.kick.patternpairs
