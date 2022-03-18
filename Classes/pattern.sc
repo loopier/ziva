@@ -78,13 +78,13 @@
 	// 	^Prorate(proportion, this);
 	// }
 
-	// pn {arg repeats=inf, key;
-	// 	^Pn(this, repeats, key);
-	// }
+	pn {arg repeats=inf, key;
+		^Pn(this, repeats, key);
+	}
 
-	// pstutter {arg n;
-	// 	^Pstutter(n, this);
-	// }
+	pstutter {arg n;
+		^Pstutter(n, this);
+	}
 
 	// pevery {arg n;
 	// 	^Pseq([this] ++ (\r!n),inf);
