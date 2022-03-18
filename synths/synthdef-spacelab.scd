@@ -33,9 +33,9 @@ SynthDef(\kwhat, { | out=0 amp=1|
 // 	ReplaceOut.kr(fltBus, LFNoise1.kr(0.3, 1000, 1500));
 // }).add;
 
-SynthDef(\kwpoly, { | out=0 gate=1 freq amp=1 |
+SynthDef(\kwpoly, { | out=0 gate=1 freq amp=1 atk=0.2 sus=1 dec=0.1|
 	var aEnv, fEnv, osc1, osc2, flt;
-	aEnv = EnvGen.kr(Env.asr(0.2, 1, 0.1), gate, doneAction: 2);
+	aEnv = EnvGen.kr(Env.asr(atk, sus, dec), gate, doneAction: 2);
 	fEnv = EnvGen.kr(Env.asr(7, 1, 0.2), levelScale: 12000);
 	osc1 = Pulse.ar(freq * [1, 1.007], LFCub.kr(2, 0, 0.3, 0.5));
 	osc2 = Pulse.ar(freq / 2, 0.3);
@@ -58,12 +58,12 @@ SynthDef(\kwpoly, { | out=0 gate=1 freq amp=1 |
 // 	EnvGen.kr(Env.asr(0,1,0), gate, doneAction: 2);
 // }).add;
 
-SynthDef(\kwstring, { | out=0 gate=1 freq=1000 |
+SynthDef(\kwstring, { | out=0 gate=1 freq=1000 amp=1 atk=0.2 sus=1 dec=0.5|
 	var aEnv, osc, flt;
-	aEnv = EnvGen.kr(Env.asr(0.2, 1, 0.5), gate, doneAction: 2);
+	aEnv = EnvGen.kr(Env.asr(atk, sus, dec), gate, doneAction: 2);
 	osc = Saw.ar([LFCub.kr(0.3, Rand(0, 1), freq * 0.003, freq), freq, LFCub.kr(0.7, Rand(0, 1), freq * 0.001, freq)]);
 	flt = LPF.ar(osc, 1500, aEnv);
-	Out.ar(out, flt);
+	Out.ar(out, flt * amp);
 }).add;
 
 SynthDef(\kwbass, { | out=0 gate=1 freq amp=1|
@@ -75,14 +75,14 @@ SynthDef(\kwbass, { | out=0 gate=1 freq amp=1|
 	Out.ar(out, flt * amp);
 }).add;
 
-SynthDef(\kwsaw, { | out=0 freq t_trig=1 amp=1|
+SynthDef(\kwsaw, { | out=0 freq t_trig=1 amp=1 atk=0 dec=3|
 	var trig, div,  oct, reps, env, osc, flt;
 	// oct = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3];
 	// trig = Impulse.kr(EnvGen.kr(Env([1.75, 120], [30], 6.5)), doneAction:2);
 	trig = t_trig;
 	// div = PulseDivider.kr(trig, 16, 16);
 	// reps = PulseCount.kr(div);
-	env = EnvGen.kr(Env.perc(0, 3), trig, amp * 2, doneAction:2);
+	env = EnvGen.kr(Env.perc(atk, dec), trig, amp * 2, doneAction:2);
 	// freq = (Stepper.kr(trig, div, 42, 74, 2, 42) + (12 * Select.kr(reps, oct))).midicps;
 	osc = Saw.ar(freq * [1, 1.01], env);
 	flt = RLPF.ar(osc, freq * 2, 0.7);
