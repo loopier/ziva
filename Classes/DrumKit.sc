@@ -53,4 +53,18 @@ DrumKit {
 	}
 
 	r { arg drumpattern; ^this.rhythm(drumpattern) }
+
+	// amps { arg  kick=nil, sn=nil, ch=nil, oh=nil, rim=nil, cym=nil, cr=nil, bell=nil, cl=nil, sh=nil, tom=nil;
+	// 	if(kick.isNil.not) {this.kick.amp(kick.debug("kick"))}{};
+	// 	if(sn.isNil.not) {this.sn.amp(sn)}{};
+	// 	if(ch.isNil.not) {this.ch.amp(ch)}{};
+	// 	if(oh.isNil.not) {this.oh.amp(oh)}{};
+	// 	if(rim.isNil.not) {this.rim.amp(rim)}{};
+	// 	if(cym.isNil.not) {this.cym.amp(cym)}{};
+	// 	if(bell.isNil.not) {this.bell.amp(bell)}{};
+	// 	if(cl.isNil.not) {this.cl.amp(cl)}{};
+	// 	if(sh.isNil.not) {this.sh.amp(sh)}{};
+	// 	if(tom.isNil.not) {this.tom.amp(tom)}{};
+	// 	^Pdef(this.name);
+	// }
 }
