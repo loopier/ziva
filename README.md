@@ -17,60 +17,44 @@ Quarks.install("https://github.com/loopier/ziva");
 
 ## Synths
 
-303
 ```
+// 303
 \acid
-```
-###
-```
+//
 \clavinet
-```
-electric piano
-```
+// electric piano
 \epiano
-```
-6-op FM synth
-```
+// 6-op FM synth
 \fmx7
-```
 
-basic wave shapes
-```
+// basic wave shapes
 \sine
 \pulse
 \tri
-```
 
-noise
-```
+// noise
 \white
 \brown
 \pink
-```
 
-kraftwerk drumkit
-```
+// kraftwerk drumkit
 \kwbd
 \kwhat
-```
-kdraftwerk synths
-```
+// kdraftwerk synths
 \kwbass
 \kwpoly
 \kwsaw
 \kwsn
 \kwstring
-```
 
-other
-```
+// other
 \prophet
 \reese
 \reslab
 \strings
 \theremin
- ```
- 
+```
+
 ## License
 (C) 2022- Roger Pibernat
 
