@@ -1,11 +1,12 @@
 // =====================================================================
 // To run this example you will need a set of samples for every drum part.
 // You will also need to install DrumPatterns that can be found as a
-// quark: Quarks.install("https://github.com/loopier/drumpattern")
+// quark but should have installed already if you installed Živa:
+// Quarks.install("https://github.com/loopier/drumpattern")
 // =====================================================================
 
 Ziva.boot;
-Ziva.loadSamples("~/loopier/samples");
+Ziva.loadSamples("~/samples");
 (
 ~avl = DrumKit(\avl,
 	kick: \avlkick, kickch:1,
