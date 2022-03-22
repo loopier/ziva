@@ -40,7 +40,8 @@ Quarks.install("https://github.com/loopier/ziva");
 // kraftwerk drumkit
 \kwbd
 \kwhat
-// kdraftwerk synths
+
+// kraftwerk synths
 \kwbass
 \kwpoly
 \kwsaw
