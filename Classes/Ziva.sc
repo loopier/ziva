@@ -206,8 +206,8 @@ Ziva {
 		effectDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.85, 0.86, 0.3)};
 		effectDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
 		effectDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
-		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 1, 0.15, 1.3 )};
-		effectDict[\lowpass] 	= {arg sig; RLPF.ar(sig, 1000, 0.2)};
+		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
+		effectDict[\lowpass] 	= {arg sig; RLPF.ar(sig, \cutoff.kr(1000), \res.kr(0.2))};
 		effectDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
 		effectDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
 		effectDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
@@ -253,6 +253,7 @@ Ziva {
 			"t%:% -> % : % : %".format(track, i+1, effect, sym, this.tracksDict[sym]).postln;
 			Ndef(ndef)[i+1] = \filter -> this.effectDict[effect];
 		};
+		^Ndef(ndef);
 	}
 
 	*fx {
