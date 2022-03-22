@@ -15,6 +15,62 @@ A general purpose framework for smoothly playing samples and synths.
 Quarks.install("https://github.com/loopier/ziva");
 ```
 
+## Synths
+
+303
+```
+\acid
+```
+###
+```
+\clavinet
+```
+electric piano
+```
+\epiano
+```
+6-op FM synth
+```
+\fmx7
+```
+
+basic wave shapes
+```
+\sine
+\pulse
+\tri
+```
+
+noise
+```
+\white
+\brown
+\pink
+```
+
+kraftwerk drumkit
+```
+\kwbd
+\kwhat
+```
+kdraftwerk synths
+```
+\kwbass
+\kwpoly
+\kwsaw
+\kwsn
+\kwstring
+```
+
+other
+```
+\prophet
+\reese
+\reslab
+\strings
+\theremin
+ ```
+ 
 ## License
 (C) 2022- Roger Pibernat
 
