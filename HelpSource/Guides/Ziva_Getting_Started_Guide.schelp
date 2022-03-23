@@ -247,7 +247,6 @@ SynthDef(\asynth, {
     var env = EnvGen.ar(
         Env.adsr(atk, dec, sus, rel),
         gate: gate,
-        timeScale: timescale,
         doneAction: 2
 	);
     var sig, fb;
