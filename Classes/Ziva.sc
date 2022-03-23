@@ -27,6 +27,7 @@ Ziva {
 	classvar <> tracksDict;
 	classvar <> fxBusses;
 	classvar <> samplesDict;
+	classvar <> clock;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -46,7 +47,8 @@ Ziva {
 			this.loadSounds;
 			this.makeEffectDict;
 			this.makeTracks(4);
-			"r = \\r".interpret
+			"r = \\r".interpret;
+			this.clock = TempoClock.new;
 		};
 		^this.server;
 	}
@@ -265,7 +267,7 @@ Ziva {
 		key = key ? \ziva;
 		elements = elements.flat;
 		elements.debug(key);
-		^Pdef(key, Ppar(elements)).play.quant_(quant);
+		^Pdef(key, Ppar(elements)).play(this.clock).quant_(quant);
 	}
 
 	*lfo { |index, wave=\sine, freq=1, min=0.0, max=1.0|
@@ -278,5 +280,9 @@ Ziva {
 		dict.put(\noise1, {LFNoise1.kr(freq).range(min,max)});
 		dict.put(\noise2, {LFNoise2.kr(freq).range(min,max)});
 		^Ndef((\ziva_lfo++index), dict.at(wave));
+	}
+
+	*tempo { |bpm|
+		this.clock.tempo = bpm/60;
 	}
 }
