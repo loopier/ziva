@@ -14,6 +14,11 @@ A general purpose framework for smoothly playing samples and synths.
 ```
 Quarks.install("https://github.com/loopier/ziva");
 ```
+if you have already installed it before, and simply want to update:
+
+```
+Quarks.update("ziva");
+```
 
 ## Synths
 
