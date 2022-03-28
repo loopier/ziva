@@ -1,3 +1,9 @@
+Psynth {
+	*new { |name ... pairs|
+		^Pbind(\instrument, name, *pairs);
+	}
+}
+
 Psample {
 	*new { |sound, ch=2 ... pairs|
 		^Pbind(\type, \sample, \sound, sound, \ch, ch, *pairs);
