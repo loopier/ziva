@@ -269,7 +269,8 @@ Ziva.synths;
 Synths are loaded in a similar way in which samples are:
 
 code::
-~nala = Pbind(\instrument, \acid);
+//~nala = Pbind(\instrument, \acid);
+~nala = Psynth(\acid);
 [ ~nala ].ziva;
 ::
 

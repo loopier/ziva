@@ -51,6 +51,9 @@ Pbind(\instrument, \acid);
 // We need it to give it to a musician
 ~lola = Pbind(\instrument, \acid);
 
+// there's a shortcut, though
+~lola = Psynth(\acid);
+
 // we can then tell the musician to play the score
 ~lola.play;
 
@@ -115,8 +118,8 @@ Ziva.stop;
 [~lola.faster.bj(3,8,reverse:true)].ziva;// reverse order from first example
 
 // to create custom rhythms there's the `r` variables, which is a rest.
-// it can be added to any pattern of any parameter (exept `dur`) in
-// order to add rests
+// it can be added to any pattern (more on patterns later) of any parameter (exept
+// `dur`) in order to add rests
 [~lola.deg([0,2,4,r].pseq)].ziva;
 // a useful use for this is having an independent parameter.  It can be named
 // anything. I usually use .r()
@@ -126,8 +129,14 @@ Ziva.stop;
 // when playing a synth, notes can be changed
 [~lola.deg(2)].ziva;// plays the 3rd note from the scale
 [~lola.deg([0,2,4])].ziva;// plays a major chord
-[~lola.deg([0,2,4]).scale(Scale.minor)].ziva;// play minor chord
+[~lola.deg([0,2,4]).scale(\minor)].ziva;// plays minor chord
 [~lola.oct(4)].ziva;// one octave lower (default is 5)
+// degree notes can be alterated with sharps (s) and flats (b)
+[~lola.deg(0,2b,4)].ziva; // plays a minor chord although the scale is major
+[~lola.deg(0,2s,4).scale(\minor)].ziva; // plays a major chord although the scale is minor
+
+// to list all available scale names in the post window
+Scale.directory;
 
 // synth parameters can also be modified
 // to see what parameters are avaiable for a synth
@@ -138,22 +147,22 @@ Ziva.controls(\acid); // see the post window
 // SAMPLES
 // to list the available samples
 Ziva.sounds; // see the post window.
-// The number between () is the number of samples with that name
+// The number displayed between () is the number of samples with that name
 ~delia = Psample(\delia);
 [~delia].ziva;
 // change sample name
 [~delia.sound(\tibetan)].ziva;
 // change sample number (if greater than the number of samples in
-// that sample folder it will wrap around)
+// that sample folder it will wrapped around)
 [~delia.n(1)].ziva;
-// rate
+// change the playing speed
 [~delia.rate(0.5)].ziva; // half speed
 // sequence a list of rates. First argument is the number of steps in
 // the sequence, the second is a list of rates to choose from.
 [~delia.randrates(4, [1,-1,2,-1])].ziva;
 // old cassette tape effect
 [~delia.slow.tape(0.9)].ziva;
-// starting point in the sample (0.0 for beginning, 1.0 for end)
+// change the starting point in the sample (0.0 for beginning, 1.0 for end)
 [~delia.start(0.5)].ziva;
 // slices the sample in a number of chunks (second argument), and plays
 // a sequence of them. The size of the sequence is given by the
@@ -170,11 +179,11 @@ Ziva.sounds; // see the post window.
 // done with very few. Here we'll present just a few.
 
 // .pseq(repeats:inf) is used to repeat a list of values for a number of
-// times. If not repeats are specified, it loops for ever.
+// times. If no 'repeats' are specified, it loops for ever.
 [~lola.deg([0,2,4].pseq)].ziva;
-// .prand(repeats:inf) pick a random value from the list on each event (hit)
+// .prand(repeats:inf) picks a random value from the list on each event (hit)
 [~lola.deg([0,1,2,3,4].prand)].ziva;
-// patterns can be neted
+// patterns can be nested
 [~lola.faster.deg([0,1,2, [7,8,9].pseq(2)].prand)].ziva;
 
 // other interesting patterns are Place, Pshuf, Pbrown, Pwhite, Pstutter, ...
