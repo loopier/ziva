@@ -58,56 +58,56 @@ SynthDef(\epiano, {
 
 // */
 
-// (
-// SynthDef(\rhodey_sc, {
-//     // |
-//     // // standard meanings
-//     // out = 0, freq = 440, gate = 1, pan = 0, amp = 0.1,
-//     // // all of these range from 0 to 1
-//     // vel = 0.8, modIndex = 0.2, mix = 0.2, lfoSpeed = 0.4, lfoDepth = 0.1
-//     // |
-//     var out = \out.kr(0);
-//     var pan = \pan.kr(0);
-//     var freq = \freq.kr(440);
-//     var amp = \amp.kr(1);// * (-10.dbamp);
-//     var atk = \atk.kr(0.01);
-//     var dec = \dec.kr(0.3);
-//     var sus = \sus.kr(0.5);
-//     var sustain = \sustain.kr(1);
-//     var rel = \rel.kr(1.0);
-//     var gate = \gate.kr(1);
-// 	var vel = \vel.kr(0.8);
-// 	var modIndex = \modindex.kr(0.2);
-// 	var lfoSpeed = \lfospeed.kr(0.4);
-// 	var lfoDepth = \lfodepth.kr(0.1);
-// 	var mix = \mix.kr(0.2);
+(
+SynthDef(\rhodes, {
+    // |
+    // // standard meanings
+    // out = 0, freq = 440, gate = 1, pan = 0, amp = 0.1,
+    // // all of these range from 0 to 1
+    // vel = 0.8, modIndex = 0.2, mix = 0.2, lfoSpeed = 0.4, lfoDepth = 0.1
+    // |
+    var out = \out.kr(0);
+    var pan = \pan.kr(0);
+    var freq = \freq.kr(440);
+    var amp = \amp.kr(1);// * (-10.dbamp);
+    var atk = \atk.kr(0.01);
+    var dec = \dec.kr(0.3);
+    var sus = \sus.kr(0.5);
+    var sustain = \sustain.kr(1);
+    var rel = \rel.kr(1.0);
+    var gate = \gate.kr(1);
+	var vel = \vel.kr(0.8);
+	var modIndex = \modindex.kr(0.2);
+	var lfoSpeed = \lfospeed.kr(0.4);
+	var lfoDepth = \lfodepth.kr(0.1);
+	var mix = \mix.kr(0.2);
 
-//     var env1, env2, env3, env4;
-//     var osc1, osc2, osc3, osc4, snd;
+    var env1, env2, env3, env4;
+    var osc1, osc2, osc3, osc4, snd;
 
-//     lfoSpeed = lfoSpeed * 12;
+    lfoSpeed = lfoSpeed * 12;
 
-//     freq = freq * 2;
+    freq = freq * 2;
 
-//     env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
-//     env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
-//     env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
-//     env4 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
+    env1 = EnvGen.ar(Env.adsr(0.001, 1.25, 0.0, 0.04, curve: \lin));
+    env2 = EnvGen.ar(Env.adsr(0.001, 1.00, 0.0, 0.04, curve: \lin));
+    env3 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
+    env4 = EnvGen.ar(Env.adsr(0.001, 1.50, 0.0, 0.04, curve: \lin));
 
-//     osc4 = SinOsc.ar(freq * 0.5) * 2pi * 2 * 0.535887 * modIndex * env4 * vel;
-//     osc3 = SinOsc.ar(freq, osc4) * env3 * vel;
-//     osc2 = SinOsc.ar(freq * 15) * 2pi * 0.108819 * env2 * vel;
-//     osc1 = SinOsc.ar(freq, osc2) * env1 * vel;
-//     snd = Mix((osc3 * (1 - mix)) + (osc1 * mix));
-//     snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
+    osc4 = SinOsc.ar(freq * 0.5) * 2pi * 2 * 0.535887 * modIndex * env4 * vel;
+    osc3 = SinOsc.ar(freq, osc4) * env3 * vel;
+    osc2 = SinOsc.ar(freq * 15) * 2pi * 0.108819 * env2 * vel;
+    osc1 = SinOsc.ar(freq, osc2) * env1 * vel;
+    snd = Mix((osc3 * (1 - mix)) + (osc1 * mix));
+    snd = snd * (SinOsc.ar(lfoSpeed) * lfoDepth + 1);
 
-//     // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
-//     snd = snd * EnvGen.ar(Env.asr(0, 1, 0.1), gate, doneAction: 2);
-//     snd = Pan2.ar(snd, pan, amp);
+    // using the doneAction: 2 on the other envs can create clicks (bc of the linear curve maybe?)
+    snd = snd * EnvGen.ar(Env.asr(0, 1, 0.1), gate, doneAction: 2);
+    snd = Pan2.ar(snd, pan, amp);
 
-//     Out.ar(out, snd);
-// }).store;
-// )
+    Out.ar(out, snd);
+}).add;
+)
 
 // // (
 // // Pbind(
