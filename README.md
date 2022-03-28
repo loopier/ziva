@@ -20,47 +20,6 @@ if you have already installed it before, and simply want to update:
 Quarks.update("ziva");
 ```
 
-## Synths
-
-```
-// 303
-\acid
-//
-\clavinet
-// electric piano
-\epiano
-// 6-op FM synth
-\fmx7
-
-// basic wave shapes
-\sine
-\pulse
-\tri
-
-// noise
-\white
-\brown
-\pink
-
-// kraftwerk drumkit
-\kwbd
-\kwhat
-
-// kraftwerk synths
-\kwbass
-\kwpoly
-\kwsaw
-\kwsn
-\kwstring
-
-// other
-\prophet
-\reese
-\reslab
-\strings
-\theremin
-```
-
 ## License
 (C) 2022- Roger Pibernat
 
