@@ -42,11 +42,16 @@ Ziva {
 		server = server ? Server.default;
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
+
+		// gets called when server boots
+		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
+		ServerTree.add({this.makeTracks(4)});
+
 		this.server.waitForBoot{
 			ZivaEventTypes.new;
 			this.loadSounds;
 			this.makeEffectDict;
-			this.makeTracks(4);
+			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new;
 		};
@@ -101,15 +106,13 @@ Ziva {
 
 	/// \brief Return a list of all compiled SynthDef names
 	*synthDefList {
-		var names = SortedList.new;
+		var names = List.new;
 
-		SynthDescLib.global.synthDescs.do { |desc|
-			if(desc.def.notNil) {
-				// Skip names that start with "system_"
-				if ("^[^system_|pbindFx_]".matchRegexp(desc.name)) {
-					names.add(desc.name);
-				};
-			};
+		SynthDescLib.global.synthDescs.keys.asArray.sort.do { |desc|
+			// Skip names that start with "system_"
+			if("^(system_|pbindFx_)".matchRegexp(desc.asString).not) {
+				names.add(desc.asString);
+			}
 		};
 
 		^names;
@@ -267,7 +270,8 @@ Ziva {
 		key = key ? \ziva;
 		elements = elements.flat;
 		elements.debug(key);
-		^Pdef(key, Ppar(elements)).play(this.clock).quant_(quant);
+		// ^Pdef(key, Ppar(elements)).play(this.clock).quant_(quant);
+		^Pdef(key, Ppar(elements)).play.quant_(quant);
 	}
 
 	*lfo { |index, wave=\sine, freq=1, min=0.0, max=1.0|
