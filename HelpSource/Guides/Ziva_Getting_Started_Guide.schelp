@@ -294,6 +294,11 @@ code::
 [ ~nala.oct(4) ].ziva;
 ::
 
+change the scale:
+code::
+[ ~nala.scale(\minor).deg([0,2,4]) ].ziva;
+::
+
 Change a parameter specific to this synth:
 
 code::

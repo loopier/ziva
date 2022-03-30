@@ -74,6 +74,9 @@ returns::link::Classes/Pchain::
 method::oct
 chain this pattern to Pbind(\octave, value)
 returns::link::Classes/Pchain::
+method::scale
+chain this pattern to Pbind(\scale, Scale.at(value))
+returns::link::Classes/Pchain::
 
 method::fast
 chain this pattern to Pbind(\dur, 0.5)
