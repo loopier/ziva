@@ -19,16 +19,16 @@ Ziva.boot;
 // Each sample will be accessed with the 'n' function.  More on this later.
 Ziva.loadSamples("path/to/samples");
 // You can add different sample lists, from different folders. They will all
-// be stored and accessible. For example, you can load SuperDirt's
-// samples alongside yours.
-Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/Dirt-Samples");
+// be stored and accessible. For example, you can load the samples that come with
+// this quark.
+Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/ziva/samples");
 // To list all samples, evaluate this function
 Ziva.sounds;
 
-// To list all synths use !!!FIX: -- not working well
+// To list all synths use
 Ziva.synths;
-// which will list all SynthDefs loaded on the server.  They can be loaded anytime as
-// you would normally do with `SynthDef(...).add`
+// which will list all SynthDefs loaded on the server.  New synths can be loaded
+// anytime as you would normally do with `SynthDef(...).add`
 
 
 // =====================================================================
@@ -47,11 +47,10 @@ Pbind(\instrument, \acid);
 // booted the server with Ziva.boot
 
 // This is just a score sheet that says, "score sheet to be played with \acid synth".
-// As such, it does nothing by itself.
-// We need it to give it to a musician
+// As such, it does nothing by itself; we need it to give it to a musician.
 ~lola = Pbind(\instrument, \acid);
 
-// there's a shortcut, though
+// there's a Živa shortcut, though
 ~lola = Psynth(\acid);
 
 // we can then tell the musician to play the score
@@ -87,6 +86,15 @@ Ziva.stop;
 // and there are others that are specific to one type of synth.
 // The functions can be chained.
 
+// in the following examples I'm using one-liners because I'm showing
+// one parameter at a time and to keep file short, but while live coding
+// I find it more convenient to use the multi-line syntax shown above:
+// (
+// [
+// 	~lola,
+// ].ziva;
+// )
+
 // common parameters to samples and synths are:
 // tempo
 [~lola.fast].ziva; // try faster, fastest, slow, slower, slowest
@@ -117,11 +125,11 @@ Ziva.stop;
 [~lola.faster.bj(3,8,sort:true)].ziva;// will create 5 silent beats then 3 hits
 [~lola.faster.bj(3,8,reverse:true)].ziva;// reverse order from first example
 
-// to create custom rhythms there's the `r` variables, which is a rest.
-// it can be added to any pattern (more on patterns later) of any parameter (exept
-// `dur`) in order to add rests
-[~lola.deg([0,2,4,r].pseq)].ziva;
-// a useful use for this is having an independent parameter.  It can be named
+// to create custom rhythms there's the `r` variable, which is a rest.
+// it can be added to any pattern (more on patterns later) of any parameter (except
+// `dur`) in order to add rests.
+[~lola.deg([0,r,4,r].pseq)].ziva;
+// it is useful having an independent parameter for rhythms.  It can be named
 // anything. I usually use .r()
 [~lola.deg((..7).prand).r([1,r,r,1,r,r,1,r,1,r,1,r].pseq)].ziva;
 
@@ -150,7 +158,7 @@ Ziva.sounds; // see the post window.
 // The number displayed between () is the number of samples with that name
 ~delia = Psample(\delia);
 [~delia].ziva;
-// change sample name
+// change sample name for a musician in the band
 [~delia.sound(\tibetan)].ziva;
 // change sample number (if greater than the number of samples in
 // that sample folder it will wrapped around)
@@ -176,7 +184,7 @@ Ziva.sounds; // see the post window.
 // =====================================================================
 // Parameters can be set to change automatically with PATTERNS.
 // There is a HUGE amount of patterns in SuperCollider, but a lot can be
-// done with very few. Here we'll present just a few.
+// done with very few. Here we'll present only some of them.
 
 // .pseq(repeats:inf) is used to repeat a list of values for a number of
 // times. If no 'repeats' are specified, it loops for ever.
