@@ -33,5 +33,19 @@ ZivaEventTypes {
 			// defaults
 			(legato: 1)
 		);
+
+		// allows to use the same syntax as Psample for synths using buffers
+		Event.addEventType(\ziva_synth, { |server|
+			~sound = Ziva.samplesDict[~sound] ? [];
+			~n = ~n ? 0;
+			~ch = ~ch ? 2;
+			~buf = ~sound.at(~n.mod(~sound.size));
+			// TODO: !!! ~note modifies rate
+			~type = \note;
+			currentEnvironment.play;
+		},
+			// defaults
+			(legato: 1)
+		);
 	}
 }

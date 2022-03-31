@@ -1,6 +1,6 @@
 Psynth {
 	*new { |name ... pairs|
-		^Pbind(\instrument, name, *pairs);
+		^Pbind(\type, \ziva_synth, \instrument, name, *pairs);
 	}
 }
 

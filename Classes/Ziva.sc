@@ -169,6 +169,10 @@ Ziva {
 		this.samplesDict.size.debug("Total");
 	}
 
+	*sample { |name|
+		^this.samplesDict.at(name);
+	}
+
 	/// \brief list synth names
 	*synths {
 		this.synthDefList.collect(_.postln);
