@@ -75,14 +75,15 @@ SynthDef(\kwbass, { | out=0 gate=1 freq amp=1|
 	Out.ar(out, flt * amp);
 }).add;
 
-SynthDef(\kwsaw, { | out=0 freq t_trig=1 amp=1 atk=0 dec=3|
+SynthDef(\kwsaw, { | out=0 freq t_trig=1 gate=1 amp=1 atk=0 dec=0.3, sus=1 rel=3|
 	var trig, div,  oct, reps, env, osc, flt;
-	// oct = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3];
-	// trig = Impulse.kr(EnvGen.kr(Env([1.75, 120], [30], 6.5)), doneAction:2);
-	trig = t_trig;
-	// div = PulseDivider.kr(trig, 16, 16);
-	// reps = PulseCount.kr(div);
-	env = EnvGen.kr(Env.perc(atk, dec), trig, amp * 2, doneAction:2);
+	oct = [0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3];
+	trig = Impulse.kr(EnvGen.kr(Env([1.75, 120], [30], 6.5)), doneAction:2);
+	// trig = t_trig;
+	div = PulseDivider.kr(trig, 16, 16);
+	reps = PulseCount.kr(div);
+	// env = EnvGen.kr(Env.perc(atk, dec), trig, amp * 2, doneAction:2);
+	env = EnvGen.kr(Env.adsr(atk, dec, sus, rel), gate, amp * 2, doneAction:2);
 	// freq = (Stepper.kr(trig, div, 42, 74, 2, 42) + (12 * Select.kr(reps, oct))).midicps;
 	osc = Saw.ar(freq * [1, 1.01], env);
 	flt = RLPF.ar(osc, freq * 2, 0.7);
