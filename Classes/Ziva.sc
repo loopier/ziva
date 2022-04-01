@@ -87,7 +87,7 @@ Ziva {
 	*loadSounds {
 		"loading sounds".debug;
 		this.loadSynths;
-		this.loadSamples(Platform.userAppSupportDir++"/downloaded-quarsk/ziva/samples");
+		this.loadSamples(Platform.userAppSupportDir++"/downloaded-quarks/ziva/samples");
 	}
 
 	/// \brief load synthdefs
