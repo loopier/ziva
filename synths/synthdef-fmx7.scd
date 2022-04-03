@@ -27,14 +27,14 @@ SynthDef(\fmx7, {
 	var freq = \freq.kr(440);
 	var dur = \dur.kr(1);
     var legato = \legato.kr(1);
-    // var attack = \atk.kr(0.01);
-    // var decay = \dec.kr(0.3);
-    // var sustain = \sus.kr(0.5);
-    // var release = \rel.kr(0.01);
-	// var env = EnvGen.ar(Env.adsr(attack, decay, sustain, release), gate, timeScale: dur, doneAction:2);
+    var attack = \atk.kr(0.01);
+    var decay = \dec.kr(0.3);
+    var sustain = \sus.kr(1.0);
+    var release = \rel.kr(0.01);
+	var env = EnvGen.ar(Env.adsr(attack, decay, sustain, release), gate, timeScale: dur, doneAction:2);
     // operator levels are independent of their amplitudes. They can be at full level but
     // muted by the \amp parameter.
-	var levels = Array.fill(6, { |i| (\level++(i+1)).asSymbol.kr(1)});
+	// var levels = Array.fill(6, { |i| (\level++(i+1)).asSymbol.kr(1)});
     // on startup first operator's amp is 1, the rest are 0 -- otherwise we'd hear nothing
 	var amps = Array.fill(6, { |i| (\amp++(i+1)).asSymbol.kr(((0-i)>=0).asInteger)});
 	var ratios = Array.fill(6, { |i| (\ratio++(i+1)).asSymbol.kr(1)});
@@ -44,6 +44,7 @@ SynthDef(\fmx7, {
 	// lfo sensitivity
 	var modsenses = Array.fill(6, { |i| (\modsens++(i+1)).asSymbol.kr(0)});
 	// selects between FM = 0 and AM = 1
+	// var pitchenv = EnvGen.kr(Env.linen(\pitchenv.kr(#[0.01,0.98,0.01]).normalizeSum), gate, timeScale:dur);
 	var lfomode = \lfomode.kr(0);
 	var lfofreq = \lfofreq.kr(1);
 	var lfodepth = \lfodepth.kr(0.0);
@@ -63,15 +64,15 @@ SynthDef(\fmx7, {
             ], [
                 (\atkt++n).asSymbol.kr(0.0),
                 (\dect++n).asSymbol.kr(0.3),
-                (\sust++n).asSymbol.kr(0.1),
+                (\sust++n).asSymbol.kr(0.7),
                 (\relt++n).asSymbol.kr(0.0),
             ],
-            releaseNode: 3,
-            loopNode: 1,
+            // releaseNode: 3,
+            // loopNode: 1,
         ),
         gate: gate,
-        // timeScale: dur,
-		doneAction:2 ,
+        timeScale: dur,
+		// doneAction:2 ,
     )
     });
 
@@ -80,6 +81,7 @@ SynthDef(\fmx7, {
 		// freq * ratios[i] + detunes[i],
 		0,
 		envs[i],
+		// env
 	]});
 
 	var mods = Array.fill(6, { |i|
@@ -87,9 +89,10 @@ SynthDef(\fmx7, {
 	});
 
 	var sig = FM7.ar(ctls, mods) * amps;
-	// sig = sig * env;
 	// sig = sig * envs[0];
 	sig = RLPF.ar(sig, cutoff, res);
+	sig = sig * env;
+	// sig = SinOsc.ar(freq) * EnvGen.kr(Env.perc(\atk.kr(0.01), \rel.kr(1)), gate, doneAction:2);
 	Out.ar(out, Pan2.ar(Mix.ar(sig * amp), pan));
 },
 	variants: (
