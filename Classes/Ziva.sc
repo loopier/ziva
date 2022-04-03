@@ -225,7 +225,7 @@ Ziva {
 		effectDict[\cyberpunk]	= {arg sig; Squiz.ar(sig, 4.5, 5, 0.1)};
 		effectDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
 		effectDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
-		effectDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(4)-1));};
+		effectDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(6.6)-1));};
 	}
 
 	/// \brief	Construct the fx tracks.
