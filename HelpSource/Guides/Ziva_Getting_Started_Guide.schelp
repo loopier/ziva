@@ -85,7 +85,7 @@ code::
 (
 [
     ~lola.faster.bj(3,8).pan(1),
-    ~lola.faster.bj(5,8).rate(1/2).pan(-1),
+    ~lola.faster.bj(5,8).speed(1/2).pan(-1),
     ~manolla.slow.oct(3),
 ].ziva;
 )
@@ -196,16 +196,16 @@ code::
 
 SUBSECTION:: Sample parameters
 
-Change the playing speed (negative rates play backwards):
+Change the playing speed (negative speeds play backwards):
 
 code::
-[ ~lola.rate(0.25) ].ziva;
+[ ~lola.speed(0.25) ].ziva;
 ::
 
-Pick 4 random values from an list of rates, and sequence them endlessly (may be repeated):
+Pick 4 random values from an list of speeds, and sequence them endlessly (may be repeated):
 
 code::
-[ ~lola.fast.randrates(4, [-1,1,-0.5,0.5,2,-2]) ].ziva;
+[ ~lola.fast.randspeeds(4, [-1,1,-0.5,0.5,2,-2]) ].ziva;
 ::
 
 Change the starting position (0.0 for beginning, 1.0 for end):

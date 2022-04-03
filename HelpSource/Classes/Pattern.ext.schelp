@@ -223,16 +223,16 @@ method::pizz
 play pizzicato
 returns::link::Classes/Pchain::
 
-method::rate
+method::speed
 set sample play speed
 returns::link::Classes/Pchain::
 
-method::randrates
+method::randspeeds
 play sample at a random sequence of playing speeds.
 argument::size
 number of steps in the sequence.
-argument::rates
-list of rates to choose from.
+argument::speeds
+list of speeds to choose from.
 returns::link::Classes/Pchain::
 
 method::chop

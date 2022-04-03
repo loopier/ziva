@@ -186,10 +186,10 @@
 	stass { ^Pchain(Pbind(\legato, 0.25), this)}
 	pizz { ^Pchain(Pbind(\legato, 0.1), this)}
 
-	rate { |rate| ^Pchain(Pbind(\rate, rate, \speed, this), this)}
-	randrates { |size=8, rates=#[-1,1,-0.5,0.5,2,-2]|
-		var r = Pseq(Array.fill(size, {rates.choose}).debug("rates "++this.name), inf);
-		^Pchain(Pbind(\rate, r, \speed, r), this);
+	// rate { |rate| ^Pchain(Pbind(\rate, rate, \speed, this), this)}
+	randspeeds { |size=8, speeds=#[-1,1,-0.5,0.5,2,-2]|
+		var sp = Pseq(Array.fill(size, {speeds.choose}).debug("speeds "++this.name), inf);
+		^Pchain(Pbind(\speed, sp), this);
 	}
 
 	chop { |size=8, chunks=16|

@@ -164,10 +164,10 @@ Ziva.sounds; // see the post window.
 // that sample folder it will wrapped around)
 [~delia.n(1)].ziva;
 // change the playing speed
-[~delia.rate(0.5)].ziva; // half speed
-// sequence a list of rates. First argument is the number of steps in
-// the sequence, the second is a list of rates to choose from.
-[~delia.randrates(4, [1,-1,2,-1])].ziva;
+[~delia.speed(0.5)].ziva; // half speed
+// sequence a list of speeds. First argument is the number of steps in
+// the sequence, the second is a list of speeds to choose from.
+[~delia.randspeeds(4, [1,-1,2,-1])].ziva;
 // old cassette tape effect
 [~delia.slow.tape(0.9)].ziva;
 // change the starting point in the sample (0.0 for beginning, 1.0 for end)

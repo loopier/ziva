@@ -26,7 +26,7 @@ ZivaEventTypes {
 			~instrument = [\zivaplaybufm, \zivaplaybuf][~ch-1];
 			// ~instrument = [\zsamplermono, \zsampler][~channels-1];
 			~buf = ~sound.at(~n.mod(~sound.size));
-			~note = ~rate.midiratio;
+			~speed = ~speed ? ~note.midiratio;
 			// TODO: !!! ~note modifies rate
 			~type = \note;
 			currentEnvironment.play;
