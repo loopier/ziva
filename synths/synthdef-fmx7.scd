@@ -44,7 +44,6 @@ SynthDef(\fmx7, {
 	// lfo sensitivity
 	var modsenses = Array.fill(6, { |i| (\modsens++(i+1)).asSymbol.kr(0)});
 	// selects between FM = 0 and AM = 1
-	// var pitchenv = EnvGen.kr(Env.linen(\pitchenv.kr(#[0.01,0.98,0.01]).normalizeSum), gate, timeScale:dur);
 	var lfomode = \lfomode.kr(0);
 	var lfofreq = \lfofreq.kr(1);
 	var lfodepth = \lfodepth.kr(0.0);
