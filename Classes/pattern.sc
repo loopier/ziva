@@ -200,6 +200,8 @@
 	// kick { |pattern| ^Pchain(Pbind(\degree, 0, \octave, 3, \r, pattern), this)}
 	// sn { |pattern| ^Pchain(Pbind(\degree, 2, \octave, 3, \r, pattern), this)}
 
+	left { ^Pchain(Pbind(\pan, -1), this) }
+	right { ^Pchain(Pbind(\pan, 1), this) }
 	pingpong { ^Pchain(Pbind(\pan, Pseq([-1,1],inf)), this) }
 	randpan  { ^Pchain(Pbind(\pan, Pwhite(-1.0)), this) }
 
