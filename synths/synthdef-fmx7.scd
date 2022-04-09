@@ -49,7 +49,7 @@ SynthDef(\fmx7, {
 	var lfodepth = \lfodepth.kr(0.0);
 	var lfo = SinOsc.ar(lfofreq, 0, lfodepth);
 	var cutoff = \cutoff.kr(10000);
-	var res = \res.kr(1);
+	var res = \rq.kr(1);
 
     var envs = Array.fill(6, { |i|
         var n = (i+1).asString;
@@ -80,7 +80,6 @@ SynthDef(\fmx7, {
 		// freq * ratios[i] + detunes[i],
 		0,
 		envs[i],
-		// env
 	]});
 
 	var mods = Array.fill(6, { |i|
