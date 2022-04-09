@@ -14,7 +14,7 @@ SynthDef(\karplus2, {
 	// var coef = \coef.kr(0.1);
 	var coef = Select.kr(\voice.kr(0), [0,0.1, 0.5,0.91,-0.05]);
 	var rq = \rq.kr(1.0);
-	var rate = \rate.kr(0.3);
+	var rate = \wah.kr(0.3);
     // var env = EnvGen.ar(
     //     Env.perc(atk, rel),
     //     gate: gate,
@@ -44,7 +44,7 @@ SynthDef(\karplus, {
 	// var coef = \coef.kr(0.1);
 	var coef = Select.kr(\voice.kr(0), [0,0.1, 0.5,0.91,-0.05]);
 	var rq = \rq.kr(1.0);
-	var rate = \rate.kr(0.3);
+	var rate = \wah.kr(0.3);
     // var env = EnvGen.ar(
     //     Env.perc(atk, rel),
     //     gate: gate,
