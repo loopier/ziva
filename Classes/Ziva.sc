@@ -310,7 +310,7 @@ Ziva {
 	}
 
 	*rhythm { |rh|
-		rhythmsDict(rh).postln;
+		rhythmsDict[rh].postln;
 	}
 
 	*rh { this.rhythms }

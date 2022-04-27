@@ -163,6 +163,44 @@ code::
 [ ~lola.faster.r([r,r,1,r,r,1,r,1,r,1,r,1].pseq) ].ziva;
 ::
 
+There are also some default rhtyhms. To list them
+
+code::Ziva.rhythms;::
+
+To see a rhythm pattern
+
+code::Ziva.rhythm(\clave);::
+
+Rhtyhms can be applied to pattern sequences (arrays).
+When a rhythm is invoked on a list, the elements will
+replace the hits (1s) in the pattern keeping the rests.
+
+code::
+[0,2,4].clave;
+// -> [ r, r, 0, r, 2, r, r, r, 4, r, r, 0, r, r, 2, r ]
+
+[~lola.faster.deg([0,4].clave.pseq)].ziva;
+::
+This can by applied to any sound argument
+
+
+Some rhythms are divided into two bars that can be played in reversed order.
+e.g.: clave can be 2/3
+
+code::
+Ziva.rhythm(\clave);
+// -> [ [ r, r, 1, r, 1, r, r, r ], [ 1, r, r, 1, r, r, 1, r ] ]
+// this two nested arrays represents one bar each
+[0,2,4].clave;
+::
+
+or 3/2
+
+code::
+[0,2,4].clave(reverse:1);
+// same as
+// -> [ [ 1, r, r, 1, r, r, 1, r ], [ r, r, 1, r, 1, r, r, r ] ]
+::
 
 SUBSECTION:: Miscellaneous
 

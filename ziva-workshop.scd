@@ -114,6 +114,8 @@ Ziva.stop;
 [~lola.slow.pan(0)].ziva; // center -- default
 [~lola.pingpong].ziva; // alternates between left and right
 
+// RHYTHM
+
 // euclidean rhythms
 // creates a rhythm. It distributes as evenly as possible a number
 // of hits (first argument) across a number fo beats (second argument).
@@ -132,6 +134,27 @@ Ziva.stop;
 // it is useful having an independent parameter for rhythms.  It can be named
 // anything. I usually use .r()
 [~lola.deg((..7).prand).r([1,r,r,1,r,r,1,r,1,r,1,r].pseq)].ziva;
+
+// there are also some default rhtyhms
+// to list them
+Ziva.rhythms;
+// to see a rhythm pattern
+Ziva.rhythm(\clave);
+// rhtyhms can be applied to pattern sequences (arrays)
+// when a rhythm is invoked on a list, the elements will
+// replace the hits (1s) in the pattern keeping the rests.
+// to see how it works
+[0,2,4].clave; // see the post window
+// audio example
+[~lola.faster.deg([0,4].clave.pseq)].ziva;
+// this can by applied to any sound argument
+
+// some rhythms are divided into two bars that can be played in reversed order
+// e.g.: clave can be 2/3
+Ziva.rhythm(\clave); // this shows two nested arrays, each one being a bar
+[0,2,4].clave;
+// or 3/2
+[0,2,4].clave(reverse:1);
 
 // SYNTHS
 // when playing a synth, notes can be changed
