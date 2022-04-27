@@ -92,6 +92,7 @@
     cencerru { |reverse=0| ^this.rhythm(\cencerru, reverse);}
     montuno { |reverse=0| ^this.rhythm(\montuno, reverse);}
     tumbao { |reverse=0| ^this.rhythm(\tumbao, reverse);}
+    conga { |reverse=0| ^this.rhythm(\conga, reverse);}
 
     // add trailing rests
     // every { arg beats=4;
