@@ -54,6 +54,45 @@
 
     // buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
 
+    // // taken from https://www.thejazzpianosite.com/jazz-piano-lessons/jazz-genres/afro-cuban-latin-jazz/
+    // this.rhythmsDict.put(\clave23, 		[r,r, 1,r, 1,r, r,r, 1,r, r,1, r,r, 1,r]);
+    // this.rhythmsDict.put(\clave32, 		[1,r, r,1, r,r, 1,r, r,r, 1,r, 1,r, r,r]);
+    // this.rhythmsDict.put(\rumba23, 		[r,r, 1,r, 1,r, r,r, 1,r, r,1, r,r, r,1]);
+    // this.rhythmsDict.put(\rumba32, 		[1,r, r,1, r,r, r,1, r,r, 1,r, 1,r, r,r]);
+    // this.rhythmsDict.put(\chitlins, 	[1,r, r,1, r,r, 1,r, r,r, 1,r, r,1, r,r]);
+    // this.rhythmsDict.put(\cascara, 		[1,r, 1,r, 1,1, r,1, 1,r, 1,1, r,1, r,1]);
+    // this.rhythmsDict.put(\cencerro, 	[1,r, 1,r, 1,1, 1,1, r,1, 1,1, 1,r, 1,1]);
+    // this.rhythmsDict.put(\conga,	 	[r,r, 1,r, r,r, 1,1, r,r, 1,1, 1,r, 1,1]);
+    // this.rhythmsDict.put(\cencerro2, 	[1,r, 1,r, 1,r, 1,1, 1,r, 1,1, 1,r, 1,1]);
+    // this.rhythmsDict.put(\montuno,	 	[1,r, 1,1, r,1, r,1, r,1, r,1, r,1, r,1]);
+    // this.rhythmsDict.put(\tumbao,	 	[r,r, r,1, r,r, 1,r, r,r, r,1, r,r, 1,r]);
+
+    rhythm { |rh, reverse=0|
+        var pseq = Pseq(this,inf).asStream;
+        rh = if(rh.isSymbol && Ziva.rhythmsDict.includesKey(rh)) {
+            if(reverse == 0) { Ziva.rhythmsDict[rh] } { Ziva.rhythmsDict[rh].reverse };
+        } {
+            rh;
+        };
+        ^Array.fill(rh.flat.size, { |i|
+            if(rh.flat[i] == \r) {
+                \r;
+            } {
+                pseq.next;
+            }
+        });
+
+    }
+
+    clave { |reverse=0| ^this.rhythm(\clave, reverse);}
+    rumba { |reverse=0| ^this.rhythm(\rumba, reverse);}
+    chitlins { |reverse=0| ^this.rhythm(\chitlins, reverse);}
+    cascara { |reverse=0| ^this.rhythm(\cascara, reverse);}
+    cencerro { |reverse=0| ^this.rhythm(\cencerro, reverse);}
+    cencerru { |reverse=0| ^this.rhythm(\cencerru, reverse);}
+    montuno { |reverse=0| ^this.rhythm(\montuno, reverse);}
+    tumbao { |reverse=0| ^this.rhythm(\tumbao, reverse);}
+
     // add trailing rests
     // every { arg beats=4;
     //     ^this++(\r!beats).flat;

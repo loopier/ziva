@@ -27,6 +27,7 @@ Ziva {
 	classvar <> tracksDict;
 	classvar <> fxBusses;
 	classvar <> samplesDict;
+	classvar <> rhythmsDict;
 	classvar <> clock;
 
 	// *new { |sound|
@@ -51,6 +52,7 @@ Ziva {
 			ZivaEventTypes.new;
 			this.loadSounds;
 			this.makeEffectDict;
+			this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new;
@@ -226,6 +228,39 @@ Ziva {
 		effectDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
 		effectDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
 		effectDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(6.6)-1));};
+		effectDict[\chorus]		= {arg sig; Mix.fill(7, {
+			var maxdelaytime= rrand(0.005,0.02);
+			DelayC.ar(sig, maxdelaytime,LFNoise1.kr(Rand(4.5,10.5),0.25*maxdelaytime,0.75*maxdelaytime) );
+		})};
+		effectDict[\chorus2]		= {arg sig; Mix.fill(7, {
+			var maxdelaytime= rrand(0.005,0.02);
+			Splay.ar(Array.fill(4,{
+				var maxdelaytime= rrand(0.005,0.02);
+				DelayC.ar(sig[0], maxdelaytime,LFNoise1.kr(Rand(0.1,0.6),0.25*maxdelaytime,0.75*maxdelaytime) );
+			}));
+		})};
+		effectDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4)};
+	}
+
+	/// \brief	Predefined rhythms to be used with durs
+	*makeRhythmsDict {
+		var r = \r;
+		this.rhythmsDict = IdentityDictionary.new.know_(true);
+
+		// taken from https://www.thejazzpianosite.com/jazz-piano-lessons/jazz-genres/afro-cuban-latin-jazz/
+		this.rhythmsDict.put(\clave, 		[[r,r, 1,r, 1,r, r,r], [1,r, r,1, r,r, 1,r]]);
+		// this.rhythmsDict.put(\clave32, 		[[1,r, r,1, r,r, 1,r], [r,r, 1,r, 1,r, r,r]]);
+		this.rhythmsDict.put(\rumba, 		[[r,r, 1,r, 1,r, r,r], [1,r, r,1, r,r, r,1]]);
+		// this.rhythmsDict.put(\rumba32, 		[[1,r, r,1, r,r, r,1], [r,r, 1,r, 1,r, r,r]]);
+		this.rhythmsDict.put(\chitlins, 	[[1,r, r,1, r,r, 1,r], [r,r, 1,r, r,1, r,r]]);
+		this.rhythmsDict.put(\cascara, 		[[1,r, 1,r, 1,1, r,1], [1,r, 1,1, r,1, r,1]]);
+		this.rhythmsDict.put(\cencerro, 	[[1,r, 1,r, 1,1, 1,1], [r,1, 1,1, 1,r, 1,1]]);
+		this.rhythmsDict.put(\cencerru, 	[[1,r, 1,r, 1,r, 1,1], [1,r, 1,1, 1,r, 1,1]]);
+		this.rhythmsDict.put(\conga,	 	[[r,r, 1,r, r,r, 1,1], [r,r, 1,1, 1,r, 1,1]]);
+		this.rhythmsDict.put(\montuno,	 	[[1,r, 1,1, r,1, r,1], [r,1, r,1, r,1, r,1]]);
+		this.rhythmsDict.put(\tumbao,	 	[[r,r, r,1, r,r, 1,r], [r,r, r,1, r,r, 1,r]]);
+		// this.rhythmsDict.put(\clave23, (durs: [1,1,1,1, 1,0.5,0.5,1,1], rests: [\r,1,1,\r, 1,\r,1,\r,1]));
+		// this.rhythmsDict.put(\clave23, (durs: [1,1,2, 1.5,1.5,1], sus: [\r,1,1/2, 2/3,1/3,1]));
 	}
 
 	/// \brief	Construct the fx tracks.
@@ -269,6 +304,16 @@ Ziva {
 	*fx {
 		effectDict.keys.collect(_.postln);
 	}
+
+	*rhythms {
+		rhythmsDict.keys.collect(_.postln);
+	}
+
+	*rhythm { |rh|
+		rhythmsDict(rh).postln;
+	}
+
+	*rh { this.rhythms }
 
 	/// \brief	Create a Pdef that automatically plays and stores a Ppar
 	*pdef { |key, quant=1 ... elements|

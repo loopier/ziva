@@ -176,6 +176,26 @@
 
 	pattern { |pattern| ^Pchain(Pbind(\r, pattern), this)}
 	buleria { |rotate=0| ^Pchain(Pbind(\r, [\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1].rotate(rotate).pseq), this) }
+	r { |pattern|
+		var rhythm = pattern;
+		if(pattern.isSymbol && Ziva.rhythmsDict.keys.includes(pattern)) {
+			rhythm = Ziva.rhythmsDict[pattern].pseq;
+		};
+		if (pattern.isArray){
+			rhythm = pattern.pseq;
+		};
+		^Pchain(Pbind(\r, rhythm), this);
+	}
+	// rh { |rhythm, fast=1|
+		// var dur = if(Ziva.rhythmsDict.keys.includes(rhythm), {Ziva.rhythmsDict[rhythm].durs.pseq * (1/(fast.max(0.001)))}, {1});
+		// // var rests = if(Ziva.rhythmsDict.includes(rhythm), {Ziva.rhythmsDict[rhythm].rests.pseq}, {1});
+		// var sus = if(Ziva.rhythmsDict.keys.includes(rhythm), {Ziva.rhythmsDict[rhythm].sus.pseq}, {1});
+		// rhythm.debug("rhythm");
+		// (Ziva.rhythmsDict.includes(rhythm)).debug("rhythm");
+		// dur.debug("durs");
+		// sus.debug("sus");
+		// ^Pchain(Pbind(\dur, dur, \legato, sus), this);
+	// }
 
 	stopin { |beats=1| ^Pchain(Pbind(\r, Pseq((1!beats),1)), this) }
 
