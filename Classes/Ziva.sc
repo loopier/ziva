@@ -34,6 +34,10 @@ Ziva {
 	// 	^super.new.synth(sound);
 	// }
 
+	*initClass {
+		this.makeRhythmsDict;
+	}
+
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
 		^this.boot(inputChannels, outputChannels, server);
 	}
@@ -52,7 +56,7 @@ Ziva {
 			ZivaEventTypes.new;
 			this.loadSounds;
 			this.makeEffectDict;
-			this.makeRhythmsDict;
+			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new;
@@ -218,7 +222,12 @@ Ziva {
 		effectDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
 		effectDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
 		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
-		effectDict[\lowpass] 	= {arg sig; RLPF.ar(sig, \cutoff.kr(1000), \res.kr(0.2))};
+		effectDict[\lpfS] 		= {arg sig; LPF.ar(sig, \cutoff.kr(3000))};
+		effectDict[\lpf] 		= {arg sig; RLPF.ar(sig, \cutoff.kr(1000), \res.kr(0.2))};
+		effectDict[\lpfL] 		= {arg sig; LPF.ar(sig, \cutoff.kr(50))};
+		effectDict[\hpfS] 		= {arg sig; HPF.ar(sig, \cutoff.kr(50))};
+		effectDict[\hpf]  		= {arg sig; RHPF.ar(sig, \cutoff.kr(1000), \res.kr(0.2))};
+		effectDict[\hpfL] 		= {arg sig; HPF.ar(sig, \cutoff.kr(1500))};
 		effectDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
 		effectDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
 		effectDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
@@ -252,14 +261,24 @@ Ziva {
 		// this.rhythmsDict.put(\clave32, 		[[1,r, r,1, r,r, 1,r], [r,r, 1,r, 1,r, r,r]]);
 		this.rhythmsDict.put(\rumba, 		[[r,r, 1,r, 1,r, r,r], [1,r, r,1, r,r, r,1]]);
 		// this.rhythmsDict.put(\rumba32, 		[[1,r, r,1, r,r, r,1], [r,r, 1,r, 1,r, r,r]]);
+		this.rhythmsDict.put(\binaneth, 	[[1,r,r,1, 1,r,1,r], [1,r,r,1, 1,r,1,1]]);
 		this.rhythmsDict.put(\chitlins, 	[[1,r, r,1, r,r, 1,r], [r,r, 1,r, r,1, r,r]]);
 		this.rhythmsDict.put(\cascara, 		[[1,r, 1,r, 1,1, r,1], [1,r, 1,1, r,1, r,1]]);
 		this.rhythmsDict.put(\cencerro, 	[[1,r, 1,r, 1,1, 1,1], [r,1, 1,1, 1,r, 1,1]]);
 		this.rhythmsDict.put(\cencerru, 	[[1,r, 1,r, 1,r, 1,1], [1,r, 1,1, 1,r, 1,1]]);
 		this.rhythmsDict.put(\conga,	 	[[r,r, 1,r, r,r, 1,1], [r,r, 1,1, 1,r, 1,1]]);
 		this.rhythmsDict.put(\montuno,	 	[[1,r, 1,1, r,1, r,1], [r,1, r,1, r,1, r,1]]);
-		this.rhythmsDict.put(\tumbao,	 	[[r,r, r,1, r,r, 1,r], [r,r, r,1, r,r, 1,r]]);
-		// this.rhythmsDict.put(\clave23, (durs: [1,1,1,1, 1,0.5,0.5,1,1], rests: [\r,1,1,\r, 1,\r,1,\r,1]));
+		this.rhythmsDict.put(\tumbao,	 	[[1,r, r,1, r,r, 1,r], [1,r, r,1, r,r, 1,r]]);
+		this.rhythmsDict.put(\tumbau,	 	[[r,r, r,1, r,r, 1,r], [r,r, r,1, r,r, 1,r]]);
+		this.rhythmsDict.put(\horace,	 	[[1,r, r,1, 1,r, r,1], [1,r, r,1, 1,r, r,1]]);
+		this.rhythmsDict.put(\buleria,	 	[r,1,r,r,1,r,r,1,r,1,r,1]);
+		this.rhythmsDict.put(\nine,	 		[1,r,r,1,r,1,1,r]);
+		this.rhythmsDict.put(\eleven,	 	[1,r,1,r,1,r,1,r,1,r,1]);
+		this.rhythmsDict.put(\tonebank,	 	[1,1,1,1, r,1,r,1, 1,1,1,r, 1,r,1,r, 1,1,1,1, r,1,r,1]);
+		this.rhythmsDict.put(\tracatrin,	[[1,r,1,r],[1,r,1,r],[1,r,1]]);
+		this.rhythmsDict.put(\tracatron,	[[1,r,r],[1,r,r],[1,r,r],[1,r]]);
+		this.rhythmsDict.put(\tracatrun,	[[1,r,1,r],[1,r,1,r],[1,r,r]]);
+			// this.rhythmsDict.put(\clave23, (durs: [1,1,1,1, 1,0.5,0.5,1,1], rests: [\r,1,1,\r, 1,\r,1,\r,1]));
 		// this.rhythmsDict.put(\clave23, (durs: [1,1,2, 1.5,1.5,1], sus: [\r,1,1/2, 2/3,1/3,1]));
 	}
 
@@ -302,11 +321,11 @@ Ziva {
 	}
 
 	*fx {
-		effectDict.keys.collect(_.postln);
+		effectDict.keys.asArray.sort.collect(_.postln);
 	}
 
 	*rhythms {
-		rhythmsDict.keys.collect(_.postln);
+		rhythmsDict.keys.asArray.sort.do{|k| var v = Ziva.rhythmsDict[k];  v.asString.replace(" ").replace("r", "·").replace("],[","  ").replace(",").replace("[").replace("]").debug(k)}
 	}
 
 	*rhythm { |rh|
@@ -314,6 +333,11 @@ Ziva {
 	}
 
 	*rh { this.rhythms }
+
+	*motif { |size=16|
+		var pat = (-7..7).pwalk([(-7..-2).prand(1),-1,0,1,(2..7).prand(1)].pwrand([1,4,5,4,1].normalizeSum, inf), startPos:7).asStream;
+		^Array.fill(16,{pat.next}).debug("motif");
+	}
 
 	/// \brief	Create a Pdef that automatically plays and stores a Ppar
 	*pdef { |key, quant=1 ... elements|
