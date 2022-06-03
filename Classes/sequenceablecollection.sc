@@ -54,18 +54,6 @@
 
     // buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
 
-    // // taken from https://www.thejazzpianosite.com/jazz-piano-lessons/jazz-genres/afro-cuban-latin-jazz/
-    // this.rhythmsDict.put(\clave23, 		[r,r, 1,r, 1,r, r,r, 1,r, r,1, r,r, 1,r]);
-    // this.rhythmsDict.put(\clave32, 		[1,r, r,1, r,r, 1,r, r,r, 1,r, 1,r, r,r]);
-    // this.rhythmsDict.put(\rumba23, 		[r,r, 1,r, 1,r, r,r, 1,r, r,1, r,r, r,1]);
-    // this.rhythmsDict.put(\rumba32, 		[1,r, r,1, r,r, r,1, r,r, 1,r, 1,r, r,r]);
-    // this.rhythmsDict.put(\chitlins, 	[1,r, r,1, r,r, 1,r, r,r, 1,r, r,1, r,r]);
-    // this.rhythmsDict.put(\cascara, 		[1,r, 1,r, 1,1, r,1, 1,r, 1,1, r,1, r,1]);
-    // this.rhythmsDict.put(\cencerro, 	[1,r, 1,r, 1,1, 1,1, r,1, 1,1, 1,r, 1,1]);
-    // this.rhythmsDict.put(\conga,	 	[r,r, 1,r, r,r, 1,1, r,r, 1,1, 1,r, 1,1]);
-    // this.rhythmsDict.put(\cencerro2, 	[1,r, 1,r, 1,r, 1,1, 1,r, 1,1, 1,r, 1,1]);
-    // this.rhythmsDict.put(\montuno,	 	[1,r, 1,1, r,1, r,1, r,1, r,1, r,1, r,1]);
-    // this.rhythmsDict.put(\tumbao,	 	[r,r, r,1, r,r, 1,r, r,r, r,1, r,r, 1,r]);
 
     rhythm { |rh, reverse=0|
         var pseq = Pseq(this,inf).asStream;
@@ -84,15 +72,29 @@
 
     }
 
-    clave { |reverse=0| ^this.rhythm(\clave, reverse);}
-    rumba { |reverse=0| ^this.rhythm(\rumba, reverse);}
-    chitlins { |reverse=0| ^this.rhythm(\chitlins, reverse);}
-    cascara { |reverse=0| ^this.rhythm(\cascara, reverse);}
-    cencerro { |reverse=0| ^this.rhythm(\cencerro, reverse);}
-    cencerru { |reverse=0| ^this.rhythm(\cencerru, reverse);}
-    montuno { |reverse=0| ^this.rhythm(\montuno, reverse);}
-    tumbao { |reverse=0| ^this.rhythm(\tumbao, reverse);}
-    conga { |reverse=0| ^this.rhythm(\conga, reverse);}
+    /// \brief  convert rests to hits and viceversa
+    inv { ^this.replace(\r, 0).invert.replace(0,\r) }
+
+    // taken from https://www.thejazzpianosite.com/jazz-piano-lessons/jazz-genres/afro-cuban-latin-jazz/
+    clave { |reverse=0| ^this.rhythm(\clave, reverse) }
+    rumba { |reverse=0| ^this.rhythm(\rumba, reverse) }
+    binaneth { |reverse=0| ^this.rhythm(\binaneth, reverse) }
+    chitlins { |reverse=0| ^this.rhythm(\chitlins, reverse) }
+    cascara { |reverse=0| ^this.rhythm(\cascara, reverse) }
+    cencerro { |reverse=0| ^this.rhythm(\cencerro, reverse) }
+    cencerru { |reverse=0| ^this.rhythm(\cencerru, reverse) }
+    montuno { |reverse=0| ^this.rhythm(\montuno, reverse) }
+    conga { |reverse=0| ^this.rhythm(\conga, reverse) }
+    tumbao { |reverse=0| ^this.rhythm(\tumbao, reverse) }
+    tumbau { |reverse=0| ^this.rhythm(\tumbao, reverse) }
+    horace { |reverse=0| ^this.rhythm(\horace, reverse) }
+    buleria { |reverse=0| ^this.rhythm(\buleria, reverse) }
+    nine { |reverse=0| ^this.rhythm(\nine, reverse) }
+    eleven { |reverse=0| ^this.rhythm(\eleven, reverse) }
+    tonebank { |reverse=0| ^this.rhythm(\tonebank, reverse) }
+    tracatrin { |reverse=0| ^this.rhythm(\tracatrin, reverse) }
+    tracatron { |reverse=0| ^this.rhythm(\tracatron, reverse) }
+    tracatrun { |reverse=0| ^this.rhythm(\tracatrun, reverse) }
 
     // add trailing rests
     // every { arg beats=4;
