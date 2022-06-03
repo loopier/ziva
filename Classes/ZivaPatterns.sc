@@ -11,7 +11,7 @@ Psample {
 }
 
 Pmidi {
-	*new { |midiout, ch|
+	*new { |midiout, ch=0|
 		^Pbind(\type, \midi, \midiout, midiout, \chan, ch);
 	}
 
