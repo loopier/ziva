@@ -245,9 +245,22 @@
 	// 	^Pchain(Pfxb(Pchain(Pbind(\out, [0, bus]), this), \rhpf, \freq, freq, \rq, rq, \in, bus));
 	// }
 
-
-
-
 	// rata { |repeats=4| ^Pchain(Pbind(\rate, Pn(Pchoose([0.5, 1, -1, 2, 4], 4, 4))), this)}
 
+	/// \brief converts a string to a drum pattern
+	drums { |str|
+		var kits = "brscSlhLftHToyYxXBpiekKOzZ";
+		var pat = Array.fill(str.size, { |i|
+			var c = str.at(i);
+			var k;
+			if(c == $ ) {
+				k = \r.debug("REST");
+			}{
+				k = kits.indexOf(c).debug(i);
+			};
+			k
+		});
+		pat.debug("drum pattern");
+		^Pchain(Pbind(\note, pat.pseq), this);
+	}
 }

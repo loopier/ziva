@@ -201,6 +201,31 @@ Ziva.sounds; // see the post window.
 // This example sequences 4 pieces chosen from a list of 8 chunks.
 [~delia.chop(4, 8)].ziva;
 
+// MIDI
+// MIDI instruments can also be played, but MIDI needs to be initialized first.
+// Initialize the client
+MIDIClient.init;
+// connect the first output of SC 'MIDIOut(0)' to your MIDI device in your User Iterface.
+// this is different for each operative system
+// then create a musician that plays that instrument.
+~wendy = Pmidi(MIDIOut(0));
+// 'MIDIOut(0)' syntax may be different for OSX and Windows -- this is just Linux
+// MIDI channel is optional, default is 0 -- in SC MIDI channels range 0-15
+[ ~wendy.oct(4).deg([0,2,4].pseq) ].ziva;
+
+// DRUMS
+// drums can be just synths or samples, but there's a special class for the
+// free AVL plugin that can be downloaded at http://www.bandshed.net/avldrumkits/
+//
+// create a drummer that sends MIDI
+~bonzo = Pavldrums(MIDIOut(0));
+// with this, you can play drums with strings of characters, where
+// specific characters are mapped to certain MIDI notes corresponding
+// to specific drum kits in the AVL plugin.
+// spaces are rests
+[ ~bonzo.drums("b h s h b h s o ").faster ].ziva;
+// to see the mappings
+Ziva.drums;
 
 // =====================================================================
 // SEQUENCING

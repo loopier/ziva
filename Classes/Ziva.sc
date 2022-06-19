@@ -29,6 +29,9 @@ Ziva {
 	classvar <> samplesDict;
 	classvar <> rhythmsDict;
 	classvar <> clock;
+	classvar <> drumDict;
+	classvar <> drumMidi;
+	classvar <> drumChars;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -56,10 +59,12 @@ Ziva {
 			ZivaEventTypes.new;
 			this.loadSounds;
 			this.makeEffectDict;
+			this.makeDrumDict;
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new;
+
 		};
 		^this.server;
 	}
@@ -282,6 +287,51 @@ Ziva {
 		// this.rhythmsDict.put(\clave23, (durs: [1,1,2, 1.5,1.5,1], sus: [\r,1,1/2, 2/3,1/3,1]));
 	}
 
+	*makeDrumDict {
+		// this.drumDict = "brscSlhLftHToyYxXBpiekKOzZ";
+		this.drumChars = "brscSlhLftHToyYxXBpiekKOzZ";
+		this.drumDict = Dictionary.new;
+		this.drumMidi = [
+			"Kick Drum",
+			"Snare SideStick",
+			"Snare Center",
+			"Hand Clap",
+			"Snare Edge",
+			"Floor Tom Center",
+			"Closed HiHat",
+			"Floor Tom Edge",
+			"Pedal HiHat",
+			"Tom Center",
+			"Semi-Open HiHa",
+			"Tom Edge",
+			"Swish HiHat",
+			"Crash Cymbal 1",
+			"Crash Cymbal 1 Choked",
+			"Ride Cymbal Tip",
+			"Ride Cymbal Choked",
+			"Ride Cymbal Bell",
+			"Tambourine",
+			"Splash Cymbal",
+			"Cowbell",
+			"Crash Cymbal 2",
+			"Crash Cymbal 2 Choked",
+			"Ride Cymbal Shank",
+			"Crash Cymbal 3",
+			"Maracas",
+		];
+
+		this.drumMidi.do{ |x,i|
+			this.drumDict.put(x, this.drumChars[i]);
+		};
+	}
+
+	*drums {
+		this.drumMidi.do{ |x,i|
+			x.debug(this.drumChars[i]);
+		};
+	}
+
+
 	/// \brief	Construct the fx tracks.
 	/// \description
 	/// 	Make an ndef, and busses to it's input.
@@ -321,7 +371,7 @@ Ziva {
 	}
 
 	*fx {
-		effectDict.keys.asArray.sort.collect(_.postln);
+		effectDict.keys.collect(_.postln);
 	}
 
 	*rhythms {

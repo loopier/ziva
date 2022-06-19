@@ -19,3 +19,9 @@ Pmidi {
 	// 	^Pchain(Pbind(\midi))
 	// }
 }
+
+Pavldrums {
+	*new { |midiout, ch=0|
+		^Pbind(\type, \midi, \midiout, midiout, \chan, ch, \octave, 3, \amp, Pwhite(0.7));
+	}
+}
