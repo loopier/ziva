@@ -10,6 +10,12 @@ Psample {
 	}
 }
 
+// Prec {
+// 	*new{ |name = \, length = 4, channels = 1|
+// 		^P
+// 	}
+// }
+
 Pmidi {
 	*new { |midiout, ch=0|
 		^Pbind(\type, \midi, \midiout, midiout, \chan, ch);

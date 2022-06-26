@@ -32,6 +32,8 @@ Ziva {
 	classvar <> drumDict;
 	classvar <> drumMidi;
 	classvar <> drumChars;
+	classvar <> recsynth; // a synth to record new samples
+	classvar <> isRecoring;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -169,6 +171,7 @@ Ziva {
 	*loadSamplesAsSymbols { arg paths = [], s = Server.default;
 		paths.do { |path|
 			var name  = PathName(path).folderName;
+			// FIX: Loopier???
 			this.samplesDict.put(name.asSymbol, Loopier.loadSamplesArray(path, s));
 		};
 	}
@@ -182,6 +185,37 @@ Ziva {
 
 	*sample { |name|
 		^this.samplesDict.at(name);
+	}
+
+	/// TODO: DOCUMENT!!!
+	*rec { |name, index, rec=1, feedback=1, length=4, ch=1|
+		var recbuf;
+		if (name.isNil) {
+			// stop recording and exit
+			rec = 0;
+			"... recording is % -> '%' (% / %)".format(["OFF","ON"][rec], name, index, this.samplesDict[name.asSymbol].size-1).debug;
+			^this.recsynth.set(\rec, rec);
+		};
+
+		if(this.samplesDict.includesKey(name).not) {
+			name.debug("new recording samples group");
+			this.samplesDict[name.asSymbol] = List();
+		};
+
+		if(index > (this.samplesDict[name.asSymbol].size - 1)){
+			"... add new sample to '%'".format(name).postln;
+			recbuf = Buffer.alloc(Server.default, Server.default.sampleRate * length, ch);
+			this.samplesDict[name.asSymbol].add(recbuf);
+			index = this.samplesDict[name.asSymbol].size - 1;
+			recbuf = this.samplesDict[name.asSymbol][index];
+		};
+		"... recording is % -> '%' (% / %)".format(["OFF","ON"][rec], name, index, this.samplesDict[name.asSymbol].size-1).debug;
+		this.recsynth = this.recsynth ? Synth(\recbuf, [buf: recbuf, rec: 0, feedback: 0]);
+		this.recsynth.set(\rec, rec, \buf, recbuf, \feedback, feedback);
+	}
+
+	*stopRec {
+		this.rec();
 	}
 
 	/// \brief list synth names
