@@ -144,6 +144,15 @@
 	higher { ^Pchain(Pbind(\octave, 7), this)}
 	highest { ^Pchain(Pbind(\octave, 8), this)}
 
+	amp { |min, max|
+		var amp;
+		if (max.isNil) {
+			amp = min;
+		} {
+			amp = Pwhite(min, max);
+		};
+		^Pchain(Pbind(\amp, amp), this);
+	}
 	ffff { ^Pchain(Pbind(\amp, 2), this)}
 	fff { ^Pchain(Pbind(\amp, 1), this)}
 	ff { ^Pchain(Pbind(\amp, 0.5), this)}
