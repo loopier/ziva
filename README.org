@@ -98,7 +98,7 @@ SynthDef(...).add;
 
 
 * Playing Sounds
-In SuperCollider (SC), there's a thing called `Pbind`.  It's a somewhat
+In SuperCollider (SC), there's a thing called #+Pbind#+.  It's a somewhat
 obscure name for a music score, a set of instructions to play music.
 It's syntax is very simple:
 
@@ -114,7 +114,7 @@ The first one is
 Pbind(\instrument, \acid);
 #+end_src
 
-where `\acid` is the name of a SynthDef that should be loaded already if you
+where #+\acid#+ is the name of a SynthDef that should be loaded already if you
 booted the server with Ziva.boot
 
 This is just a score sheet that says, "score sheet to be played with \acid synth".
