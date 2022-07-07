@@ -7,6 +7,7 @@ SynthDef(\recbuf, { |monitor=1|
 	var trig = \trig.kr(1);
 
 	var in = SoundIn.ar(\in.kr(0));
+	// var in = In.ar(\in.kr(0));
 	var feedback = \feedback.kr(0);
 	var rec = \rec.kr(1);
 	var sig = in * amp * (rec > 0);
