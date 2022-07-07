@@ -188,7 +188,7 @@ Ziva {
 	}
 
 	/// TODO: DOCUMENT!!!
-	*rec { |name, index, rec=1, feedback=1, length=4, ch=1|
+	*rec { |name, index, soundin=0, rec=1, feedback=1, length=4, ch=1, monitor=0|
 		var recbuf;
 		if (name.isNil) {
 			// stop recording and exit
@@ -209,9 +209,9 @@ Ziva {
 			index = this.samplesDict[name.asSymbol].size - 1;
 			recbuf = this.samplesDict[name.asSymbol][index];
 		};
-		"... recording is % -> '%' (% / %)".format(["OFF","ON"][rec], name, index, this.samplesDict[name.asSymbol].size-1).debug;
-		this.recsynth = this.recsynth ? Synth(\recbuf, [buf: recbuf, rec: 0, feedback: 0]);
-		this.recsynth.set(\rec, rec, \buf, recbuf, \feedback, feedback);
+		"... recording from ch:% is % -> '%' (% / %)".format(soundin, ["OFF","ON"][rec], name, index, this.samplesDict[name.asSymbol].size).debug;
+		this.recsynth = this.recsynth ? Synth(\recbuf, [buf: recbuf, rec: 0, feedback: 0, in:soundin, monitor:monitor]);
+		this.recsynth.set(\rec, rec, \buf, this.samplesDict[name.asSymbol][index], \in, soundin, \feedback, feedback, \monitor, monitor);
 	}
 
 	*stopRec {
