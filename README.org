@@ -46,7 +46,9 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 start the server
 
 #src_begin sclang
+
 Ziva.boot;
+
 #src_end
 
 you can set some sever options with arguments, e.g. to set more audio channels:
