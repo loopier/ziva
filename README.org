@@ -102,17 +102,17 @@ In SuperCollider (SC), there's a thing called `Pbind`.  It's a somewhat
 obscure name for a music score, a set of instructions to play music.
 It's syntax is very simple:
 
-#begin_src sclang
+#+begin_src sclang
 Pbind(\parametername1, VALUE, \parametername2, VALUE, ...);
-#end_src
+#+end_src
 
 There are many parameters available, too many to list here (see Pbind's
 help if you want the details).  We're going to see some as we need them.
 The first one is
 
-#begin_src sclang
+#+begin_src sclang
 Pbind(\instrument, \acid);
-#end_src
+#+end_src
 
 where `\acid` is the name of a SynthDef that should be loaded already if you
 booted the server with Ziva.boot
@@ -120,27 +120,27 @@ booted the server with Ziva.boot
 This is just a score sheet that says, "score sheet to be played with \acid synth".
 As such, it does nothing by itself; we need it to give it to a musician.
 
-#begin_src sclang
+#+begin_src sclang
 ~lola = Pbind(\instrument, \acid);
-#end_src
+#+end_src
 
 there's a Živa shortcut, though
 
-#begin_src sclang
+#+begin_src sclang
 ~lola = Psynth(\acid);
-#end_src
+#+end_src
 
 we can then tell the musician to play the score
 
-#begin_src sclang
+#+begin_src sclang
 ~lola.play;
-#end_src
+#+end_src
 
 but we cannot tell it to stop;
 
-#begin_src sclang
+#+begin_src sclang
 ~lola.stop;
-#end_src
+#+end_src
 
 WTF??? why didn't it stop?  One of SuperCollider's many complexities.
 We won't explain it here.
@@ -149,30 +149,30 @@ YOU WILL NEED IT!!)
 
 In Živa, to simplify things, we'll put all our musicians in a band
 
-#begin_src sclang
+#+begin_src sclang
 (
 [
 	~lola,
 ].ziva;
 )
-#end_src
+#+end_src
 
 then we can tell the band to stop playing
 
-#begin_src sclang
+#+begin_src sclang
 Ziva.stop;
-#end_src
+#+end_src
 
 or simply remove everyone from the band
 
-#begin_src sclang
+#+begin_src sclang
 (
 [
 // ~lola,
 	nil
 ].ziva;
 )
-#end_src
+#+end_src
 
 // =====================================================================
 // CHANGING THE SOUND
