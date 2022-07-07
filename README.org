@@ -44,12 +44,11 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 * SETUP
 start the server
-
-#src_begin sclang
+#begin_src sclang
 
 Ziva.boot;
 
-#src_end
+#end_src
 
 you can set some sever options with arguments, e.g. to set more audio channels:
 `Ziva.boot(inputChannels:2, outputChannels:2);`
@@ -61,29 +60,29 @@ subdirectories, which themselves store the audio files.
 Each subdirectory name will become the sample name.
 Each sample will be accessed with the `n` function.  More on this later.
 
-#src_begin sclang
+#begin_src sclang
 Ziva.loadSamples("path/to/samples");
-#src_end
+#end_src
 
 You can add different sample lists, from different folders. They will all
 be stored and accessible. For example, you can load the samples that come with
 this quark.
 
-#src_begin sclang
+#begin_src sclang
 Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/ziva/samples");
-#src_end
+#end_src
 
 To list all samples, evaluate this function
 
-#src_begin sclang
+#begin_src sclang
 Ziva.sounds;
-#src_end
+#end_src
 
 To list all synths use
 
-#src_begin sclang
+#begin_src sclang
 Ziva.synths;
-#src_end
+#end_src
 
 which will list all SynthDefs loaded on the server.  New synths can be loaded
 anytime as you would normally do with `SynthDef(...).add`
