@@ -42,52 +42,62 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 // =====================================================================
 
 
-* SETUP
-start the server
+* Setup
+Start the server.
 
 #+begin_src sclang
 Ziva.boot;
 #+end_src
 
-you can set some sever options with arguments, e.g. to set more audio channels:
-`Ziva.boot(inputChannels:2, outputChannels:2);`
-or more memory
-`Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);`
+You can set some sever options with arguments, e.g. to set more audio channels:
 
-load some samples.  This path is to a parent directory holding
-subdirectories, which themselves store the audio files.
+#+begin_src sclang
+Ziva.boot(inputChannels:2, outputChannels:2);
+#+end_src
+
+or more memory
+
+#+begin_src sclang
+Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);`
+#+end_src
+
+Load some samples.  This path is to a parent directory holding subdirectories, which themselves store the audio files.
+
 Each subdirectory name will become the sample name.
+
 Each sample will be accessed with the `n` function.  More on this later.
 
 #+begin_src sclang
 Ziva.loadSamples("path/to/samples");
 #+end_src
 
-You can add different sample lists, from different folders. They will all
-be stored and accessible. For example, you can load the samples that come with
-this quark.
+You can add different sample lists, from different folders. They will all be stored and accessible. For example, you can load the samples that come with this quark.
 
 #+begin_src sclang
 Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/ziva/samples");
 #+end_src
 
-To list all samples, evaluate this function
+To list all samples, evaluate this function:
 
 #+begin_src sclang
 Ziva.sounds;
 #+end_src
 
-To list all synths use
+To list all synths use:
 
 #+begin_src sclang
 Ziva.synths;
 #+end_src
 
 which will list all SynthDefs loaded on the server.  New synths can be loaded
-anytime as you would normally do with `SynthDef(...).add`
+anytime as you would normally do with
+#+begin_src sclang
+SynthDef(...).add;
+#+end_src
 
 
-* PLAYING SOUNDS
+
+* Playing Sounds
 // In SuperCollider (SC), there's a thing called `Pbind`.  It's a somewhat
 // obscure name for a music score, a set of instructions to play music.
 // It's syntax is very simple:
