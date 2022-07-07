@@ -195,13 +195,13 @@ Common parameters to samples and synths are:
 ** tempo
 
 #+begin_src sclang
-[~lola.fast].ziva; #+end_src
+[~lola.fast].ziva;
 #+end_src
 
 try faster, fastest, slow, slower, slowest
 
 #+begin_src sclang
-[~lola.dur(1.3)].ziva; #+end_src
+[~lola.dur(1.3)].ziva;
 #+end_src
 
 for custom duration
@@ -209,13 +209,13 @@ for custom duration
 volume
 
 #+begin_src sclang
-[~lola.f].ziva; #+end_src
+[~lola.f].ziva;
 #+end_src
 
 try ff, fff, ffff, p, pp, ppp
 
 #+begin_src sclang
-[~lola.amp(0.2)].ziva; #+end_src
+[~lola.amp(0.2)].ziva;
 #+end_src
 
 BE CAREFUL!! NEVER GO ABOVE 1.0!!!
@@ -223,12 +223,12 @@ BE CAREFUL!! NEVER GO ABOVE 1.0!!!
 legato (sustain)
 
 #+begin_src sclang
-[~lola.stacc].ziva; #+end_src
+[~lola.stacc].ziva;
 
 try pizz, stass, stacc, tenuto, legato, pedal
 
 #+begin_src sclang
-[~lola.legato(1.2)].ziva, #+end_src
+[~lola.legato(1.2)].ziva,
 
 custom length
 
@@ -239,22 +239,22 @@ custom length
 panning (distribution along stereo field)
 
 #+begin_src sclang
-[~lola.pan(-1)].ziva; #+end_src
+[~lola.pan(-1)].ziva;
 
 left
 
 #+begin_src sclang
-[~lola.fast.pan(1)].ziva; #+end_src
+[~lola.fast.pan(1)].ziva;
 
 right
 
 #+begin_src sclang
-[~lola.slow.pan(0)].ziva; #+end_src
+[~lola.slow.pan(0)].ziva;
 
 center -- default
 
 #+begin_src sclang
-[~lola.pingpong].ziva; #+end_src
+[~lola.pingpong].ziva;
 
 alternates between left and right
 
@@ -273,7 +273,7 @@ creates a rhythm. It distributes as evenly as possible a number
 of hits (first argument) across a number fo beats (second argument).
 
 #+begin_src sclang
-[~lola.faster.bj(3,8)].ziva; #+end_src
+[~lola.faster.bj(3,8)].ziva;
 
 will create 3 hits over 8 beats
 
@@ -346,7 +346,7 @@ replace the hits (1s) in the pattern keeping the rests.
 to see how it works
 
 #+begin_src sclang
-[0,2,4].clave; #+end_src
+[0,2,4].clave;
 
 see the post window
 audio example
@@ -365,7 +365,7 @@ some rhythms are divided into two bars that can be played in reversed order
 e.g.: clave can be 2/3
 
 #+begin_src sclang
-Ziva.rhythm(\clave); #+end_src
+Ziva.rhythm(\clave);
 
 this shows two nested arrays, each one being a bar
 
@@ -405,12 +405,12 @@ one octave lower (default is 5)
 degree notes can be alterated with sharps (s) and flats (b)
 
 #+begin_src sclang
-[~lola.deg(0,2b,4)].ziva; #+end_src
+[~lola.deg(0,2b,4)].ziva;
 
 plays a minor chord although the scale is major
 
 #+begin_src sclang
-[~lola.deg(0,2s,4).scale(\minor)].ziva; #+end_src
+[~lola.deg(0,2s,4).scale(\minor)].ziva;
 
 plays a major chord although the scale is minor
 
@@ -429,7 +429,7 @@ synth parameters can also be modified
 to see what parameters are avaiable for a synth
 
 #+begin_src sclang
-Ziva.controls(\acid); #+end_src
+Ziva.controls(\acid);
 
 see the post window
 
@@ -443,7 +443,7 @@ SAMPLES
 to list the available samples
 
 #+begin_src sclang
-Ziva.sounds; #+end_src
+Ziva.sounds;
 
 see the post window.
 The number displayed between () is the number of samples with that name
@@ -469,7 +469,7 @@ that sample folder it will wrapped around)
 change the playing speed
 
 #+begin_src sclang
-[~delia.speed(0.5)].ziva; #+end_src
+[~delia.speed(0.5)].ziva;
 
 half speed
 sequence a list of speeds. First argument is the number of steps in
