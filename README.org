@@ -198,75 +198,81 @@ Common parameters to samples and synths are:
 [~lola.fast].ziva;
 #+end_src
 
-try faster, fastest, slow, slower, slowest
+Other options are: ~faster~, ~fastest~, ~slow~, ~slower~, ~slowest~
+
+For custom duration (in beats):
 
 #+begin_src sclang
 [~lola.dur(1.3)].ziva;
 #+end_src
 
-for custom duration
+** volume
 
-volume
+To play louder add ~f~ (for /forte/):
 
 #+begin_src sclang
 [~lola.f].ziva;
 #+end_src
 
-try ff, fff, ffff, p, pp, ppp
+Other options are: ~ff~, ~fff~, ~ffff~, ~p~, ~pp~, ~ppp~
+
+Custom loudness can be set with ~amp~. *BE CAREFUL!! NEVER GO ABOVE 1.0!!!*
 
 #+begin_src sclang
 [~lola.amp(0.2)].ziva;
 #+end_src
 
-BE CAREFUL!! NEVER GO ABOVE 1.0!!!
 
-legato (sustain)
-
-#+begin_src sclang
-[~lola.stacc].ziva;
-
-try pizz, stass, stacc, tenuto, legato, pedal
+** legato (sustain)
 
 #+begin_src sclang
-[~lola.legato(1.2)].ziva,
-
-custom length
-
-#+begin_src sclang
-
+    [~lola.stacc].ziva;
 #+end_src
 
-panning (distribution along stereo field)
+Other opstions are: ~pizz~, ~stass~, ~stacc~, ~tenuto~, ~legato~, ~pedal~
+
+For custom length use ~legato~:
 
 #+begin_src sclang
-[~lola.pan(-1)].ziva;
+   [~lola.legato(1.2)].ziva,
+#+end_src
+
+
+** panning
+Distribution along stereo field.
 
 left
 
 #+begin_src sclang
-[~lola.fast.pan(1)].ziva;
+[~lola.pan(-1)].ziva;
+#+end_src
 
 right
 
 #+begin_src sclang
-[~lola.slow.pan(0)].ziva;
+[~lola.fast.pan(1)].ziva;
+#+end_src
 
-center -- default
+center (default)
+
+#+begin_src sclang
+[~lola.slow.pan(0)].ziva;
+#+end_src
+
+alternate between left and right
 
 #+begin_src sclang
 [~lola.pingpong].ziva;
-
-alternates between left and right
-
-#+begin_src sclang
-
 #+end_src
 
-RHYTHM
+custom
 
 #+begin_src sclang
-
+[~lola.pan(-0.5)].ziva;
 #+end_src
+
+
+** TODO rhythm
 
 euclidean rhythms
 creates a rhythm. It distributes as evenly as possible a number
