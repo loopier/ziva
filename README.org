@@ -48,8 +48,9 @@ To evaluate code in SuperCollider, put the cursor in the line you want to evalua
 
 To stop all sounds, perss ~CTRL/CMD-.(period)~. *REMEMBER THIS!!*
 
-* Setup
-** Booting the server
+** Setup
+*** Booting the server
+First of all we need to boot SuperCollider's server (sound engine).
 #+begin_src sclang
 Ziva.boot;
 #+end_src
@@ -60,13 +61,13 @@ You can set some sever options with arguments, e.g. to set more audio channels:
 Ziva.boot(inputChannels:2, outputChannels:2);
 #+end_src
 
-or more memory
+or increase memory
 
 #+begin_src sclang
 Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);`
 #+end_src
 
-** Samples
+*** Samples
 In Živa two types of sounds can be played: samples and synths. The path to the samples directory must be set. Some default synths are loaded automatically.
 
 The path to the samples directory must be holding subdirectories, which themselves store the audio files.
@@ -77,21 +78,21 @@ Each subdirectory name will become the sample name accessible from Živa, and ea
 Ziva.loadSamples("path/to/samples/parent/directory");
 #+end_src
 
-For example, you can load the samples that come with this quark.
+For example, you can load the samples that come with this quark:
 
 #+begin_src sclang
-Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/ziva/samples");
+Ziva.loadSamples(Platform.userAppSupportDir++"/downloaded-quarks/ziva/samples");
 #+end_src
 
-You can add different sample lists, from different folders, with consecutive calls to this function; beware that if there are two subfolders with the same name only the last one will prevail.
+Several sample lists can be added from different folders, with consecutive calls to this function; beware that if there are two subfolders with the same name only the last one will prevail.
 
-To list all loaded samples, evaluate this function and check the post winow (number between ~()~ are the number of audio files in that subdirectory):
+To list all loaded samples, evaluate this function and check the post window (the number between ~()~ is the number of audio files in that subdirectory):
 
 #+begin_src sclang
 Ziva.sounds;
 #+end_src
 
-** Synths
+*** Synths
 
 To list currently available synths use:
 
@@ -99,23 +100,18 @@ To list currently available synths use:
 Ziva.synths;
 #+end_src
 
-which will list all SynthDefs loaded on the server.  New synths can be loaded anytime as you would normally do with:
-#+begin_src sclang
-SynthDef(...).add;
-#+end_src
 
 
+** Playing Sounds
 
-* Playing Sounds
-
-Živa uses a model based after music bands. There are musicians that play instruments, following scoresheets, and a band, or parts of a band that gathers playing musicians.
+Živa follows a model that mimmics music bands. There are musicians in a band that play instruments following scoresheets.
 
 To start we must have a musician, which just a variable. For example:
 #+begin_src sclang
 ~lola
 #+end_src
 
-This musician needs to play an instrument, it can be either synth or a sample:
+This musician needs to play an instrument, it can be either a synth or a sample:
 #+begin_src sclang
   ~lola = Psynth(\acid);
   // or
@@ -133,82 +129,27 @@ In order to play, the musician needs to be in a band, which is just a list (actu
   )
 #+end_src
 
-This code will help us understand a few things.
+This code will help us understand a few things:
 1. The starting and ending ~()~ let us evaluate all the code within these parenthesis without having to select it.
-2. ~.ziva~ is a function than will make the band start playing at once on the beginning of the next beat.
+2. ~.ziva~ is a function that will make the band start playing at once on the beginning of the next beat.
 
+If you evaluate this code you should hear either Delia Derbyshire saying something, or an acid bass playing middel C, depending on what you evaluated last when setting up the instrument for ~\~lola~.
 
+To stop the sound there are 3 options:
+- press ~CTRL/CMD-.~.
+- evaluate ~Ziva.stop;~
+- or empty the band:
+  #+begin_src sclang
+    (
+    [
+        // ~lola,
+        nil
+    ].ziva
+    )
+  #+end_src
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  In SuperCollider (SC), there's a thing called ~Pbind~.  It's a somewhat
-  obscure name for a music score, a set of instructions to play music.
-  Its syntax is very simple:
-
-  ,#+begin_src sclang
-  Pbind(\parametername1, VALUE, \parametername2, VALUE, ...);
-#+end_src
-
-There are many parameters available, too many to list here (see [[https://doc.sccode.org/Classes/Pbind.html][Pbind's help]] if you want the details).  We're going to see some as we need them.
-
-The first one is
-
-#+begin_src sclang
-Pbind(\instrument, \acid);
-#+end_src
-
-where ~\acid~ is the name of a ~SynthDef~ that should be loaded already if you
-booted the server with ~Ziva.boot~
-
-This is just a score sheet that says, "score sheet to be played with ~\acid~ synth".
-As such, it does nothing by itself; we need it to give it to a musician.
-
-#+begin_src sclang
-~lola = Pbind(\instrument, \acid);
-#+end_src
-
-There's a Živa shortcut, though:
-
-#+begin_src sclang
-~lola = Psynth(\acid);
-#+end_src
-
-We can then tell the musician to play the score:
-
-#+begin_src sclang
-~lola.play;
-#+end_src
-
-but we cannot tell it to stop:
-
-#+begin_src sclang
-~lola.stop;
-#+end_src
-
-WTF??? why didn't it stop?  One of SuperCollider's many complexities.
-We won't explain it here.
-For now, press ~CTRL+.~ (hold control key down while pressing the /dot/ key) to stop all sounds at any time (*REMEMBER THIS
-YOU WILL NEED IT!!*)
-
-In Živa, to simplify things, we'll put all our musicians in a band. A band is just an array of musicians:
+** Changing the Sound
+The sound can be changed in many different ways. Some of these are common to both samples and synths. Others are specific to samples or synths. And a few are specific to one type of synth only. Anyhow, they all use functions that can be chained. in the following examples I'm using one-liners because I'm showing one parameter at a time and wanted to keep the file short, but while live coding I find it more convenient to use the multi-line syntax shown above:
 
 #+begin_src sclang
 (
@@ -218,42 +159,9 @@ In Živa, to simplify things, we'll put all our musicians in a band. A band is j
 )
 #+end_src
 
-then we can tell the band to stop playing
+Let's start with parameters that are common to both samples and synths:
 
-#+begin_src sclang
-Ziva.stop;
-#+end_src
-
-or simply remove everyone from the band
-
-#+begin_src sclang
-(
-[
-// ~lola,
-	nil
-].ziva;
-)
-#+end_src
-
-* Changing the Sound
-The sound can be changed in many different ways. Some are common to
-samples and synths. Some are specific to samples, others to synths,
-and there are others that are specific to one type of synth.
-The functions can be chained.
-in the following examples I'm using one-liners because I'm showing
-one parameter at a time and to keep file short, but while live coding
-I find it more convenient to use the multi-line syntax shown above:
-
-#+begin_src sclang
-(
-[
-	~lola,
-].ziva;
-)
-#+end_src
-
-Common parameters to samples and synths are:
-** tempo
+*** tempo
 
 #+begin_src sclang
 [~lola.fast].ziva;
@@ -267,7 +175,7 @@ For custom duration (in beats):
 [~lola.dur(1.3)].ziva;
 #+end_src
 
-** volume
+*** volume
 
 To play louder add ~f~ (for /forte/):
 
@@ -284,7 +192,7 @@ Custom loudness can be set with ~amp~. *BE CAREFUL!! NEVER GO ABOVE 1.0!!!*
 #+end_src
 
 
-** legato (sustain)
+*** legato (sustain)
 
 #+begin_src sclang
     [~lola.stacc].ziva;
@@ -299,7 +207,7 @@ For custom length use ~legato~:
 #+end_src
 
 
-** panning
+*** panning
 Distribution along stereo field.
 
 left
@@ -333,7 +241,7 @@ custom
 #+end_src
 
 
-** TODO rhythm
+*** TODO rhythm
 
 euclidean rhythms
 creates a rhythm. It distributes as evenly as possible a number
@@ -617,7 +525,7 @@ Ziva.drums;
 #+end_src
 
 
-* SEQUENCING
+*** SEQUENCING
 // Parameters can be set to change automatically with PATTERNS.
 // There is a HUGE amount of patterns in SuperCollider, but a lot can be
 // done with very few. Here we'll present only some of them.
@@ -674,3 +582,7 @@ Ziva.track(1, \delay);
 Ziva.track(0); // remove the fx from track 0
 * TODO Živa quick reference
 * TODO Živa tips and tricks
+- which will list all SynthDefs loaded on the server.  New synths can be loaded anytime as you would normally do in SuperCollider with:
+#+begin_src sclang
+SynthDef(...).add;
+#+end_src
