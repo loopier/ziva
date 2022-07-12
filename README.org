@@ -44,7 +44,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 * Živa for beginners
 
-This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check [[*Živa for SuperCollider users][Živa for SuperCollider users]] instead.
+This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check or [[ZivaForSuperColliderUsers.org][Ziva for SuperCollider Users]]  [[QuickReference.org][Quick Reference]] instead.
 
 ** SuperCollider essentials
 
@@ -106,7 +106,7 @@ Ziva.synths;
 
 *** Tempo
 
-To set the BPM for now we need to use regular SuperCollider:
+For now, to set the BPM we need to use regular SuperCollider:
 
 #+begin_src sclang
 TempoClock.default.tempo = 120/60; // 120 bpm
@@ -712,24 +712,4 @@ To see the mappings:
 #+begin_src sclang
 Ziva.drums;
 #+end_src
-* Živa quick reference
-** TODO
-* Živa for SuperCollider users
-** Patterns in Živa vs Patterns in SuperCollider
 
-  Živa uses a custom syntax for patterns, but regular SuperCollider patterns can also be used. Not all SuperCollider patterns have their equivalent in Živa, only the ones I use the most do. I keep adding them as I need.
-
-  If you feel like adding more patterns, I'd recommend extending the  ~SequenceableCollection~ class in your own file, and putting it in your ~Extensions~ subfolder.
-
-  My approach is to make every pattern equivalent return a ~Pchain~, so it can be chained to others. See Živa's implementation of ~SequenceableCollection~ extension ([[./Classes/sequenceablecollection.sc]]) to see some examples.
-
-** Adding new SynthDefs
-
-New synths can be loaded anytime as you would normally do in SuperCollider with:
-#+begin_src sclang
-SynthDef(...).add;
-#+end_src
-As soon as the ~SynthDef~ is added it will be listed by the ~Ziva.synths~ command and ready to use.
-
-** Effects
-Effect tracks are ~Ndefs~ that receive a bus and send it out. Effects are added to the ~Ndef~ slots. Effect names are taken from ~Ziva.effectsDict~. New effects can be added with new entries to this dictionary. Syntax is ~Ziva.effectsDict(\newfxname, {|in| ...});~.
