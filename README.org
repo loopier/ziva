@@ -44,7 +44,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 * Živa for beginners
 
-This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check or [[ZivaForSuperColliderUsers.org][Ziva for SuperCollider Users]]  [[QuickReference.org][Quick Reference]] instead.
+This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check [[ZivaForSuperColliderUsers.org][Ziva for SuperCollider Users]] or [[QuickReference.org][Quick Reference]] instead.
 
 ** SuperCollider essentials
 

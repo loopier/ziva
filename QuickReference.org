@@ -1,22 +1,17 @@
 #+title: Živa Quick Reference
 
-* Setup
-** Booting the server
+** Setup
+*** Booting the server
 #+begin_src sclang
 Ziva.boot;
 #+end_src
-** Changing server settings
+*** Changing server settings
 Boot the server with any of the following variables (or us ~ServerOptions~ before evaluating ~Ziva.boot~)
 #+begin_src sclang
 Ziva.boot(inputChannels:2, outputChannels:2, numBuffers:16, memSize:32, maxNodes:32);
 #+end_src
 
-** Samples
-In Živa two types of sounds can be played: samples and synths. The path to the samples directory must be set. Some default synths are loaded automatically.
-
-The path to the samples directory must be holding subdirectories, which themselves store the audio files.
-
-Each subdirectory name will become the sample name accessible from Ži va, and each sample within that directory will be accessed with the ~n~ function.  More on this later.
+*** Load Samples
 
 #+begin_src sclang
 Ziva.loadSamples("path/to/samples/parent/directory");
@@ -30,13 +25,13 @@ Ziva.loadSamples(Platform.userAppSupportDir++"/downloaded-quarks/ziva/samples");
 
 Several sample lists can be added from different folders, with consecutive calls to this function; beware that if there are two subfolders with the same name only the last one will prevail.
 
+*** List Samples
 To list all loaded samples, evaluate this function and check the post window (the number between ~()~ is the number of audio files in that subdirectory):
-
 #+begin_src sclang
 Ziva.sounds;
 #+end_src
 
-** Synths
+*** Synths
 
 To list currently available synths use:
 
@@ -44,7 +39,7 @@ To list currently available synths use:
 Ziva.synths;
 #+end_src
 
-** Tempo
+*** Tempo
 
 For now, to set the BPM we need to use regular SuperCollider:
 
@@ -54,19 +49,19 @@ TempoClock.default.tempo = 120/60; // 120 bpm
 
 This value can be changed at any time and will affect all sounds.
 
-* Playing Sounds
-** synth sound
+** Playing Sounds
+*** synth sound
 
 #+begin_src sclang
 ~lola = Psynth(\acid);
 #+end_src
 
-** sample sound
+*** sample sound
 #+begin_src sclang
 ~delia = Psample(\delia);
 #+end_src
 
-** play
+*** play
 #+begin_src sclang
 (
 [
@@ -75,7 +70,7 @@ This value can be changed at any time and will affect all sounds.
 )
 #+end_src
 
-** stop
+*** stop
 #+begin_src sclang
 (
 [
@@ -85,8 +80,8 @@ This value can be changed at any time and will affect all sounds.
 )
 #+end_src
 
-** Samples and Synths Parameters
-*** duration
+*** Samples and Synths Parameters
+**** duration
 
 Preset
 
@@ -105,7 +100,7 @@ Custom
 [~lola.dur(1/3)].ziva;
 #+end_src
 
-*** volume
+**** volume
 
 Preset
 
@@ -125,7 +120,7 @@ Custom
 [~lola.amp(0.2)].ziva;
 #+end_src
 
-*** legato (sustain)
+**** legato (sustain)
 
 Preset
 
@@ -144,7 +139,7 @@ Custom
    [~lola.legato(1.2)].ziva,
 #+end_src
 
-*** panning
+**** panning
 
 left
 
@@ -184,8 +179,8 @@ custom
 [~lola.pan(-0.5)].ziva; // -1 far left, 1 far right
 #+end_src
 
-*** rhythm
-**** euclidean rhythms
+**** rhythm
+****  euclidean rhythms
 ~.bj(hits, beats, [offset, ...])~
 #+begin_src sclang
 [
@@ -193,13 +188,13 @@ custom
 ].ziva;
 #+end_src
 
-**** custom rhythms
+****  custom rhythms
 #+begin_src sclang
 [~lola.deg([0,r,4,r].pseq)].ziva;
 [~lola.deg((..7).prand).r([1,r,r,1,r,r,1,r,1,r,1,r].pseq)].ziva;
 #+end_src
 
-**** preset rhythms
+****  preset rhythms
 
 To list available rhythms
 
@@ -249,15 +244,15 @@ or 3/2:
 [0,2,4].clave(reverse:1);
 #+end_src
 
-** Parameters for Synths
-*** scale
+*** Parameters for Synths
+**** scale
 To list all available scale names
 
 #+begin_src sclang
 Scale.directory;
 [~lola.deg([0,2,4]).scale(\minor)].ziva;
 #+end_src
-*** note - degree - scale
+**** note - degree - scale
 
 - ~.deg()~ or ~.degree()~ plays notes on a scale, ~0~ being the root.
 - ~.note()~ plays chromatically from the root ~0~.
@@ -277,19 +272,19 @@ Chord
 #+end_src
 
 
-**** alterations (sharps and flats)
+****  alterations (sharps and flats)
 #+begin_src sclang
 [~lola.deg([0,2b,4])].ziva;
 [~lola.deg([0,2s,4].scale(\minor))].ziva;
 #+end_src
 
-*** octave
+**** octave
 Default is 5
 #+begin_src sclang
 [~lola.oct(4)].ziva;
 #+end_src
 
-** Synth Parameters
+*** Synth Parameters
 To list the available synths
 
 #+begin_src sclang
@@ -315,7 +310,7 @@ Setting parameters
 [~lola.cutoff(200)].ziva;
 #+end_src
 
-** Sample Parameters
+*** Sample Parameters
 To list the available samples
 
 #+begin_src sclang
@@ -328,13 +323,13 @@ Initializing
 [~delia].ziva;
 #+end_src
 
-*** Changing sample name
+**** Changing sample name
 
 #+begin_src sclang
 [~delia.sound(\tibetan)].ziva;
 #+end_src
 
-*** Changing sample index
+**** Changing sample index
 
 #+begin_src sclang
 [~delia.n(1)].ziva;
@@ -342,25 +337,25 @@ Initializing
 
 if the number is greater than the number of samples in that sample folder it will wrapped around.
 
-*** Speed
+**** Speed
 #+begin_src sclang
 [~delia.speed(0.5)].ziva;
 #+end_src
 
-*** Random speeds
+**** Random speeds
 
 #+begin_src sclang
 [~delia.randspeeds(4, [1,-1,2,-1])].ziva;
 #+end_src
 
-*** Tape effect
+**** Tape effect
 Old cassette tape effect (gets crazy pretty fast):
 
 #+begin_src sclang
 [~delia.slow.tape(0.9)].ziva;
 #+end_src
 
-*** Starting point
+**** Starting point
 
 ~.start()~ (~0.0~ for beginning, ~1.0~ for end):
 
@@ -368,7 +363,7 @@ Old cassette tape effect (gets crazy pretty fast):
 [~delia.start(0.5)].ziva; // start in the midpoint
 #+end_src
 
-*** Chop and scramble
+**** Chop and scramble
 
 The samples can be chopped and recomposed from its pieces with ~.chop()~.
 The number of chunks to be sliced is set by the second argument. Then a new sequence is created from those chunks. The size of the sequence is given by the first argument.
@@ -379,7 +374,7 @@ This example sequences 4 pieces chosen from a list of 8 chunks.
 [~delia.chop(4, 8)].ziva;
 #+end_src
 
-* MIDI
+** MIDI
 
 To initialize the client:
 
@@ -406,9 +401,9 @@ MIDI channel is optional, default is 0 -- /WARNING: in SC MIDI channels range 0-
 #+end_src
 
 
-* Patterns
+** Patterns
 
-** basic sequence pattern
+*** basic sequence pattern
 
 ~.pseq(repeats)~ is used to repeat a sequence of values for a number of times. If no ~repeats~ are specified, it loops for ever.
 
@@ -422,14 +417,14 @@ MIDI channel is optional, default is 0 -- /WARNING: in SC MIDI channels range 0-
 [~lola.deg([0,r,4].pseq)].ziva;
 #+end_src
 
-** random pattern
+*** random pattern
 ~.prand(repeats)~ picks a random value from the list on each event (beat):
 
 #+begin_src sclang
 [~lola.deg([0,1,2,3,4,r].prand)].ziva;
 #+end_src
 
-** nesting patterns
+*** nesting patterns
 Patterns can be used inside other patterns. There's no limit on the levels of nesting:
 
 #+begin_src sclang
@@ -437,7 +432,7 @@ Patterns can be used inside other patterns. There's no limit on the levels of ne
 #+end_src
 
 
-** other patterns
+*** other patterns
 Other interesting patterns are ~Place~, ~Pshuf~, ~Pbrown~, ~Pwhite~, ~Pstutter~, ...
 See [[http://doc.sccode.org/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html][A-Practical-Guide/PG_02_Basic_Vocabulary]] in SCHelp.
 
@@ -456,7 +451,7 @@ Following is an example using both regular SuperCollider pattern syntax and Živ
 
 
 
-* Modulation
+** Modulation
 Using LFOs
 
 #+begin_src sclang
@@ -468,7 +463,7 @@ You can create as many LFOs as you want, but the first parameter must be differe
 
 Available LFO wave shapes are: ~\sine~, ~\saw~, ~\pulse~, ~\tri~, ~\noise0~, ~\noise1~, ~\noise2~
 
-* Effects
+** Effects
 
 Sound effects (reverb, delay, chorus, ...) can be added to the signal chain. To list available sounds use:
 
@@ -504,7 +499,7 @@ Then connect each sound to the desired track using ~>>~:
 Ziva.track(0); // remove the fx from track 0
 #+end_src
 
-* Drums
+** Drums
 
 /WARNING: This is experimental/
 
