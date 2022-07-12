@@ -40,6 +40,14 @@ You should have received a copy of the GNU General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 
+* Živa for beginners
+
+This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check the [[*Živa quick reference][Živa quick reference]], or [[*Živa tips and tricks][Živa tips and tricks]] instead.
+
+To evaluate code in SuperCollider, put the cursor in the line you want to evaluate (or select all the code needed) and press ~CTRL/CMD-RETURN~.
+
+To stop all sounds, perss ~CTRL/CMD-.(period)~. *REMEMBER THIS!!*
+
 * Setup
 ** Booting the server
 #+begin_src sclang
@@ -58,36 +66,40 @@ or more memory
 Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);`
 #+end_src
 
-** Loading samples
+** Samples
+In Živa two types of sounds can be played: samples and synths. The path to the samples directory must be set. Some default synths are loaded automatically.
 
-The path must be a parent directory holding subdirectories, which themselves store the audio files.
+The path to the samples directory must be holding subdirectories, which themselves store the audio files.
 
-Each subdirectory name will become the sample name, and each sample within that directory will be accessed with the `n` function.  More on this later.
+Each subdirectory name will become the sample name accessible from Živa, and each sample within that directory will be accessed with the `n` function.  More on this later.
 
 #+begin_src sclang
 Ziva.loadSamples("path/to/samples/parent/directory");
 #+end_src
 
-You can add different sample lists, from different folders. They will all be stored and accessible. For example, you can load the samples that come with this quark.
+For example, you can load the samples that come with this quark.
 
 #+begin_src sclang
 Ziva.loadSamples("~/.local/share/SuperCollider/downloaded-quarks/ziva/samples");
 #+end_src
 
-To list all samples, evaluate this function:
+You can add different sample lists, from different folders, with consecutive calls to this function; beware that if there are two subfolders with the same name only the last one will prevail.
+
+To list all loaded samples, evaluate this function and check the post winow (number between ~()~ are the number of audio files in that subdirectory):
 
 #+begin_src sclang
 Ziva.sounds;
 #+end_src
 
-To list all synths use:
+** Synths
+
+To list currently available synths use:
 
 #+begin_src sclang
 Ziva.synths;
 #+end_src
 
-which will list all SynthDefs loaded on the server.  New synths can be loaded
-anytime as you would normally do with
+which will list all SynthDefs loaded on the server.  New synths can be loaded anytime as you would normally do with:
 #+begin_src sclang
 SynthDef(...).add;
 #+end_src
@@ -95,12 +107,64 @@ SynthDef(...).add;
 
 
 * Playing Sounds
-In SuperCollider (SC), there's a thing called ~Pbind~.  It's a somewhat
-obscure name for a music score, a set of instructions to play music.
-Its syntax is very simple:
 
+Živa uses a model based after music bands. There are musicians that play instruments, following scoresheets, and a band, or parts of a band that gathers playing musicians.
+
+To start we must have a musician, which just a variable. For example:
 #+begin_src sclang
-Pbind(\parametername1, VALUE, \parametername2, VALUE, ...);
+~lola
+#+end_src
+
+This musician needs to play an instrument, it can be either synth or a sample:
+#+begin_src sclang
+  ~lola = Psynth(\acid);
+  // or
+  ~lola = Psound(\delia);
+#+end_src
+
+The name preceded by ~\~ is the name of the synth or sample listed by ~Ziva.synths~ or ~Ziva.sounds~.
+
+In order to play, the musician needs to be in a band, which is just a list (actually a SuperCollider ~Array~) of musicians:
+#+begin_src sclang
+  (
+  [
+      ~lola,
+  ].ziva;
+  )
+#+end_src
+
+This code will help us understand a few things.
+1. The starting and ending ~()~ let us evaluate all the code within these parenthesis without having to select it.
+2. ~.ziva~ is a function than will make the band start playing at once on the beginning of the next beat.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  In SuperCollider (SC), there's a thing called ~Pbind~.  It's a somewhat
+  obscure name for a music score, a set of instructions to play music.
+  Its syntax is very simple:
+
+  ,#+begin_src sclang
+  Pbind(\parametername1, VALUE, \parametername2, VALUE, ...);
 #+end_src
 
 There are many parameters available, too many to list here (see [[https://doc.sccode.org/Classes/Pbind.html][Pbind's help]] if you want the details).  We're going to see some as we need them.
@@ -608,3 +672,5 @@ Ziva.track(1, \delay);
 ].ziva;
 )
 Ziva.track(0); // remove the fx from track 0
+* TODO Živa quick reference
+* TODO Živa tips and tricks
