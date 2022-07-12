@@ -42,7 +42,9 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 * Živa for beginners
 
-This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check the [[*Živa quick reference][Živa quick reference]], or [[*Živa tips and tricks][Živa tips and tricks]] instead.
+This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check the [[*Živa quick reference][Živa quick reference]], [[*Živa for SuperCollider users][Živa for SuperCollider users]] instead.
+
+** SuperCollider essentials
 
 To evaluate code in SuperCollider, put the cursor in the line you want to evaluate (or select all the code needed) and press ~CTRL/CMD-RETURN~.
 
@@ -104,9 +106,9 @@ Ziva.synths;
 
 ** Playing Sounds
 
-Živa follows a model that mimmics music bands. There are musicians in a band that play instruments following scoresheets.
+Živa follows a model that mimmics music bands: there are musicians in a band that play instruments following scoresheets.
 
-To start we must have a musician, which just a variable. For example:
+To start we must have a musician, which is just a SuperCollider variable. For example:
 #+begin_src sclang
 ~lola
 #+end_src
@@ -115,7 +117,7 @@ This musician needs to play an instrument, it can be either a synth or a sample:
 #+begin_src sclang
   ~lola = Psynth(\acid);
   // or
-  ~lola = Psound(\delia);
+  ~delia = Psample(\delia);
 #+end_src
 
 The name preceded by ~\~ is the name of the synth or sample listed by ~Ziva.synths~ or ~Ziva.sounds~.
@@ -129,16 +131,16 @@ In order to play, the musician needs to be in a band, which is just a list (actu
   )
 #+end_src
 
-This code will help us understand a few things:
+A few hints about this code:
 1. The starting and ending ~()~ let us evaluate all the code within these parenthesis without having to select it.
 2. ~.ziva~ is a function that will make the band start playing at once on the beginning of the next beat.
 
-If you evaluate this code you should hear either Delia Derbyshire saying something, or an acid bass playing middel C, depending on what you evaluated last when setting up the instrument for ~\~lola~.
+If you evaluate this code you should hear an acid bass playing middle C.
 
 To stop the sound there are 3 options:
-- press ~CTRL/CMD-.~.
+- press ~CTRL/CMD-.~
 - evaluate ~Ziva.stop;~
-- or empty the band:
+- or empty (and evaluate) the band:
   #+begin_src sclang
     (
     [
@@ -149,7 +151,7 @@ To stop the sound there are 3 options:
   #+end_src
 
 ** Changing the Sound
-The sound can be changed in many different ways. Some of these are common to both samples and synths. Others are specific to samples or synths. And a few are specific to one type of synth only. Anyhow, they all use functions that can be chained. in the following examples I'm using one-liners because I'm showing one parameter at a time and wanted to keep the file short, but while live coding I find it more convenient to use the multi-line syntax shown above:
+The sound can be changed by setting its parameters with function calls. Some of these parameters are common to both samples and synths. Others are specific to either samples or synths. And a few are specific to one type of synth only. Anyhow, they all use functions that can be chained. In the following examples I'm using one-liners because I'm showing one parameter at a time and wanted to keep the file short, but while live coding I find it more convenient to use the multi-line syntax shown above:
 
 #+begin_src sclang
 (
@@ -159,9 +161,15 @@ The sound can be changed in many different ways. Some of these are common to bot
 )
 #+end_src
 
-Let's start with parameters that are common to both samples and synths:
+All parameters (function names) try stick to conventional music notation veocabulary.
 
-*** tempo
+Let's start with parameters that are common to both samples and synths:
+** Parameters for Samples and Synths
+*** duration
+
+Duration sets how many times per beat a sound is played. If it's not set, it defaults to 1 hit per beat; it will sound once every beat.
+
+If it's set to ~fast~, it will play twice per beat. Try evaluating this line:
 
 #+begin_src sclang
 [~lola.fast].ziva;
@@ -172,18 +180,19 @@ Other options are: ~faster~, ~fastest~, ~slow~, ~slower~, ~slowest~
 For custom duration (in beats):
 
 #+begin_src sclang
-[~lola.dur(1.3)].ziva;
+[~lola.dur(1/3)].ziva;
 #+end_src
 
 *** volume
 
-To play louder add ~f~ (for /forte/):
+To play louder add ~f~ (for /forte/; to play softer use ~p~ (for /piano/):
 
 #+begin_src sclang
 [~lola.f].ziva;
+[~lola.p].ziva;
 #+end_src
 
-Other options are: ~ff~, ~fff~, ~ffff~, ~p~, ~pp~, ~ppp~
+Other options are: ~ff~, ~fff~, ~ffff~, ~pp~, ~ppp~
 
 Custom loudness can be set with ~amp~. *BE CAREFUL!! NEVER GO ABOVE 1.0!!!*
 
@@ -194,11 +203,13 @@ Custom loudness can be set with ~amp~. *BE CAREFUL!! NEVER GO ABOVE 1.0!!!*
 
 *** legato (sustain)
 
+Note length, how long it sounds, is set with ~legato~. To play staccato notes use ~stacc~:
+
 #+begin_src sclang
     [~lola.stacc].ziva;
 #+end_src
 
-Other opstions are: ~pizz~, ~stass~, ~stacc~, ~tenuto~, ~legato~, ~pedal~
+Other opstions are: ~pizz~ (pizzicato), ~stass~ (stacatissimo), ~stacc~, ~tenuto~, ~legato~, ~pedal~
 
 For custom length use ~legato~:
 
@@ -208,21 +219,25 @@ For custom length use ~legato~:
 
 
 *** panning
-Distribution along stereo field.
+Distributes sound along stereo field.
 
 left
 
 #+begin_src sclang
-[~lola.pan(-1)].ziva;
+  [~lola.left].ziva;
+// or
+  [~lola.pan(-1)].ziva;
 #+end_src
 
 right
 
 #+begin_src sclang
-[~lola.fast.pan(1)].ziva;
+  [~lola.fast.right].ziva;
+// or
+  [~lola.fast.pan(1)].ziva;
 #+end_src
 
-center (default)
+center (default -- doesn't need to be set)
 
 #+begin_src sclang
 [~lola.slow.pan(0)].ziva;
@@ -237,54 +252,57 @@ alternate between left and right
 custom
 
 #+begin_src sclang
-[~lola.pan(-0.5)].ziva;
+[~lola.pan(-0.5)].ziva; // -1 far left, 1 far right
 #+end_src
 
 
-*** TODO rhythm
+*** rhythm
 
-euclidean rhythms
-creates a rhythm. It distributes as evenly as possible a number
-of hits (first argument) across a number fo beats (second argument).
+There are a few ways to set the rhythm in Živa.
+
+The most basic ones is setting rests in other parameter sequences. This is explained later, after we've talked about sequencing. Rhythm sequences can be set as a separate parameter also (more on this later, too).
+
+For now we'll just talk about the ~.bj()~ function, which stands for Bjorklund, an algorithm that creates Euclidean rhythms.
+
+Euclidean rhythms try to distribute, as evenly as possible, a number of hits across a number fo beats.
+
+If we want to distribute 3 hits along 8 beats as evenly as possible we will use ~.bj(3,8)~ (first argument is number of hits, second number of beats):
 
 #+begin_src sclang
 [~lola.faster.bj(3,8)].ziva;
-
-will create 3 hits over 8 beats
-
-#+begin_src sclang
-[~lola.faster.bj(5,8,1)].ziva;#+end_src
-
-will create 5 hits over 8 beats delayed
-
-#+begin_src sclang
-							#+end_src
-
-by 1 beat
-
-#+begin_src sclang
-[~lola.faster.bj(5,8,scramble:true)].ziva;#+end_src
-
-will create 5 random hits over
-
-#+begin_src sclang
-										#+end_src
-
-8 beats
-
-#+begin_src sclang
-[~lola.faster.bj(3,8,sort:true)].ziva;#+end_src
-
-will create 5 silent beats then 3 hits
-
-#+begin_src sclang
-[~lola.faster.bj(3,8,reverse:true)].ziva;#+end_src
-
-reverse order from first example
-
-#+begin_src sclang
-
 #+end_src
+
+By evaluating this, a rhythm of 3 hits should be playing.
+
+This rhythm can be delayed by any number of beats (third argument):
+
+#+begin_src sclang
+    [
+        ~lola.oct(3),
+        ~lola.faster.bj(5,8,1),
+    ].ziva;
+#+end_src
+
+A quick way to get uneven rhythms is to create an euclidean rhythm then shuffle it:
+
+#+begin_src sclang
+[~lola.faster.bj(5,8,scramble:true)].ziva;
+#+end_src
+
+The code above will create 5 random hits over 8 beats. Should change on every evaluation.
+
+Streams of hits can also be played with. To create 5 silent beats then 3 hits:
+
+#+begin_src sclang
+[~lola.faster.bj(3,8,sort:true)].ziva;
+#+end_src
+
+These patterns can also be reversed:
+
+#+begin_src sclang
+[~lola.faster.bj(3,8,reverse:true)].ziva;
+#+end_src
+
 
 to create custom rhythms there's the `r` variable, which is a rest.
 it can be added to any pattern (more on patterns later) of any parameter (except
@@ -299,48 +317,52 @@ anything. I usually use .r()
 
 #+begin_src sclang
 [~lola.deg((..7).prand).r([1,r,r,1,r,r,1,r,1,r,1,r].pseq)].ziva;
-
 #+end_src
 
-there are also some default rhtyhms
-to list them
+There are also some default rhtyhms to list them:
 
 #+begin_src sclang
 Ziva.rhythms;
 #+end_src
 
-to see a rhythm pattern
+To see a rhythm pattern:
 
 #+begin_src sclang
-Ziva.rhythm(\clave);
+Ziva.rhythm(\clave); // check the post window
 #+end_src
 
-rhtyhms can be applied to pattern sequences (arrays)
-when a rhythm is invoked on a list, the elements will
-replace the hits (1s) in the pattern keeping the rests.
-to see how it works
+Rhtyhms can be applied to pattern sequences (arrays) when a rhythm is invoked on a list, the elements will replace the hits (1s) in the pattern keeping the rests. to see how it works
 
 #+begin_src sclang
 [0,2,4].clave;
+#+end_src
 
-see the post window
-audio example
+See the post window.
+
+Here's an example with audio:
 
 #+begin_src sclang
 [~lola.faster.deg([0,4].clave.pseq)].ziva;
 #+end_src
 
-this can by applied to any sound argument
+This can by applied to any sound argument.
 
 #+begin_src sclang
-
+~lola = Psynth(\acid);
+(
+[
+    ~lola.faster.deg([0,4].clave.pseq).cutoff([100,1000].clave.pseq),
+].ziva;
+)
 #+end_src
 
-some rhythms are divided into two bars that can be played in reversed order
-e.g.: clave can be 2/3
+Some rhythms are divided into two bars that can be played in reversed order.
+
+E.g.: clave can be either 2/3:
 
 #+begin_src sclang
 Ziva.rhythm(\clave);
+#+end_src
 
 this shows two nested arrays, each one being a bar
 
@@ -352,227 +374,263 @@ or 3/2
 
 #+begin_src sclang
 [0,2,4].clave(reverse:1);
-
 #+end_src
 
-SYNTHS
-when playing a synth, notes can be changed
+** Parameters for Synths
+*** note
+When playing a synth, notes can be changed with:
 
 #+begin_src sclang
-[~lola.deg(2)].ziva;#+end_src
-
-plays the 3rd note from the scale
-
-#+begin_src sclang
-[~lola.deg([0,2,4])].ziva;#+end_src
-
-plays a major chord
-
-#+begin_src sclang
-[~lola.deg([0,2,4]).scale(\minor)].ziva;#+end_src
-
-plays minor chord
-
-#+begin_src sclang
-[~lola.oct(4)].ziva;#+end_src
-
-one octave lower (default is 5)
-degree notes can be alterated with sharps (s) and flats (b)
-
-#+begin_src sclang
-[~lola.deg(0,2b,4)].ziva;
-
-plays a minor chord although the scale is major
-
-#+begin_src sclang
-[~lola.deg(0,2s,4).scale(\minor)].ziva;
-
-plays a major chord although the scale is minor
-
-#+begin_src sclang
-
+[~lola.deg(2)].ziva;
 #+end_src
 
-to list all available scale names in the post window
+The code above plays the 3rd note from the scale (degree).
+
+To play a chord, use an array of notes:
+
+#+begin_src sclang
+[~lola.deg([0,2,4])].ziva;
+#+end_src
+
+The degrees that are played depend on the scale that is set (~\major~ by default).
+
+To list all available scale names in the post window:
 
 #+begin_src sclang
 Scale.directory;
-
 #+end_src
 
-synth parameters can also be modified
-to see what parameters are avaiable for a synth
+A minor chord can be played by changing to a minor scale:
+#+begin_src sclang
+[~lola.deg([0,2,4]).scale(\minor)].ziva;
+#+end_src
+
+Degrees can also be altered with ~s~ to sharpen and ~b~ to flatten.
+
+Play a minor chord over a major scale:
 
 #+begin_src sclang
-Ziva.controls(\acid);
+[~lola.deg([0,2b,4])].ziva;
+#+end_src
 
-see the post window
+Play a major chord over a minor scale:
+
+#+begin_src sclang
+[~lola.deg([0,2s,4].scale(\minor))].ziva;
+#+end_src
+
+*** octave
+By default, SuperCollider patterns play on the 5th octave. To play one octave lower:
+
+#+begin_src sclang
+[~lola.oct(4)].ziva;
+#+end_src
+
+*** other parameters
+Parameters specific to a synth can also be modified. To see what parameters are avaiable for a given synth use:
+
+#+begin_src sclang
+Ziva.controls(\acid); // \acid is the synth name
+#+end_src
+
+See the post window. It displays all the parameter names that can be changed with function calls, and their current value.
 
 #+begin_src sclang
 [~lola.cutoff(8000)].ziva;
 [~lola.cutoff(200)].ziva;
-
 #+end_src
 
-SAMPLES
-to list the available samples
+** Parameters for Samples
+To list the available samples
 
 #+begin_src sclang
 Ziva.sounds;
+#+end_src
 
-see the post window.
-The number displayed between () is the number of samples with that name
+See the post window.
+The number displayed between () is the number of samples with that name.
 
 #+begin_src sclang
 ~delia = Psample(\delia);
 [~delia].ziva;
 #+end_src
 
-change sample name for a musician in the band
+*** Changing sample name
+The sample (group) can be changed while playing it with ~.sound(\samplename)~.
 
 #+begin_src sclang
 [~delia.sound(\tibetan)].ziva;
 #+end_src
 
-change sample number (if greater than the number of samples in
-that sample folder it will wrapped around)
+*** Changing sample index
+Each sample name usually has more than one sample audio file available. To change the sample file number use ~.n(number)~:
 
 #+begin_src sclang
 [~delia.n(1)].ziva;
 #+end_src
 
-change the playing speed
+if the number is greater than the number of samples in that sample folder it will wrapped around.
+
+*** Speed
+Samples can be played at different speeds:
 #+begin_src sclang
 [~delia.speed(0.5)].ziva;
+#+end_src
 
-half speed
-sequence a list of speeds. First argument is the number of steps in
-the sequence, the second is a list of speeds to choose from.
+The code above plays the sample at half speed.
+
+*** Random speeds
+
+Random speed sequences can be created from a list of speeds. First argument is the number of steps in the sequence, the second is a list of speeds to choose from.
 
 #+begin_src sclang
 [~delia.randspeeds(4, [1,-1,2,-1])].ziva;
 #+end_src
 
-old cassette tape effect
+*** Tape effect
+Old cassette tape effect:
 
 #+begin_src sclang
 [~delia.slow.tape(0.9)].ziva;
 #+end_src
 
-change the starting point in the sample (0.0 for beginning, 1.0 for end)
+*** Starting point
+
+The sample doesn't need to start playing from the beginning. To change the starting point in the sample use ~.start()~ (0.0 for beginning, 1.0 for end):
 
 #+begin_src sclang
-[~delia.start(0.5)].ziva;
+[~delia.start(0.5)].ziva; // start in the midpoint
 #+end_src
 
-slices the sample in a number of chunks (second argument), and plays
-a sequence of them. The size of the sequence is given by the
-first argument.
+*** Chop and scramble
+
+The samples can be chopped and recomposed from its pieces with ~.chop()~.
+The number of chunks to be sliced is set by the second argument. Then a new sequence is created from those chunks. The size of the sequence is given by the first argument.
+
 This example sequences 4 pieces chosen from a list of 8 chunks.
 
 #+begin_src sclang
 [~delia.chop(4, 8)].ziva;
-
 #+end_src
 
-MIDI
+** MIDI
 MIDI instruments can also be played, but MIDI needs to be initialized first.
-Initialize the client
+
+To initialize the client:
 
 #+begin_src sclang
 MIDIClient.init;
 #+end_src
 
-connect the first output of SC 'MIDIOut(0)' to your MIDI device in your User Iterface.
-this is different for each operative system
-then create a musician that plays that instrument.
+Then connect the first output of SC 'MIDIOut(0)' to your MIDI device in your MIDI user iterface (this is different for each operative system).
+
+Then create a musician that plays that instrument.
 
 #+begin_src sclang
 ~wendy = Pmidi(MIDIOut(0));
+// or
+~wendy = Pmidi(MIDIOut(0), 1); // to send MIDI to channel 2
 #+end_src
 
-'MIDIOut(0)' syntax may be different for OSX and Windows -- this is just Linux
+~MIDIOut(0)~ syntax may be different for OSX and Windows -- this is just Linux.
+
 MIDI channel is optional, default is 0 -- in SC MIDI channels range 0-15
 
 #+begin_src sclang
 [ ~wendy.oct(4).deg([0,2,4].pseq) ].ziva;
-
 #+end_src
 
-DRUMS
-drums can be just synths or samples, but there's a special class for the
-free AVL plugin that can be downloaded at http://www.bandshed.net/avldrumkits/
-//
-create a drummer that sends MIDI
+
+** Sequencing
+
+Parameters can be set to change automatically with *PATTERNS*.
+There is a HUGE amount of patterns in SuperCollider, but a lot can be
+done with very few. Here we'll present only some of them.
+
+Patterns can modulate any parameter.
+
+
+*** basic sequence
+
+~.pseq(repeats)~ is used to repeat a sequence of values for a number of times. If no ~repeats~ are specified, it loops for ever.
 
 #+begin_src sclang
-~bonzo = Pavldrums(MIDIOut(0));
-#+end_src
-
-with this, you can play drums with strings of characters, where
-specific characters are mapped to certain MIDI notes corresponding
-to specific drum kits in the AVL plugin.
-spaces are rests
-
-#+begin_src sclang
-[ ~bonzo.drums("b h s h b h s o ").faster ].ziva;
-#+end_src
-
-to see the mappings
-
-#+begin_src sclang
-Ziva.drums;
-#+end_src
-
-
-*** SEQUENCING
-// Parameters can be set to change automatically with PATTERNS.
-// There is a HUGE amount of patterns in SuperCollider, but a lot can be
-// done with very few. Here we'll present only some of them.
-
-// .pseq(repeats:inf) is used to repeat a list of values for a number of
-// times. If no 'repeats' are specified, it loops for ever.
 [~lola.deg([0,2,4].pseq)].ziva;
-// .prand(repeats:inf) picks a random value from the list on each event (hit)
+#+end_src
+
+The code above plays an arpeggio of root-third-fifth indefinitely.
+
+*** random sequence
+~.prand(repeats)~ picks a random value from the list on each event (hit):
+
+#+begin_src sclang
 [~lola.deg([0,1,2,3,4].prand)].ziva;
-// patterns can be nested
+#+end_src
+
+*** other sequences
+Other interesting patterns are ~Place~, ~Pshuf~, ~Pbrown~, ~Pwhite~, ~Pstutter~, ...
+See [[http://doc.sccode.org/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html][A-Practical-Guide/PG_02_Basic_Vocabulary]] in SCHelp.
+
+
+
+*** Nesting patterns
+Patterns can be nested:
+
+#+begin_src sclang
 [~lola.faster.deg([0,1,2, [7,8,9].pseq(2)].prand)].ziva;
+#+end_src
 
-// other interesting patterns are Place, Pshuf, Pbrown, Pwhite, Pstutter, ...
-// See A-Practical-Guide/PG_02_Basic_Vocabulary in SCHelp.
-
-// patterns can modulate any parameter
+#+begin_src sclang
 (
 [
-	~lola.faster.pizz.deg(Pbrown(0,7,1)).oct(6).cutoff(Pwhite(200,9000)).pan(Pwhite(-1.0)),
-	~lola.faster.legato(Pwhite(0.1,1.2)).bj(4,7).cutoff(8000),
-	~lola.oct([3,4].pseq),
+  ~lola.faster.legato(Pwhite(0.1,1.2)).bj(4,7).cutoff(8000),
+  ~lola.oct([3,4].pseq),
 ].ziva;
 )
+#+end_src
 
-* MODULATION
-// Another way to modulate parameters is with LFOs (Low Frequency Oscillator).
-// This example creates a sine wave oscillator and uses it to modulate the
-// cutoff frequency of our \acid synth.
+** Modulation
+Another way to modulate parameters is with LFOs (Low Frequency Oscillator).
+
+This example creates a sine wave oscillator and uses it to modulate the
+cutoff frequency of our ~\acid~ synth.
+
+#+begin_src sclang
 ~sine1 = Ziva.lfo(1, wave:\sine, freq:0.6, min:200, max:8000  );
 [~lola.legato.cutoff(~sine1)].ziva;
-// you can create as many LFOs as you want, but the first parameter must be
-// different for each LFO or it will be overwitten (can be a number or a symbol)
-// other LFO wave shapes are: \sine, \saw, \pulse, \tri, \noise0, \noise1, \noise2
+#end_src
 
-* EFFECTS
-// Effects are applied to tracks, not sounds.
-// There are 4 tracks available.
-// Any number of effects can be applied to each track (including none).
-// Order matters.
-// To list the available effects
+You can create as many LFOs as you want, but the first parameter must be
+different for each LFO or it will be overwitten (can be a number or a [[http://doc.sccode.org/Classes/Symbol.html][symbol]]).
+
+Available LFO wave shapes are: ~\sine~, ~\saw~, ~\pulse~, ~\tri~, ~\noise0~, ~\noise1~, ~\noise2~
+
+* Effects
+
+Sound effects (reverb, delay, chorus, ...) can be added to the signal chain. To list available sounds use:
+#+begin_src
 Ziva.fx; // see the post window
+Ziva.boot; // this might have to be called -- it's of bug, will be fixed
+#+end_src
 
-Ziva.boot; // this must be called -- it's of bug, will be fixed
-// to setup effects for tracks
+Important things to consider regarding effects:
+
+- Effects are applied to tracks, not sounds. There are 4 tracks available.
+- Any number of effects can be applied to each track (including none, or ~nil~).
+- Order matters.
+
+To setup effects for tracks:
+
+#+begin_src
 Ziva.track(0, \lowpass, \reverbL);
 Ziva.track(1, \delay);
-// then connect each sond to the desired track
+#+end_src
+
+The first argument is the track number. The rest are the effects to be added, *in the order that they will be applied*.
+
+Then connect each sound to the desired track use ~>>~:
+
+#+begin_src
 (
 [
 	~lola.oct([3,4]).cutoff(9000) >> 0,
@@ -580,9 +638,53 @@ Ziva.track(1, \delay);
 ].ziva;
 )
 Ziva.track(0); // remove the fx from track 0
-* TODO Živa quick reference
-* TODO Živa tips and tricks
-- which will list all SynthDefs loaded on the server.  New synths can be loaded anytime as you would normally do in SuperCollider with:
+#+end_src
+
+** Drums
+
+/WARNING: This is experimental/
+
+Drums can be just synths or samples, but there's a special class for the
+free AVL plugin that can be downloaded at http://www.bandshed.net/avldrumkits/
+
+This is just a wrapper for AVL's MIDI mapping, it might work with other MIDI drum sets, I haven't tried it.
+
+Create a drummer that sends MIDI.
+
+#+begin_src sclang
+~bonzo = Pavldrums(MIDIOut(0));
+#+end_src
+
+With this, you can play drums with strings of characters, where
+specific characters are mapped to certain MIDI notes corresponding
+to specific drum kits in the AVL plugin.
+
+Spaces are rests.
+
+#+begin_src sclang
+[ ~bonzo.drums("b h s h b h s o ").faster ].ziva;
+#+end_src
+
+To see the mappings:
+
+#+begin_src sclang
+Ziva.drums;
+#+end_src
+* Živa quick reference
+** TODO
+* Živa for SuperCollider users
+** Patterns in Živa vs Patterns in SuperCollider
+
+  Živa uses a custom syntax for patterns, but regular SuperCollider patterns can also be used. Not all SuperCollider patterns have their equivalent in Živa, but the ones I use the most do. I keep adding them as I need.
+
+  If you feel like adding more patterns, I'd recommend extending the  ~SequenceableCollection~ class in your own file, and putting it in your ~Extensions~ subfolder.
+
+  My approach is to make every pattern equivalent return a ~Pchain~, so it can be chained to others. See Živa's implementation of ~SequenceableCollection~ extention to see some examples.
+
+** Adding new SynthDefs
+
+New synths can be loaded anytime as you would normally do in SuperCollider with:
 #+begin_src sclang
 SynthDef(...).add;
 #+end_src
+As soon as the ~SynthDef~ is added it will be listed by the ~Ziva.synths~ command.
