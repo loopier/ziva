@@ -104,7 +104,15 @@ To list currently available synths use:
 Ziva.synths;
 #+end_src
 
+*** Tempo
 
+To set the BPM for now we need to use regular SuperCollider:
+
+#+begin_src sclang
+TempoClock.default.tempo = 120/60; // 120 bpm
+#+end_src
+
+This value can be changed at any time and will affect all sounds.
 
 ** Playing Sounds
 
@@ -345,9 +353,7 @@ To see a rhythm pattern:
 Ziva.rhythm(\clave); // check the post window
 #+end_src
 
-Rhythms can be applied to pattern sequences (arrays) when a rhythm is invoked on a list, the elements will replace the hits (1s) in the pattern keeping the rests. To see how it works
-
-Rhythms are applied on lists. Each element in the list will consecutively be added to the next hit in the rhythm:
+Rhythms are applied to lists. Each element in the list will consecutively be added to the next hit in the rhythm:
 
 #+begin_src sclang
 [0,2,4].clave; // -> [ r, r, 0, r, 2, r, r, r, 4, r, r, 0, r, r, 2, r ]
@@ -372,7 +378,7 @@ This can by applied to any sound argument.
 )
 #+end_src
 
-Some rhythms are divided into two bars that can be played in reversed order. E.g.: clave:
+Some rhythms are divided into two bars that can be played in reverse.
 
 #+begin_src sclang
 Ziva.rhythm(\clave);
@@ -394,7 +400,7 @@ or 3/2:
 *** note - degree
 When playing a synth, notes can be changed with different parameters:
 
-- ~.deg()~ or ~.degree()~ plays notes on a scale, 0 being the root.
+- ~.deg()~ or ~.degree()~ plays notes on a scale, ~0~ being the root.
 - ~.note()~ plays chromatically from the root ~0~.
 - ~.midinote()~ is set with MIDI note values, ~60~ is middle C.
 - ~.freq()~ can be used to set frequency in Hz.
@@ -597,8 +603,8 @@ As stated above, ~r~ (rests) can be inserted in sequences to create rhythms.
 [~lola.deg([0,1,2,3,4,r].prand)].ziva;
 #+end_src
 
-*** Nesting patterns
-Patterns can be nested:
+*** nesting patterns
+Patterns can be used inside other patterns. There's no limit on the levels of nesting:
 
 #+begin_src sclang
 [~lola.faster.deg([0,1,2, [7,8,9].pseq(2)].prand)].ziva;
@@ -640,13 +646,13 @@ different for each LFO or it will be overwitten (can be a number or a [[http://d
 
 Available LFO wave shapes are: ~\sine~, ~\saw~, ~\pulse~, ~\tri~, ~\noise0~, ~\noise1~, ~\noise2~
 
-* Effects
+** Effects
 
 Sound effects (reverb, delay, chorus, ...) can be added to the signal chain. To list available sounds use:
 
 #+begin_src
 Ziva.fx; // see the post window
-Ziva.boot; // this might have to be called -- it's of bug, will be fixed
+Ziva.boot; // this might have to be called -- it's a bug, will be fixed
 #+end_src
 
 Important things to consider regarding effects:
@@ -664,7 +670,7 @@ Ziva.track(1, \delay);
 
 The first argument is the track number. The rest are the effects to be added, *in the order that they will be applied*.
 
-Then connect each sound to the desired track use ~>>~:
+Then connect each sound to the desired track using ~>>~:
 
 #+begin_src
 (
@@ -685,7 +691,7 @@ free AVL plugin that can be downloaded at http://www.bandshed.net/avldrumkits/
 
 This is just a wrapper for AVL's MIDI mapping, it might work with other MIDI drum sets, I haven't tried it.
 
-Create a drummer that sends MIDI.
+Create a drummer that sends MIDI (remember to connect it in the MIDI routing app):
 
 #+begin_src sclang
 ~bonzo = Pavldrums(MIDIOut(0));
@@ -711,11 +717,11 @@ Ziva.drums;
 * Živa for SuperCollider users
 ** Patterns in Živa vs Patterns in SuperCollider
 
-  Živa uses a custom syntax for patterns, but regular SuperCollider patterns can also be used. Not all SuperCollider patterns have their equivalent in Živa, but the ones I use the most do. I keep adding them as I need.
+  Živa uses a custom syntax for patterns, but regular SuperCollider patterns can also be used. Not all SuperCollider patterns have their equivalent in Živa, only the ones I use the most do. I keep adding them as I need.
 
   If you feel like adding more patterns, I'd recommend extending the  ~SequenceableCollection~ class in your own file, and putting it in your ~Extensions~ subfolder.
 
-  My approach is to make every pattern equivalent return a ~Pchain~, so it can be chained to others. See Živa's implementation of ~SequenceableCollection~ extention to see some examples.
+  My approach is to make every pattern equivalent return a ~Pchain~, so it can be chained to others. See Živa's implementation of ~SequenceableCollection~ extension ([[./Classes/sequenceablecollection.sc]]) to see some examples.
 
 ** Adding new SynthDefs
 
@@ -723,4 +729,7 @@ New synths can be loaded anytime as you would normally do in SuperCollider with:
 #+begin_src sclang
 SynthDef(...).add;
 #+end_src
-As soon as the ~SynthDef~ is added it will be listed by the ~Ziva.synths~ command.
+As soon as the ~SynthDef~ is added it will be listed by the ~Ziva.synths~ command and ready to use.
+
+** Effects
+Effect tracks are ~Ndefs~ that receive a bus and send it out. Effects are added to the ~Ndef~ slots. Effect names are taken from ~Ziva.effectsDict~. New effects can be added with new entries to this dictionary. Syntax is ~Ziva.effectsDict(\newfxname, {|in| ...});~.
