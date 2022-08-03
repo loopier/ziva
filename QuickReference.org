@@ -183,9 +183,10 @@ custom
 ****  euclidean rhythms
 ~.bj(hits, beats, [offset, ...])~
 #+begin_src sclang
-[
-    ~lola.faster.bj(5,8,0,scramble:false, sort:false, reverse:false),
-].ziva;
+  [
+      ~lola.faster.bj(5,8,0,scramble:false, sort:false, reverse:false), // for rhythm over the instrument
+      ~lola.faster.deg([0,2,4].bj(5,8,0)), // for rhythm over one parameter
+  ].ziva;
 #+end_src
 
 ****  custom rhythms
