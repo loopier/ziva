@@ -8,11 +8,14 @@ A general purpose framework for smoothly playing samples and synths.
 
 /WARNING: This software is still under heavy development and might considerably change in future versions./
 * Requirements
+** All OS
 
     - SuperCollider: https://github.com/supercollider/supercollider - tested with v3.12.2
-    - optional, but recommended (many effect UGens need it): sc3-plugins: https://github.com/supercollider/sc3-plugins/
+    - sc3-plugins: https://github.com/supercollider/sc3-plugins/
     - optional, but recommended (for the Dirt-Samples library): SuperDirt quark: https://github.com/musikinformatik/SuperDirt
-    - optional: DrumPattern quark: https://github.com/loopier/drumpattern
+
+** Windows
+  Windows users also need to install git: https://gitforwindows.org/
 
 * Installation from SuperCollider
 #+begin_src sclang
