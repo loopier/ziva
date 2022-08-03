@@ -96,6 +96,10 @@
     tracatron { |reverse=0| ^this.rhythm(\tracatron, reverse) }
     tracatrun { |reverse=0| ^this.rhythm(\tracatrun, reverse) }
 
+    bj { arg hits, beats, offset=0, reverse=0;
+        if (hits.isNil) { hits = this.size };
+        ^this.rhythm(Bjorklund(hits,beats).replace(0,\r).rotate(offset), reverse);
+    }
     // add trailing rests
     // every { arg beats=4;
     //     ^this++(\r!beats).flat;
@@ -105,6 +109,7 @@
     //     // ^Array.fill(size, list.pwalk(stepPattern, directionPattern, startPos).iter);
     //     [size, list, stepPattern, directionPattern, startPos].collect(_.debug(_));
     // }
+
 
     pdef{ |key|
         ^Pdef(key, Ppar(this));
