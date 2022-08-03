@@ -234,6 +234,15 @@ Ziva {
 		// };
 	}
 
+	/// \brief return a random synth name
+	*randSynth {
+		^Ziva.synthDefList.choose;
+	}
+
+	*randSample {
+		^Ziva.samplesDict.keys.choose;
+	}
+
 	/// \brief return a list of the controls for the given synth
     *synthControls { |synth|
         var controls = List();
