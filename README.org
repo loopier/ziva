@@ -6,7 +6,7 @@ This is a set of tools and syntax sugar for easy live coding with SuperCollider 
 
 A general purpose framework for smoothly playing samples and synths.
 
-/*WARNING:* This software is still under heavy development and might considerably change in future versions./
+/WARNING: This software is still under heavy development and might considerably change in future versions./
 * Requirements
 
     - SuperCollider: https://github.com/supercollider/supercollider - tested with v3.12.2
@@ -296,10 +296,20 @@ This rhythm can be delayed by any number of beats (third argument).
 The next exmaple plays the same rhythm as above but delayed by one beat:
 
 #+begin_src sclang
-    [
-        ~lola.oct(3),
-        ~lola.faster.bj(5,8,1),
-    ].ziva;
+  [
+      ~lola.faster.bj(5,8), // play the rhtyhm on the whole instrument
+      ~lola.faster.deg([0,2,4].bj(3,8).pseq), // will arpegiate with a bj(3,8) rhythm
+
+  ].ziva;
+#+end_src
+
+This function works both on patterns (instruments), and arrays.
+
+#+begin_src sclang
+  [
+      ~lola.faster.bj(5,8,1),
+      ~lola.deg()
+  ].ziva;
 #+end_src
 
 **** creative rhythms
@@ -331,7 +341,7 @@ It can be added to any pattern (more on patterns later) of any parameter (except
 [~lola.deg([0,r,4,r].pseq)].ziva;
 #+end_src
 
-It is useful having an independent parameter/function for rhythms.  It can be named anything. I usually use .r()
+It is useful having an independent parameter/function for rhythms.  It can be named anything. I usually use ~.r()~
 
 #+begin_src sclang
 [~lola.deg((..7).prand).r([1,r,r,1,r,r,1,r,1,r,1,r].pseq)].ziva;
