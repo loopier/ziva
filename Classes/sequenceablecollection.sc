@@ -97,8 +97,23 @@
     tracatrun { |reverse=0| ^this.rhythm(\tracatrun, reverse) }
 
     bj { arg hits, beats, offset=0, reverse=0;
+        var bj;
+        var counter = 0;
         if (hits.isNil) { hits = this.size };
-        ^this.rhythm(Bjorklund(hits,beats).replace(0,\r).rotate(offset), reverse);
+        bj = Bjorklund(hits,beats).rotate(offset);
+        if (reverse.isNil) {
+            bj = bj.reverse;
+        };
+
+        bj.do{ |x, i|
+            bj[i].debug(i);
+            if (x == 1) {
+                bj[i] = this.at(counter);
+                counter = (counter + 1).mod(this.size);
+                counter.debug("counter");
+            };
+        };
+        ^bj;
     }
     // add trailing rests
     // every { arg beats=4;
