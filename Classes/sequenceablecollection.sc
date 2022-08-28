@@ -19,6 +19,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + SequenceableCollection {
+    !! { | repeats |
+        if (repeats <= 0) { repeats = inf };
+        ^Pseq(this, repeats);
+    }
+
+    ?? { | repeats |
+        if (repeats <= 0) { repeats = inf };
+        ^Prand(this, repeats);
+    }
+
+    ?! { | size=8, repeats=0 |
+        if (repeats <= 0) { repeats = inf };
+        ^Pseq( this.chooseN(size), repeats );
+    }
+
     ziva { |key, quant=1|
         // this.do {|x, i| x.debug(i)}.postln;
         // Ziva.play(this);
@@ -29,14 +44,24 @@
         ^({this.choose}.dup(size));
     }
 
-    // concat { |arr|
-    //     // var prev = [];
-    //     // this.do{|n|
-    //     //     prev = prev ++ n;
-    //     // }
-    //     // ^prev;
-    //     ^(this++arr);
-    // }
+    choosen { |size=4|
+        ^this.chooseN(size);
+    }
+
+    // duplicate N times (same as .dup(n)) and concatenate OTHER to the end
+    dupand { |n, other|
+        ^this.dup(n).add(other).flat;
+    }
+
+    // triplicate THIS and concatenate OTHER at the end
+    triand { |other|
+        ^this.dupand(3, other);
+    }
+
+    // concatenate OTHER with N duplicates of THIS
+    anddup { |n, other|
+        ^other.add(this.dup(n)).flat;
+    }
 
     // returns an array of variations of the given array following
     // the algorithm used to compose sextines in poetry.

@@ -115,6 +115,10 @@
 		^Pchain(Pbind(\out, Ziva.tracksDict[sym]), this);
 	}
 
+	fm { |track, amt=1|
+		^Pchain(Pbind(\in, Ndef((\track_++track).asSymbol), \modamt, amt * 100), this);
+	}
+
 	cc { |cc, value| ^Pchain(Pbind(\ctlNum, cc, \control, value), this) }
 	inst { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
 	ins { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
@@ -163,6 +167,10 @@
 	bramp { ^Pchain(Pbind(\amp, Pbrown(0.1), this))}
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
+	perc { | rel=1 | ^Pchain(Pbind(\atk, 0.01, \rel, rel, \legato, 0.01), this) }
+	ar { | atk=0.5, rel=0.5 | ^Pchain(Pbind(\atk, atk, \dec, rel, \sus, 1, \rel, rel), this) }
+	adsr { | atk=0.01, dec=0.3, sus=0.5, rel=1.0 | ^Pchain(Pbind(\atk, atk, \dec, dec, \sus, sus, \rel, rel), this) }
+
 	bjorklund {|k,n, rotate=0, scramble=false, sort=false, reverse=false|
 		var bj = Bjorklund(k,n).replace(0,\r);
 		if(scramble) {bj = bj.scramble} {};
@@ -210,6 +218,7 @@
 
 	pedal { ^Pchain(Pbind(\legato, 4), this)}
 	legato { |amt| ^Pchain(Pbind(\legato, amt ? 1.1), this)}
+	leg { |amt| ^Pchain(Pbind(\legato, amt ? 1.1), this)}
 	tenuto { ^Pchain(Pbind(\legato, 1), this)}
 	stacc { ^Pchain(Pbind(\legato, 0.5), this)}
 	stass { ^Pchain(Pbind(\legato, 0.25), this)}

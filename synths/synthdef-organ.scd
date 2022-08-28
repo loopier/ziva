@@ -36,6 +36,7 @@ SynthDef(\organ, {
 	sig = sig * env;
 	sig = sig * amp;
 	sig = LeakDC.ar(sig);
+	sig = sig * 4;
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).add;
 )

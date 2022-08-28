@@ -6,7 +6,11 @@ Psynth {
 
 Psample {
 	*new { |sound, ch=2 ... pairs|
-		^Pbind(\type, \sample, \sound, sound, \ch, ch, *pairs);
+		if(Ziva.samplesDict.includesKey(sound)) {
+			^Pbind(\type, \sample, \sound, sound, \ch, ch, *pairs);
+		} {
+			"Sample '%' not found. Evaluate 'Ziva.samples' to see a list of available synths.".format(sound.asString).error;
+		}
 	}
 }
 

@@ -661,7 +661,7 @@ Available LFO wave shapes are: ~\sine~, ~\saw~, ~\pulse~, ~\tri~, ~\noise0~, ~\n
 
 ** Effects
 
-Sound effects (reverb, delay, chorus, ...) can be added to the signal chain. To list available sounds use:
+Sound effects (reverb, delay, chorus, ...) can be added to the signal chain. To list available effects use:
 
 #+begin_src
 Ziva.fx; // see the post window
@@ -670,9 +670,10 @@ Ziva.boot; // this might have to be called -- it's a bug, will be fixed
 
 Important things to consider regarding effects:
 
-- Effects are applied to tracks, not sounds. There are 4 tracks available.
+- Effects are applied to tracks, not sounds.
+- Any number of tracks can be added.
 - Any number of effects can be applied to each track (including none, or ~nil~).
-- Order matters.
+- Order of the effects in each track matters.
 
 To setup effects for tracks:
 
@@ -681,7 +682,7 @@ Ziva.track(0, \lowpass, \reverbL);
 Ziva.track(1, \delay);
 #+end_src
 
-The first argument is the track number. The rest are the effects to be added, *in the order that they will be applied*.
+The first argument is the track name (numbers can also be used). The rest are the effects to be added, *in the order that they will be applied*.
 
 Then connect each sound to the desired track using ~>>~:
 

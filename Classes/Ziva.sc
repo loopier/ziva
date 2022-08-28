@@ -112,7 +112,8 @@ Ziva {
 		filePaths = pathMatch(standardizePath(path +/+ "*"));
 		filePaths.do { |filepath|
 			if(filepath.splitext.last == "scd") {
-				(dirt:this).use { filepath.load }; "loading synthdefs in %\n".postf(filepath)
+				(dirt:this).use { filepath.load };
+				"loading synthdefs in %\n".postf(filepath);
 			}
 		}
 	}
@@ -221,6 +222,7 @@ Ziva {
 	/// \brief list synth names
 	*synths {
 		this.synthDefList.collect(_.postln);
+		^this.synthDefList;
 	}
 
 	/// \brief post synths and samples
@@ -381,16 +383,28 @@ Ziva {
 	/// 	The bus is stored in the dictionary for outside access.
 	*makeTracks { |numtracks|
 		this.tracksDict = IdentityDictionary.new;
-		numtracks.do{ |i|
-			var ndefsym = (\track_++i).asSymbol;
-			var tracksym = (\t++i).asSymbol;
-			var bus = Bus.audio(this.server, 2);
+		// numtracks.do{ |i|
+		// 	var ndefsym = (\track_++i).asSymbol;
+		// 	var tracksym = (\t++i).asSymbol;
+		// 	var bus = Bus.audio(this.server, 2);
 
 
-			Ndef(ndefsym, { In.ar(bus, 2) }).play;
+		// 	Ndef(ndefsym, { In.ar(bus, 2) }).play;
+		// 	this.tracksDict.put(tracksym, bus);
+		// 	this.tracksDict[tracksym].debug(ndefsym);
+		// };
+	}
+
+	*makeTrack { |name|
+			var ndefsym = (\track_++name).asSymbol;
+			var tracksym = (\t++name).asSymbol;
+			var bus = Ndef(\ndefsym).bus ? Bus.audio(this.server, 2);
+
+			Ndef(ndefsym, { In.ar(bus, 2) * \amp.kr(1) }).play.fadeTime_(1);
 			this.tracksDict.put(tracksym, bus);
 			this.tracksDict[tracksym].debug(ndefsym);
-		};
+
+		ndefsym.debug("new fx track");
 	}
 
 	/// \brief set the effects for the track
@@ -399,9 +413,16 @@ Ziva {
 	*track { |track ... effects|
 		var sym = (\t++track).asSymbol;
 		var ndef = (\track_++track).asSymbol;
+		// var exists = Ndef.dictFor(this.server).keys.includes(ndef);//.debug("Ndef exists: %".format(ndef));
+		if ( Ndef.dictFor(this.server).keys.includes(ndef).not
+			|| this.tracksDict.includesKey(sym).not
+			|| Ndef(ndef).source.isNil
+		) {
+			this.makeTrack(track);
+		};
 		// clear tracks
 		Ndef(ndef).sources.do{|x, i|
-			"%: %".format(i, tracksDict[sym]).debug("removing");
+			"%: %".format(i, tracksDict[sym]).debug("removing fx for track");
 			if(i>0) {
 				Ndef(ndef)[i] = nil;
 			};
