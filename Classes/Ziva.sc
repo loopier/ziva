@@ -459,6 +459,10 @@ Ziva {
 		elements = elements.flat;
 		elements.debug(key);
 		// ^Pdef(key, Ppar(elements)).play(this.clock).quant_(quant);
+
+		// play the harmony only at the beginning
+		if (Pdef(\harmony).isPlaying.not.debug("harmony is playing:")) { Pdef(\hamorny).quant_(quant) };
+
 		^Pdef(key, Ppar(elements)).play.quant_(quant);
 	}
 
