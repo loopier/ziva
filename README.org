@@ -643,6 +643,24 @@ Following is an example using both regular SuperCollider pattern syntax and Živ
 
 
 
+** Harmony
+A harmonic sequence with it's own rhtyhm can be set with `Ziva.harmony(degrees, durations)`;
+
+`degrees` is a pattern that sets the root notes of the chords of the harmonic progression.
+
+`durations` is a pattern that sets the harmonic rhythm (units are of 1 beat).
+
+For example:
+
+#+begin_src sclang
+  // to set a chord progression of
+  // root note for 3 beats
+  // 2nd degree for 1 beat
+  // 6th degree one octave lower for 2 beats
+  // 7th degree one octave lower for 2 beats
+  ~harmony = Ziva.harmony([0,1,-2,-1].pseq, [3,1,2,2].pseq);
+#+end_src
+
 ** Modulation
 Another way to modulate parameters is with LFOs (Low Frequency Oscillator).
 

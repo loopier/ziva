@@ -477,4 +477,17 @@ Ziva {
 	*tempo { |bpm|
 		this.clock.tempo = bpm/60;
 	}
+
+	// \brief 	create a '~harmony' (and '~h' shortcut) global variable to hold a
+	// 			universal harmonic sequence
+	// \param 	degs	harmonic progression rootnotes
+	// \param 	dur		harmonic rhythm
+	// \param 	pairs	any other Pbind parameter
+	*harmony { |degs, durs ... pairs|
+		degs.debug("hamrmonic degs");
+		durs.debug("hamrmonic durs");
+		pairs.debug("hamrmonic pairs");
+		Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play;
+		^Pfunc { ~harmony[\degree] };
+	}
 }
