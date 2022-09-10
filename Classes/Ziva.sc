@@ -271,6 +271,10 @@ Ziva {
 		effectDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.85, 0.86, 0.3)};
 		effectDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
 		effectDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
+		effectDict[\gverbS] 	= {arg sig; sig + GVerb.ar(sig, roomsize:10, revtime:3, dampsigg:0.1, sigputbw:0.0, drylevel:0.0, earlyreflevel:1.0, taillevel:0.2, mul: (-6.dbamp))};
+		effectDict[\gverb] 		= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:20, revtime:3, dampsigg:0.3, sigputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)};
+		effectDict[\gverbL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:30, revtime:3, dampsigg:0.3, sigputbw:0.5, drylevel:0.5, earlyreflevel:0.5, taillevel:0.5), 100)};
+		effectDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:3, dampsigg:0.2, sigputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
 		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
 		effectDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
 		effectDict[\lpf] 		= {arg sig; RLPF.ar(sig, \lcutoff.kr(1000), \res.kr(1.0))};
