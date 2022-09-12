@@ -69,7 +69,13 @@
 	scale { |name| ^Pchain(Pbind(\scale, Scale.at(name)), this) }
 	deg { |value| ^Pchain(Pbind(\degree, value), this) }
 	oct { |value| ^Pchain(Pbind(\octave, value), this) }
-	ixi { |msg, oct=1| ^Pchain(Pbind(\note, msg.notes(oct).pseq), this)}
+	pixi { |msg, durmul=1, oct=1|
+		var ixi = msg.ixi(oct:oct, durmul:durmul);
+		^Pchain(Pbind(
+			\degree, ixi.degs.pseq,
+			\dur, ixi.durs.pseq,
+		), this);
+	}
 
 	once { |times = 1| ^Pchain(Pbind(\r, Pseq([1, \r], times)), this) }
 
