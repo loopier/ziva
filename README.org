@@ -145,7 +145,7 @@ play an eighth-note arpeggio with the synth
 
 play the synth faster than the kick drum
 
--- other options are: `slowest, slower, slow, fast, faster, fastest`
+-- other options are: ~slowest, slower, slow, fast, faster, fastest~
 
 #+begin_src sclang
 (
@@ -209,9 +209,9 @@ add a bass line with the same synth
 
 dynamics -- play louder or softer
 
--- options are: ```fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)```
+-- options are: ~fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)~
 
--- .`amp([0.0 .. 1.0])` for custom loudness -- BE CAREFUL with values > `1.0`
+-- .~amp([0.0 .. 1.0])~ for custom loudness -- BE CAREFUL with values > ~1.0~
 
 #+begin_src sclang
 (
@@ -227,17 +227,17 @@ add a pizzicato chord comp
 
 -- other options are:
 
-	- `stass`: staccatissimo
+	- ~stass~: staccatissimo
 
-	- `stacc`: staccato
+	- ~stacc~: staccato
 
-	- `tenuto`
+	- ~tenuto~
 
-	- `legato` (or `leg`)
+	- ~legato~ (or ~leg~)
 
-	- `pedal`
+	- ~pedal~
 
- - `legato(value)`
+ - ~legato(value)~
 
 #+begin_src sclang
 (
@@ -253,11 +253,11 @@ add a pizzicato chord comp
 
 pan things around with:
 
-- `right/left`
+- ~right/left~
 
-- `randpan`
+- ~randpan~
 
-- `pan([-1.0 .. 1.0])`
+- ~pan([-1.0 .. 1.0])~
 
 #+begin_src sclang
 (
@@ -282,7 +282,7 @@ create a melody of any length from a note list (will change every time you evalu
 )
 #+end_src
 
-create a melody with a different approach using legato and rests (`r`)
+create a melody with a different approach using legato and rests (~r~)
 
 #+begin_src sclang
 (
@@ -475,7 +475,7 @@ Ziva.boot(inputChannels:2, outputChannels:2);
 or increase memory
 
 #+begin_src sclang
-Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);`
+Ziva.boot(numBuffers:16, memSize:32, maxNodes:32);~
 #+end_src
 
 *** Samples
@@ -1048,11 +1048,11 @@ Following is an example using both regular SuperCollider pattern syntax and Živ
 
 
 ** Harmony
-A harmonic sequence with it's own rhtyhm can be set with `Ziva.harmony(degrees, durations)`;
+A harmonic sequence with it's own rhtyhm can be set with ~Ziva.harmony(degrees, durations)~;
 
-`degrees` is a pattern that sets the root notes of the chords of the harmonic progression.
+~degrees~ is a pattern that sets the root notes of the chords of the harmonic progression.
 
-`durations` is a pattern that sets the harmonic rhythm (units are of 1 beat).
+~durations~ is a pattern that sets the harmonic rhythm (units are of 1 beat).
 
 For example:
 
