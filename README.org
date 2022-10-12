@@ -54,10 +54,10 @@ boot the server
 Ziva.boot;
 #+end_src
 
-to add custom samples
+optionally add custom samples -- some are loaded by default
 
 #+begin_src sclang
-Ziva.loadSamples("~/path/to/your/samples/parent/directory");
+Ziva.loadSamples("path/to/your/samples/parent/directory"); // $HOME is prepended automatically
 #+end_src
 
 list available synths
