@@ -209,7 +209,7 @@ add a bass line with the same synth
 
 dynamics -- play louder or softer
 
--- options are: `fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)`
+-- options are: ```fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)```
 
 -- .`amp([0.0 .. 1.0])` for custom loudness -- BE CAREFUL with values > `1.0`
 
