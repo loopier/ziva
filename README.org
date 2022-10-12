@@ -211,7 +211,7 @@ dynamics -- play louder or softer
 
 -- options are: ~fff, ff, f, p, pp, ppp~ (from fortissimo to pianissimo)
 
--- .~amp([0.0 .. 1.0])~ for custom loudness -- BE CAREFUL with values > ~1.0~
+-- ~.amp([0.0 .. 1.0])~ for custom loudness -- BE CAREFUL with values > ~1.0~
 
 #+begin_src sclang
 (
@@ -431,6 +431,8 @@ change the tempo
 #+end_src
 
 combine them all
+
+comment lines to mute them, and uncomment them to unmute them
 
 #+begin_src sclang
 (
