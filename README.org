@@ -2,11 +2,12 @@
 
 Live coding with SuperCollider patterns made easy (hopefully).
 
-This is a set of tools and syntax sugar for easy live coding with SuperCollider patterns.
+This is a set of tools and syntax sugar for easy live coding synthdefs and samples with SuperCollider patterns.
 
-A general purpose framework for smoothly playing samples and synths.
+Živa was developed in a residency at[[https://wiki.ljudmila.org/Research_residency:_Roger_Pibernat][Ljudmila]] (in Ljubljana, Slovenia) as part of the [[https://onthefly.space][on-the-fly project]].
 
 /WARNING: This software is still under heavy development and might considerably change in future versions./
+
 * Requirements
 ** All OS
 
@@ -305,7 +306,7 @@ create a melody with a different approach using legato and rests (~r~)
 )
 #+end_src
 
-create a melody with yet another approach using dur
+create a melody with yet another approach using ~dur~
 
 #+begin_src sclang
 (
@@ -339,7 +340,7 @@ play it for a longer time
 )
 #+end_src
 
-choose a different the sample
+choose a different sample
 
 #+begin_src sclang
 (
