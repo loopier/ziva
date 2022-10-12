@@ -6,6 +6,8 @@ A set of tools and syntax sugar for easy live coding with synthdef and sample pa
 
 Živa was developed in a residency at [[https://wiki.ljudmila.org/Research_residency:_Roger_Pibernat][Ljudmila]] (in Ljubljana, Slovenia) as part of the [[https://onthefly.space][On-the-fly project]].
 
+Regular SuperCollider pattern and Ndef syntax can be used as parameters inside Živa functions.
+
 /WARNING: This software is still under heavy development and might considerably change in future versions./
 
 * Requirements
