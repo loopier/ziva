@@ -457,11 +457,11 @@ To list available effects: ~Ziva.fx~
 #+begin_src sclang
 Ziva.track(0, \delay, \reverb);
 
-  (
-  [
-      ~nala >> 0,
-      nil
-  ].ziva;
-  )
+(
+[
+    ~nala >> 0,
+    nil
+].ziva;
+)
 
 #+end_src
