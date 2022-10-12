@@ -2,9 +2,9 @@
 
 Live coding with SuperCollider patterns made easy (hopefully).
 
-This is a set of tools and syntax sugar for easy live coding synthdefs and samples with SuperCollider patterns.
+A set of tools and syntax sugar for easy live coding with synthdef and sample patterns in SuperCollider.
 
-Živa was developed in a residency at[[https://wiki.ljudmila.org/Research_residency:_Roger_Pibernat][Ljudmila]] (in Ljubljana, Slovenia) as part of the [[https://onthefly.space][on-the-fly project]].
+Živa was developed in a residency at [[https://wiki.ljudmila.org/Research_residency:_Roger_Pibernat][Ljudmila]] (in Ljubljana, Slovenia) as part of the [[https://onthefly.space][On-the-fly project]].
 
 /WARNING: This software is still under heavy development and might considerably change in future versions./
 
