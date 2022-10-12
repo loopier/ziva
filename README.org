@@ -47,6 +47,23 @@ General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
+* Example
+
+#+begin_src sclang
+Ziva.boot;
+~acid = Psynth(\acid);
+~kick = Psample(\aekick);
+
+(
+[
+	~acid.faster.deg([0,2,4,7].choosen(16).tumbao.pseq),
+	~acid.fast.pizz.bj(7,12).deg([2,4]).oct(7),
+	~acid.fast.deg([0,4,7,0].montuno.pseq).oct(3),
+	~kick.f.bpm(115),
+].ziva;
+)
+
+#+end_src
 
 * Quick Start
 ** Server
