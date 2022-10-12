@@ -45,7 +45,405 @@ You should have received a copy of the GNU General Public License
 along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 
-* Živa for beginners
+* Quick Start
+boot the server
+
+#+begin_src sclang
+Ziva.boot;
+#+end_src
+
+to add custom samples
+
+#+begin_src sclang
+Ziva.loadSamples("~/path/to/your/samples/parent/directory");
+#+end_src
+
+list available synths
+
+#+begin_src sclang
+Ziva.synths;
+#+end_src
+
+list avialable sounds (samples)
+
+#+begin_src sclang
+Ziva.sounds;
+#+end_src
+
+list available fx
+
+#+begin_src sclang
+Ziva.fx;
+#+end_src
+
+list available rhythms
+
+#+begin_src sclang
+Ziva.rhythms;
+#+end_src
+
+list available controls of a synth
+
+#+begin_src sclang
+Ziva.controls(\acid);
+#+end_src
+
+create a synth player
+
+#+begin_src sclang
+~nala = Psynth(\acid);
+#+end_src
+
+create a sample player
+
+#+begin_src sclang
+~lola = Psample(\aekick);
+#+end_src
+
+create a band -- placeholder for sound players
+
+#+begin_src sclang
+(
+[
+	~nala,
+	~lola
+].ziva;
+)
+#+end_src
+
+stop everything
+
+#+begin_src sclang
+(
+[
+	// ~nala,
+	// ~lola
+	nil
+].ziva;
+)
+#+end_src
+or
+
+Ziva.stop;
+
+play an eighth-note arpeggio with the synth
+
+#+begin_src sclang
+(
+[
+	~nala.deg([0,2,4].pseq),
+	~lola,
+].ziva;
+)
+#+end_src
+
+play the synth faster than the kick drum
+
+-- other options are: slowest, slower, slow, fast, faster, fastest
+
+#+begin_src sclang
+(
+[
+	~nala.fast.deg([0,2,4].pseq),
+	~lola,
+].ziva;
+)
+#+end_src
+
+play a rhythm with the kick drum
+
+#+begin_src sclang
+(
+[
+	// ~nala.fast.deg([0,2,4].pseq),
+	~lola.faster.r([0].cascara.pseq), // *
+	nil
+].ziva;
+)
+#+end_src
+
+add a preset rhtythm to the arpegiated synth
+
+(see Ziva.rhythms for available rhythms)
+
+#+begin_src sclang
+(
+[
+	~nala.faster.deg([0,2,4].tumbao.pseq), // *
+	~lola.faster.r([0].cascara.pseq),
+	nil
+].ziva;
+)
+#+end_src
+
+euclidean rhythms
+
+#+begin_src sclang
+(
+[
+	~nala.faster.bj(5,8),
+	~lola.faster.bj(3,8),
+	nil
+].ziva;
+)
+#+end_src
+
+add a bass line with the same synth
+
+#+begin_src sclang
+(
+[
+	~nala.faster.deg([0,2,4].tumbao.pseq),
+	~nala.faster.deg([0,4,7].montuno.pseq).oct(3), // *
+	~lola.faster.r([0].cascara.pseq),
+	nil
+].ziva;
+)
+#+end_src
+
+dynamics -- play louder or softer
+
+-- options are: fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)
+
+-- .amp([0.0 .. 1.0]) for custom loudness -- BE CAREFUL with values > 1.0
+
+#+begin_src sclang
+(
+[
+	~nala.fast.p.oct(6),
+	~nala.ff.oct(3),
+	~nala.faster.amp([0.1,0.3].pseq),
+].ziva;
+)
+#+end_src
+
+add a pizzicato chord comp
+
+-- other options are:
+
+	- stass: staccatissimo
+
+	- stacc: staccato
+
+	- tenuto
+
+	- legato (or 'leg')
+
+	- pedal
+
+ - legato(value)
+
+#+begin_src sclang
+(
+[
+	~nala.faster.pizz.deg([0,2,4]).r([0].clave.pseq).oct(6), // *
+	~nala.faster.deg([0,2,4].tumbao.pseq),
+	~nala.faster.deg([0,4,7].montuno.pseq).oct(3),
+	~lola.faster.r([0].cascara),
+	nil
+].ziva;
+)
+#+end_src
+
+pan things around with:
+
+- right/left
+
+- randpan
+
+- pan([-1.0 .. 1.0])
+
+#+begin_src sclang
+(
+[
+	~nala.faster.pizz.deg([0,2,4]).r([0].clave.pseq).oct(6).randpan, // *
+	~nala.faster.deg([0,2,4].tumbao.pseq).right, // *
+	~nala.faster.deg([0,4,7].montuno.pseq).oct(3).pan(-0.2), // *
+	~lola.faster.r([0].cascara).pan(0.2),
+	nil
+].ziva;
+)
+#+end_src
+
+create a melody of any length from a note list (will change every time you evaluate)
+
+#+begin_src sclang
+(
+[
+	~nala.faster.deg([0,2,4].choosen(8).tumbao.pseq),
+	nil
+].ziva;
+)
+#+end_src
+
+create a melody with a different approach using legato and rests ('r')
+
+#+begin_src sclang
+(
+[
+	~nala.fast.deg([0,2,4,r].choosen(8).pseq).legato([0.1,0.5,1].choosen(8).pseq),
+	nil
+].ziva;
+)
+#+end_src
+
+create a melody with yet another approach using dur
+
+#+begin_src sclang
+(
+[
+	~nala.dur([1,1/2,1/4].choosen(4).pseq).deg([0,2,4,7].choosen(8).pseq),
+	nil
+].ziva;
+)
+#+end_src
+
+play a longer sample
+
+~del = Psample(\delia);
+#+begin_src sclang
+(
+[
+	~del,
+	nil
+].ziva;
+)
+#+end_src
+
+play it for a longer time
+
+#+begin_src sclang
+(
+[
+	~del.slow,
+	nil
+].ziva;
+)
+#+end_src
+
+choose a different the sample
+
+#+begin_src sclang
+(
+[
+	~del.dur(6).n(4),
+	nil
+].ziva;
+)
+#+end_src
+
+choose a random sample everytime
+
+#+begin_src sclang
+(
+[
+	~del.slow.n((..8).prand),
+	nil
+].ziva;
+)
+#+end_src
+
+change the playing rate
+
+#+begin_src sclang
+(
+[
+	~del.slow.n(4).speed(0.5),
+	nil
+].ziva;
+)
+#+end_src
+
+play the sample in a random sequence of speeds
+
+- first argument is the length of the sequence
+
+- second argument is the list of speeds to choose from
+
+#+begin_src sclang
+(
+[
+	~del.fast.n(4).randspeeds(4,[-1,1,-0.5,0.5,2,-2]),
+	nil
+].ziva;
+)
+#+end_src
+
+old broken cassette tape effect
+
+- 0.0 : no effect
+
+- the higher the crazier
+
+#+begin_src sclang
+(
+[
+	~del.slow.n(4).tape(0.5),
+	nil
+].ziva;
+)
+#+end_src
+
+start playing halfway in the sample
+
+#+begin_src sclang
+(
+[
+	~del.slow.n(4).start(0.5),
+	nil
+].ziva;
+)
+#+end_src
+
+chop the sample and rearange the slices
+
+- first argument is the number of slices used (randomly chosen from the chopped sample)
+
+- second argument is the number of slices the sampled is chopped in
+
+#+begin_src sclang
+(
+[
+	~del.fast.n(4).chop(4,8),
+	nil
+].ziva;
+)
+#+end_src
+
+change the tempo
+
+- this changes the GLOBAL tempo. So changing it to any sound will affect all the others
+
+#+begin_src sclang
+(
+[
+	~del.fast.n(4).chop(8,8).bpm(120),
+	~lola,
+	nil
+].ziva;
+)
+#+end_src
+
+combine them all
+
+#+begin_src sclang
+(
+[
+	~nala.faster.stacc.deg([0,2,4].choosen(8).tumbao.pseq).oct([4,5,6,7].choosen(8).pseq),
+	~nala.fast.deg([0,7].choosen(8).montuno.pseq).oct(3),
+	~lola.f.n((..4).choosen(4).pseq),
+	~del.f.fast.legato([0.5,1,2].choosen(8).pseq).n((..7).choosen(8).pseq).chop(8).randspeeds(5,[-1,-2,1,2]),
+	nil
+].ziva;
+)
+#+end_src
+
+#+begin_src sclang
+// boot
+  Ziva.boot;
+#+end_src
+
+* OLD
 
 This guide is intended for people who have never used SuperCollider before. If you already know SuperCollider you might want to check [[ZivaForSuperColliderUsers.org][Ziva for SuperCollider Users]] or [[QuickReference.org][Quick Reference]] instead.
 
@@ -658,7 +1056,7 @@ For example:
   // 2nd degree for 1 beat
   // 6th degree one octave lower for 2 beats
   // 7th degree one octave lower for 2 beats
-  ~harmony = Ziva.harmony([0,1,-2,-1].pseq, [3,1,2,2].pseq);
+    ~harmony = Ziva.harmony([0,1,-2,-1].pseq, [3,1,2,2].pseq);
 #+end_src
 
 ** Modulation
@@ -744,4 +1142,3 @@ To see the mappings:
 #+begin_src sclang
 Ziva.drums;
 #+end_src
-
