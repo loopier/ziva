@@ -46,6 +46,7 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 
 
 * Quick Start
+** Server
 boot the server
 
 #+begin_src sclang
@@ -88,6 +89,8 @@ list available controls of a synth
 Ziva.controls(\acid);
 #+end_src
 
+** Setup and basics
+
 create a synth player
 
 #+begin_src sclang
@@ -126,6 +129,7 @@ or
 
 Ziva.stop;
 
+** Playing
 play an eighth-note arpeggio with the synth
 
 #+begin_src sclang
