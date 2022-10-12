@@ -452,7 +452,7 @@ Effects are set on tracks. Sounds can then be routed to those tracks using ~>>~
 
 Syntax: ~Ziva.track(nameOrNumber, effect1, effect2, ...);~. Order matters!
 
-To list available effects: `Ziva.fx`
+To list available effects: ~Ziva.fx~
 
 #+begin_src sclang
 Ziva.track(0, \delay, \reverb);
