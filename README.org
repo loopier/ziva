@@ -143,6 +143,18 @@ play an eighth-note arpeggio with the synth
 )
 #+end_src
 
+play same arpeggio in another scale
+
+#+begin_src sclang
+(
+[
+	~nala.deg([0,2,4].pseq).scale(\diminished),
+	~lola,
+].ziva;
+)
+#+end_src
+
+
 play the synth faster than the kick drum
 
 -- other options are: ~slowest, slower, slow, fast, faster, fastest~
