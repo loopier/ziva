@@ -20,6 +20,10 @@
 
 + Pattern {
 
+	bpm { |bpm|
+		^Pchain(Pbind(\tempo, bpm/60), this);
+	}
+
 	pn {arg repeats=inf, key;
 		^Pn(this, repeats, key);
 	}
