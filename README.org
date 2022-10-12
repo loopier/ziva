@@ -53,16 +53,21 @@ along with this library.  If not, see <http://www.gnu.org/licenses/>.
 Ziva.boot;
 ~acid = Psynth(\acid);
 ~kick = Psample(\aekick);
+~delia = Psample(\delia);
+
+Ziva.track(0, \chorus, \reverbS);
 
 (
 [
-	~acid.faster.deg([0,2,4,7].choosen(16).tumbao.pseq),
-	~acid.fast.pizz.bj(7,12).deg([2,4]).oct(7),
+	~acid.faster.deg([0,2,4,7].choosen(16).tumbao.pseq).scale(\harmonicMinor).randpan,
+	~acid.fast.pizz.bj(7,12).deg([2,4]).oct(7).scale(\harmonicMinor) >> 0,
 	~acid.fast.deg([0,4,7,0].montuno.pseq).oct(3),
+
+	~delia.f.fast.n((..26).prand).chop(4,8).tape(0.4),
+
 	~kick.f.bpm(115),
 ].ziva;
 )
-
 #+end_src
 
 * Quick Start
