@@ -127,7 +127,9 @@ stop everything
 #+end_src
 or
 
+#+begin_src sclang
 Ziva.stop;
+#+end_src
 
 ** Playing
 play an eighth-note arpeggio with the synth
@@ -143,7 +145,7 @@ play an eighth-note arpeggio with the synth
 
 play the synth faster than the kick drum
 
--- other options are: slowest, slower, slow, fast, faster, fastest
+-- other options are: `slowest, slower, slow, fast, faster, fastest`
 
 #+begin_src sclang
 (
@@ -207,9 +209,9 @@ add a bass line with the same synth
 
 dynamics -- play louder or softer
 
--- options are: fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)
+-- options are: `fff, ff, f, p, pp, ppp (from fortissimo to pianissimo)`
 
--- .amp([0.0 .. 1.0]) for custom loudness -- BE CAREFUL with values > 1.0
+-- .`amp([0.0 .. 1.0])` for custom loudness -- BE CAREFUL with values > `1.0`
 
 #+begin_src sclang
 (
@@ -225,17 +227,17 @@ add a pizzicato chord comp
 
 -- other options are:
 
-	- stass: staccatissimo
+	- `stass`: staccatissimo
 
-	- stacc: staccato
+	- `stacc`: staccato
 
-	- tenuto
+	- `tenuto`
 
-	- legato (or 'leg')
+	- `legato` (or `leg`)
 
-	- pedal
+	- `pedal`
 
- - legato(value)
+ - `legato(value)`
 
 #+begin_src sclang
 (
@@ -251,11 +253,11 @@ add a pizzicato chord comp
 
 pan things around with:
 
-- right/left
+- `right/left`
 
-- randpan
+- `randpan`
 
-- pan([-1.0 .. 1.0])
+- `pan([-1.0 .. 1.0])`
 
 #+begin_src sclang
 (
@@ -280,7 +282,7 @@ create a melody of any length from a note list (will change every time you evalu
 )
 #+end_src
 
-create a melody with a different approach using legato and rests ('r')
+create a melody with a different approach using legato and rests (`r`)
 
 #+begin_src sclang
 (
