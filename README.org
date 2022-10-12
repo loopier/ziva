@@ -182,7 +182,7 @@ play a rhythm with the kick drum
 
 add a preset rhtythm to the arpegiated synth
 
-(see Ziva.rhythms for available rhythms)
+(see ~Ziva.rhythms~ for available rhythms)
 
 #+begin_src sclang
 (
