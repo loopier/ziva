@@ -1,14 +1,13 @@
-
 # Živa Reference
 
 This document exposes the API available through Živa.
 
 
-*Optional arguments are surrounded by `[]` *
+*Optional arguments are surrounded by `[]`*
 
 *Symbols always start with ` \ `*
 
-Regular SuperCollider code can be normally used anyware.
+Regular SuperCollider code can be normally used anywhere.
     
 # Basic Example
 
