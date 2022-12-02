@@ -1,0 +1,59 @@
+<meta charset="utf-8" emacsmode="-*- markdown -*-"><link rel="stylesheet" href="markdeep/apidoc.css?"">
+
+                          **Živa Reference**
+
+This document exposes the API available through Živa.
+
+!!! Note
+    Optional arguments are surrounded by `[]`
+
+# System methods
+
+Methods to setup, run the live coding enviroment and get info from its current state.
+
+Address | Args <img width=675px/> | Description
+--------|------|------------
+`boot`  | `actor:s` <br/> - | Delete the actor (remove its instance).
+
+# Instrument methods
+
+Methods to use with instruments.
+
+Address | Args <img width=675px/> | Description
+--------|------|------------
+`boot`  | `[inputChannels, outputChannels, server, numBuffers, memSize, maxNodes]` | Boot the server with optional parameteres
+
+## Synths
+
+Methods exclusive of synths.
+!!! Note
+    If the method does not exist, it will be passed on as synth argument.
+
+Address | Args <img width=675px/> | Description
+--------|------|------------
+`deg`  | `num|pattern` | Play the given `degree` note in the current scale.
+`oct`  | `num|pattern` | Play in the given `octave`.
+
+## Samples
+
+Methods exclusive of samples.
+
+Address | Args <img width=675px/> | Description
+--------|------|------------
+`speed`  | `number|pattern` | Play the sample at the given `speed`. Affects the pitch.
+
+## MIDI
+
+Methods exclusive of midi.
+
+Address | Args <img width=675px/> | Description
+--------|------|------------
+`speed`  | `number|pattern` | Play the sample at the given `speed`. Affects the pitch.
+
+
+
+
+
+<style class="fallback">body{visibility:hidden}</style><script>markdeepOptions={tocStyle:'none'};</script>
+<!-- Markdeep: --><script src="markdeep/markdeep.min.js?" charset="utf-8"></script>
+
