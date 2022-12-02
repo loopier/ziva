@@ -11,17 +11,21 @@ This document exposes the API available through Živa.
 
 Methods to setup, run the live coding enviroment and get info from its current state.
 
-Address | Args <img width=675px/> | Description
+Address | Args <img width=175px/> | Description
 --------|------|------------
-`boot`  | `actor:s` <br/> - | Delete the actor (remove its instance).
+`boot`  | `[inputChannels, outputChannels,`<br> `server, numBuffers, `<br> `memSize, maxNodes]` | Boot the server with optional parameteres
+`synths`  |  | List available synths
+`samples`  |  | List available synths
 
 # Instrument methods
 
 Methods to use with instruments.
 
-Address | Args <img width=675px/> | Description
+Address | Args | Description
 --------|------|------------
-`boot`  | `[inputChannels, outputChannels,<br> server, numBuffers, memSize, maxNodes]` | Boot the server with optional parameteres
+`pan`  | `num|pattern` | Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
+`pingpong`  |  | Alternate left and right panning.
+`randpan`  |  | Set stereo panning to a random value between `-1` and `1` on every event.
 
 ## Synths
 
@@ -30,16 +34,18 @@ Methods exclusive of synths.
 !!! Note
     If the method does not exist, it will be passed on as synth argument.
 
-Address | Args <img width=675px/> | Description
+Address | Args | Description
 --------|------|------------
-`deg`  | `num|pattern` | Play the given `degree` note in the current scale.
-`oct`  | `num|pattern` | Play in the given `octave`.
+`deg`  | `num|pattern` | Play the given **degree** note in the current scale.
+`oct`  | `num|pattern` | Play in the given **octave**.
+`note`  | `num|pattern` | Play chromatic note. `0` is root at the current octave.
+`midinote`  | `num|pattern` | Play MIDI note. 
 
 ## Samples
 
 Methods exclusive of samples.
 
-Address | Args <img width=675px/> | Description
+Address | Args | Description
 --------|------|------------
 `speed`  | `number|pattern` | Play the sample at the given `speed`. Affects the pitch.
 
@@ -47,12 +53,21 @@ Address | Args <img width=675px/> | Description
 
 Methods exclusive of midi.
 
-Address | Args <img width=675px/> | Description
+Address | Args | Description
 --------|------|------------
 `speed`  | `number|pattern` | Play the sample at the given `speed`. Affects the pitch.
 
+# Patterns
 
+Apply patterns on lists of values.
 
+!!!Note **Syntax:** `[item1, item2, ... itemN].patternName(args)`
+        **Examples:** `[0,2,4].pseq`, `[[0,2,4,7].pseq(3), [0,4].prand(4)].pseq`
+
+Address | Args | Description
+--------|------|------------
+`pseq`  | `repeats` | Play values of the list in order a number of `repeats`. Defaults to `inf`.
+`prand`  | `repeats` | For a number of `repeats`, take a random value of the list. Defaults to `inf`.
 
 
 <style class="fallback">body{visibility:hidden}</style><script>markdeepOptions={tocStyle:'none'};</script>
