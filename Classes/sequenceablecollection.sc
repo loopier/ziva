@@ -226,7 +226,7 @@
     }
 
     pwrand  { arg weights, repeats=1;
-        ^Pwrand(this, weights, repeats);
+        ^Pwrand(this, weights.normalizeSum, repeats);
     }
 
     pfsm { arg repeats=1;
@@ -245,7 +245,7 @@
         ^Pswitch1(this, which);
     }
 
-    ptuple { arg repeats=1;
+    ptuple { arg repeats=inf;
         ^Ptuple(this, repeats);
     }
 
@@ -253,11 +253,11 @@
         ^Place(this, repeats, offset);
     }
 
-    ppatlace { arg repeats=1, offset=0;
+    ppatlace { arg repeats=inf, offset=0;
         ^Ppatlace(this, repeats, offset);
     }
 
-    pslide {  arg repeats = 1, len = 3, step = 1, start = 0, wrapAtEnd = true;
+    pslide {  arg len = 3, step = 1, start = 0, wrapAtEnd = true, repeats = inf;
         ^Pslide(this, repeats, len, step, start, wrapAtEnd);
     }
 
@@ -265,15 +265,11 @@
         ^Pwalk(this, stepPattern, directionPattern, startPos);
     }
 
-	ppar { arg repeats=1;
-		^Ppar(this, repeats);
-	}
+    ppar { arg repeats=1;
+        Ppar(this, repeats);
+    }
 
-	ptpar { arg repeats=1;
-		^Ptpar(this, repeats);
-	}
-
-	pline { arg repeats=1;
-		^Pline(this, repeats);
-	}
+    ptpar { arg repeats=1;
+        Ptpar(this, repeats);
+    }
 }
