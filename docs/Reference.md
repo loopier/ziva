@@ -202,6 +202,8 @@ Method | Args | Description
 
 Following is a list of the available methods for lists of data. SuperCollider array methods can also be used. See [SuperCollider Array Help](https://doc.sccode.org/Classes/Array.html) 
 
+*The variable `r` can be used inside any list to add a rest.*
+
 Method | Args | Description
 --------|------|------------
 `choosen` | `number` | Creates a list of any `number` of items taken randomly from the list.
