@@ -3,11 +3,11 @@
 
 This document exposes the API available through Živa.
 
-!!! Note
-    Optional arguments are surrounded by `[]`
 
-    Symbols always start with ` \ `
-    
+*Optional arguments are surrounded by `[]` *
+
+*Symbols always start with ` \ `*
+
 Regular SuperCollider code can be normally used anyware.
     
 # Basic Example
@@ -101,10 +101,9 @@ Method | Args | Description
 
 ## Synths
 
-Methods exclusive of synths.
+Methods exclusive for synths.
 
-!!! Note
-    If the method does not exist, it will be passed on as synth argument.
+If the method does not exist, it will be passed on as synth argument.
 
 Method | Args | Description
 --------|------|------------
@@ -126,7 +125,7 @@ Method | Args | Description
 
 ## Samples
 
-Methods exclusive of samples.
+Methods exclusive for samples.
 
 Method | Args | Description
 --------|------|------------
