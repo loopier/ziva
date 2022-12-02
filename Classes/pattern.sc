@@ -141,6 +141,16 @@
 		^this.bjorklund(k, n, rotate, scramble, sort, reverse);
 	}
 
+	/// \brief	Create durations in groups of 2 and 3
+	// bj2 { |k,n, mul=1, rotate=0, scramble=false, sort=false, reverse=false|
+	// 	var bj = Bjorklund2(k,n) * mul;
+	// 	if(scramble) { bj = bj.scramble } {};
+	// 	if(sort) { bj = bj.sort } {};
+	// 	if(reverse) { bj = bj.reverse } {};
+	// 	bj = bj.rotate;
+	// 	^Pchain(Pbind(\dur, Pseq(bj.debug, inf)), this);
+	// }
+
 	upbeat { ^Pchain(Pbind(\r, Pseq([\r,1], inf)), this) }
 
 	pattern { |pattern| ^Pchain(Pbind(\r, pattern), this)}

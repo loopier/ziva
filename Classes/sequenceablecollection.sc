@@ -140,6 +140,52 @@
         };
         ^bj;
     }
+
+    /// \brief  same as bj() but with rests instead of 0's
+    bjr { arg hits, beats, offset=1, reverse=0;
+        var bj;
+        var counter = 0;
+        if (hits.isNil) { hits = this.size };
+        bj = Bjorklund(hits,beats).rotate(offset);
+        if (reverse.isNil) {
+            bj = bj.reverse;
+        };
+
+        bj.do{ |x, i|
+            bj[i].debug(i);
+            if (x == 1) {
+                bj[i] = this.at(counter);
+                counter = (counter + 1).mod(this.size);
+                counter.debug("counter");
+            } {
+                bj[i] = \r;
+            };
+        };
+        ^bj;
+
+    }
+
+    /// \brief  uses array's elements as multipliers of Bjorklund2
+    bj2 { arg hits, durs, offset=1, reverse=nil;
+        var bj;
+        var counter = 0;
+        if (hits.isNil) { hits = this.size };
+        bj = Bjorklund2(hits,durs).rotate(offset);
+        if (reverse.isNil.not) {
+            bj = bj.reverse;
+        };
+
+        bj.do{ |x, i|
+            // bj[i].debug(i);
+            // if (x == 1) {
+                bj[i] = bj[i] * this.at(counter);
+                counter = (counter + 1).mod(this.size);
+                counter.debug("counter");
+            // };
+        };
+        ^bj;
+    }
+
     // add trailing rests
     // every { arg beats=4;
     //     ^this++(\r!beats).flat;
