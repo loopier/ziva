@@ -217,8 +217,8 @@ Method | Args | Description
 `bj` | `hits, beats [, offset, reverse]` | Like `rhythm`, but with [euclidean rhythms](https://en.wikipedia.org/wiki/Euclidean_rhythm), placing items on any number of `hits` over a number of `beats`, and `0`s elsewhere. 
 `bjr` | `hits, beats [, offset, reverse]` | Like `bj`, but adding `\r` (rests) instead of `0`s.
 `bj2` | `hits, beats [, offset, reverse]` | Sets a number of `hits`, whose durations add up to any number of `beats`.
-`!!` | `repeats` | Like `[...].pseq(repeats)`.
-`??` | `repeats` | Like `[...].prand(repeats)`.
-`?!` | `size [, repeats:inf]` | Like `[...].choosen(size).pseq(repeats)`.
+`!!` | `repeats` | Like `[...].pseq(repeats)`. Usage: `[0,2,4]!!4`.
+`??` | `repeats` | Like `[...].prand(repeats)`. Usage: `[0,2,4]??4`.
+`?!` | `size [, repeats:inf]` | Like `[...].choosen(size).pseq(repeats)`. Usage: `[0,2,4]?!4`.
 `ziva` | | Instruments in the list will be played in parallel (see [Basic Example](#basic-example) above). Like `Pseq(\ziva, Ppar( ...list... )).play.quant_(1)`.
 
