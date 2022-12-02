@@ -221,19 +221,25 @@ Ziva {
 
 	/// \brief list synth names
 	*synths {
+		"synths".debug("-----");
 		this.synthDefList.collect(_.postln);
 		^this.synthDefList;
 	}
 
 	/// \brief post synths and samples
-	*sounds {
+	*samples {
 		// list synths
 		// list samples - name(items)
-		"listing sounds".debug;
+		"samples".debug("-----");
 		this.listLoadedSamples;
 		// currentEnvironment.keys.asArray.sort.do{|key|
 		// 	currentEnvironment[key].size.debug(key);
 		// };
+	}
+
+	*sounds {
+		this.synths;
+		this.samples;
 	}
 
 	/// \brief return a random synth name

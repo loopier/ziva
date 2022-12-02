@@ -21,6 +21,7 @@ ZivaEventTypes {
 	*new {
 		Event.addEventType(\sample, { |server|
 			~sound = Ziva.samplesDict[~sound] ? [];
+			~sample = Ziva.samplesDict[~sample] ? [];
 			~n = ~n ? 0;
 			~ch = ~ch ? 2;
 			~instrument = [\zivaplaybufm, \zivaplaybuf][~ch-1];
@@ -38,6 +39,7 @@ ZivaEventTypes {
 		// allows to use the same syntax as Psample for synths using buffers
 		Event.addEventType(\ziva_synth, { |server|
 			~sound = Ziva.samplesDict[~sound] ? [];
+			~sample = Ziva.samplesDict[~sample] ? [];
 			~n = ~n ? 0;
 			~ch = ~ch ? 2;
 			~buf = ~sound.at(~n.mod(~sound.size));
