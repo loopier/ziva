@@ -26,6 +26,24 @@ Ziva.track(0, \chorus2, \reverbS);
 )
 ```
 
+## A more elaborated example
+
+```
+Ziva.boot;
+~acid = Psynth(\acid);
+~k = Psample(\aekick);
+Ziva.track(0, \chorus2);
+~lfo = Ziva.lfo(1, \sine, 0.1, 300, 3000);
+(
+[
+    ~acid.f.fast.stacc.bj(5,8).oct([5,6].prand).deg([0,2,4].pseq).randpan,
+    ~acid.p.fast.oct(3).cutoff(~lfo) >> 0,
+    ~k.f.n([2,r,0,0].pseq).bpm(128),
+    nil
+].ziva;
+)
+```
+
 # System methods
 
 Methods to setup, run the live coding enviroment and get info from its current state.
