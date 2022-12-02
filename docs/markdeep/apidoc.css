@@ -159,6 +159,7 @@ body#md {
 /* tables; use fainter colors than regular markdeep style */
 .md table.table {
     font-size: 90%;
+    width: 100%;
 }
 
 .md table.table th {
