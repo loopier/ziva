@@ -202,5 +202,5 @@ Method | Args | Description
 `!!` | `repeats` | Like `[...].pseq(repeats)`.
 `??` | `repeats` | Like `[...].prand(repeats)`.
 `?!` | `size [, repeats:inf]` | Like `[...].choosen(size).pseq(repeats)`.
-`ziva` | | Instruments in the list will be played in parallel (see [Basic Example](#basicexample) above). Like `Pseq(\ziva, Ppar( ...list... )).play.quant_(1)`.
+`ziva` | | Instruments in the list will be played in parallel (see [Basic Example](#basic-example) above). Like `Pseq(\ziva, Ppar( ...list... )).play.quant_(1)`.
 
