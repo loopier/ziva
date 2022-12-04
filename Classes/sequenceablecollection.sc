@@ -229,6 +229,10 @@
         ^Pwrand(this, weights.normalizeSum, repeats);
     }
 
+    pcoin { arg prob=0.5;
+        ^Pfunc{ this.at(prob.coin.asInteger) }
+    }
+
     pfsm { arg repeats=1;
         ^Pfsm(this, repeats);
     }

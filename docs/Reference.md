@@ -186,6 +186,7 @@ Method | Args | Description
 `prand`  | `[repeats]` | Chooses a random value from the list `repeats` times. Defaults to `inf`.
 `pxrand`  | `[repeats]` | Like `prand`, but never repeating the same element twice in a row.
 `pwrand`  | `weights [, repeats]` | Like `prand`, but the probability of each item is determined by `weights`.
+`pcoin`  | `probability` | Chooses between the first and second element of the list, with a `probability` (between `0.0` and `1.0`). Lower values favours first element, higher values favour second element.
 `pshuf` | `[repeats]` | Returns a shuffled version of the `list` item by item, repeating the same sequence a number of `repeats`.
 `pindex`  | `pattern [, repeats]` | Choose values from the list at the index given by `pattern`.
 `pser` | `[repeats, offset]` | Like `pseq`, however the repeats variable gives the number of items returned instead of the number of complete cycles
