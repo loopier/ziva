@@ -12,7 +12,7 @@ Regular SuperCollider pattern and Ndef syntax can be used as parameters inside Å
 
 * Documentation
 
-See [[./docs/Reference.md.html][Quick Reference Guide]].
+See [[./docs/Reference.md][Quick Reference Guide]].
 
 * Requirements
 ** All OS
