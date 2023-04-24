@@ -130,7 +130,7 @@
             bj = bj.reverse;
         };
 
-        bj.do{ |x, i|
+        bj.debug("Bjorklund").do{ |x, i|
             bj[i].debug(i);
             if (x == 1) {
                 bj[i] = this.at(counter);
