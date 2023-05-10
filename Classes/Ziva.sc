@@ -23,7 +23,7 @@
 
 Ziva {
 	classvar <> server;
-	classvar <> effectDict;
+	classvar <> fxDict;
 	classvar <> tracksDict;
 	classvar <> fxBusses;
 	classvar <> samplesDict;
@@ -34,6 +34,8 @@ Ziva {
 	classvar <> drumChars;
 	classvar <> recsynth; // a synth to record new samples
 	classvar <> isRecoring;
+	classvar <> constants; // dictionary for constant values
+	classvar <> oscillators;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -59,8 +61,10 @@ Ziva {
 
 		this.server.waitForBoot{
 			ZivaEventTypes.new;
+			this.makeConstants;
+			this.makeOscillators;
 			this.loadSounds;
-			this.makeEffectDict;
+			this.makeFxDict;
 			this.makeDrumDict;
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
@@ -272,37 +276,84 @@ Ziva {
         this.synthControls(synth).collect(_.postln)
 	}
 
-	*makeEffectDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
-		effectDict = IdentityDictionary.new;
-		effectDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, \mix.kr(0.85), \room.kr(0.86), \damp.kr(0.3))};
-		effectDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
-		effectDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
-		effectDict[\gverbS] 	= {arg sig; sig + GVerb.ar(sig, roomsize:10, revtime:1, damping:0.1, inputbw:0.0, drylevel:0.0, earlyreflevel:1.0, taillevel:0.2, mul: (-6.dbamp))};
-		effectDict[\gverb] 		= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)};
-		effectDict[\gverbL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:30, revtime:3, damping:0.3, inputbw:0.5, drylevel:0.5, earlyreflevel:0.5, taillevel:0.5), 100)};
-		effectDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
-		effectDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
-		effectDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
-		effectDict[\lpf] 		= {arg sig; RLPF.ar(sig, \lcutoff.kr(1000), \lres.kr(1.0))};
-		effectDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
-		effectDict[\hpfS] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(50))};
-		effectDict[\hpf]  		= {arg sig; RHPF.ar(sig, \hcutoff.kr(1000), \hres.kr(1.0))};
-		effectDict[\hpfL] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(1500))};
-		effectDict[\bpf] 		= {arg sig; BPF.ar(sig, \bcutoff.kr(1500), \bres.kr(1.0))};
-		effectDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
-		effectDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
-		effectDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
-		effectDict[\technosaw] 	= {arg sig; RLPF.ar(sig, LFSaw.ar(0.2).exprange(880,12000), 0.2)};
-		effectDict[\distort] 	= {arg sig; (3111.33*sig.distort/(1+(2231.23*sig.abs))).distort*0.02};
-		effectDict[\cyberpunk]	= {arg sig; Squiz.ar(sig, 4.5, 5, 0.1)};
-		effectDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
-		effectDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
-		effectDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(6.6)-1));};
-		effectDict[\chorus]		= {arg sig; Mix.fill(7, {
+	*makeConstants {
+		constants = IdentityDictionary.new;
+		constants[\pizz] = 0.1;
+		constants[\stass] = 0.25;
+		constants[\stacc] = 0.5;
+		constants[\tenuto] = 1.0;
+		constants[\legato] = 1.1;
+		constants[\pedal] = 2;
+		constants[\hardleft] = -1;
+		constants[\left] = -0.9;
+		constants[\right] = 0.9;
+		constants[\hardright] = 1;
+		constants[\pingpong] = Pseq([-0.9,0.9], inf);
+		constants[\rand] = Pwhite(-1,1);
+		constants[\ultrafastest] = 1/64;
+		constants[\ultrafaster] = 1/32;
+		constants[\ultrafast] = 1/16;
+		constants[\fastest] = 1/8;
+		constants[\faster] = 1/4;
+		constants[\fast] = 1/2;
+		constants[\slow] = 2;
+		constants[\slower] = 4;
+		constants[\slowest] = 8;
+		constants[\ultraslow] = 16;
+		constants[\ultraslower] = 32;
+		constants[\ultraslowest] = 64;
+		constants[\pppp] = 0.01;
+		constants[\ppp] = 0.02;
+		constants[\pp] = 0.03;
+		constants[\p] = 0.05;
+		constants[\f] = 0.2;
+		constants[\ff] = 0.3;
+		constants[\fff] = 0.5;
+		constants[\ffff] = 0.9;
+	}
+
+	*makeOscillators {
+		oscillators = IdentityDictionary.new;
+		oscillators[\sine] = {SinOsc.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\saw] = {LFSaw.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\pulse] = {LFPulse.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\tri] = {LFTri.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\noise0] = {LFNoise0.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\noise1] = {LFNoise1.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+		oscillators[\noise2] = {LFNoise2.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+	}
+
+	*makeFxDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
+		fxDict = IdentityDictionary.new;
+		fxDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, \mix.kr(0.85), \room.kr(0.86), \damp.kr(0.3))};
+		fxDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
+		fxDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
+		fxDict[\gverbS] 	= {arg sig; sig + GVerb.ar(sig, roomsize:10, revtime:1, damping:0.1, inputbw:0.0, drylevel:0.0, earlyreflevel:1.0, taillevel:0.2, mul: (-6.dbamp))};
+		fxDict[\gverb] 		= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)};
+		fxDict[\gverbL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:30, revtime:3, damping:0.3, inputbw:0.5, drylevel:0.5, earlyreflevel:0.5, taillevel:0.5), 100)};
+		fxDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
+		fxDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
+		fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
+		fxDict[\lpf] 		= {arg sig; RLPF.ar(sig, \lcutoff.kr(1000), \lres.kr(1.0))};
+		fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
+		fxDict[\hpfS] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(50))};
+		fxDict[\hpf]  		= {arg sig; RHPF.ar(sig, \hcutoff.kr(1000), \hres.kr(1.0))};
+		fxDict[\hpfL] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(1500))};
+		fxDict[\bpf] 		= {arg sig; BPF.ar(sig, \bcutoff.kr(1500), \bres.kr(1.0))};
+		fxDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
+		fxDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
+		fxDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
+		fxDict[\technosaw] 	= {arg sig; RLPF.ar(sig, LFSaw.ar(0.2).exprange(880,12000), 0.2)};
+		fxDict[\distort] 	= {arg sig; (3111.33*sig.distort/(1+(2231.23*sig.abs))).distort*0.02};
+		fxDict[\cyberpunk]	= {arg sig; Squiz.ar(sig, 4.5, 5, 0.1)};
+		fxDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
+		fxDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
+		fxDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(6.6)-1));};
+		fxDict[\chorus]		= {arg sig; Mix.fill(7, {
 			var maxdelaytime= rrand(0.005,0.02);
 			DelayC.ar(sig, maxdelaytime,LFNoise1.kr(Rand(4.5,10.5),0.25*maxdelaytime,0.75*maxdelaytime) );
 		})};
-		effectDict[\chorus2]	= {arg sig; Mix.fill(7, {
+		fxDict[\chorus2]	= {arg sig; Mix.fill(7, {
 			var maxdelaytime= rrand(0.005,0.02);
 			Splay.ar(Array.fill(4,{
 				var maxdelaytime= rrand(0.005,0.02);
@@ -311,7 +362,7 @@ Ziva {
 				del;
 			}));
 		})};
-		effectDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
+		fxDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
 	}
 
 	/// \brief	Predefined rhythms to be used with durs
@@ -442,13 +493,13 @@ Ziva {
 		};
 		effects.do{ |effect, i|
 			"t%:% -> % : % : %".format(track, i+1, effect, sym, this.tracksDict[sym]).postln;
-			Ndef(ndef)[i+1] = \filter -> this.effectDict[effect];
+			Ndef(ndef)[i+1] = \filter -> this.fxDict[effect];
 		};
 		^Ndef(ndef);
 	}
 
 	*fx {
-		effectDict.keys.collect(_.postln);
+		fxDict.keys.collect(_.postln);
 	}
 
 	*rhythms {

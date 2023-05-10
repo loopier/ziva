@@ -71,34 +71,29 @@
 	i { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
 
 	scale { |name| ^Pchain(Pbind(\scale, Scale.at(name)), this) }
-	deg { |value| ^Pchain(Pbind(\degree, value), this) }
-	oct { |value| ^Pchain(Pbind(\octave, value), this) }
-	pixi { |msg, durmul=1, oct=1|
-		var ixi = msg.ixi(oct:oct, durmul:durmul);
-		^Pchain(Pbind(
-			\degree, ixi.degs.pseq,
-			\dur, ixi.durs.pseq,
-		), this);
+	deg { |value|
+		if( value.isSymbol ) { value = value.debug("deg Value").asString.debug("deg String") };
+		if( value.isString ) { value = Array.fill(value.size, {|i| value[i].asString.asHexIfPossible }).debug("deg Array").pseq };
+
+		// ^Pchain(Pbind(\degree, value.debug("deg")), this);
+		^Pset(\degree, value.debug("deg"), this);
 	}
+	oct { |value| ^Pchain(Pbind(\octave, value), this) }
+	// pixi { |msg, durmul=1, oct=1|
+	// 	var ixi = msg.ixi(oct:oct, durmul:durmul);
+	// 	^Pchain(Pbind(
+	// 		\degree, ixi.degs.pseq,
+	// 		\dur, ixi.durs.pseq,
+	// 	), this);
+	// }
 
 	once { |times = 1| ^Pchain(Pbind(\r, Pseq([1, \r], times)), this) }
 
-	fastest { ^Pchain(Pbind(\dur, 1/8), this)}
-	faster { ^Pchain(Pbind(\dur, 1/4), this)}
-	fast { ^Pchain(Pbind(\dur, 1/2), this)}
-	slow { ^Pchain(Pbind(\dur, 2), this)}
-	slower { ^Pchain(Pbind(\dur, 4), this)}
-	slowest { ^Pchain(Pbind(\dur, 8), this)}
-	ultraslow { ^Pchain(Pbind(\dur, 16), this)}
-	ultraslower { ^Pchain(Pbind(\dur, 32), this)}
-	ultraslowest { ^Pchain(Pbind(\dur, 64), this)}
-
-	lowest { ^Pchain(Pbind(\octave, 2), this)}
-	lower { ^Pchain(Pbind(\octave, 3), this)}
-	low { ^Pchain(Pbind(\octave, 4), this)}
-	high { ^Pchain(Pbind(\octave, 6), this)}
-	higher { ^Pchain(Pbind(\octave, 7), this)}
-	highest { ^Pchain(Pbind(\octave, 8), this)}
+	dur { | args |
+		var durs = Ziva.constants[args] ? args;
+		// ^Pchain(Pbind(\dur, durs), this);
+		^Pset(\dur, durs, this);
+	}
 
 	amp { |min, max|
 		var amp;
@@ -109,13 +104,7 @@
 		};
 		^Pchain(Pbind(\amp, amp), this);
 	}
-	ffff { ^Pchain(Pbind(\amp, 2), this)}
-	fff { ^Pchain(Pbind(\amp, 1), this)}
-	ff { ^Pchain(Pbind(\amp, 0.5), this)}
-	f { ^Pchain(Pbind(\amp, 0.3), this)}
-	p { ^Pchain(Pbind(\amp, 0.05), this)}
-	pp { ^Pchain(Pbind(\amp, 0.02), this)}
-	ppp { ^Pchain(Pbind(\amp, 0.01), this)}
+
 	bramp { ^Pchain(Pbind(\amp, Pbrown(0.1), this))}
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
@@ -141,50 +130,21 @@
 		^this.bjorklund(k, n, rotate, scramble, sort, reverse);
 	}
 
-	/// \brief	Create durations in groups of 2 and 3
-	// bj2 { |k,n, mul=1, rotate=0, scramble=false, sort=false, reverse=false|
-	// 	var bj = Bjorklund2(k,n) * mul;
-	// 	if(scramble) { bj = bj.scramble } {};
-	// 	if(sort) { bj = bj.sort } {};
-	// 	if(reverse) { bj = bj.reverse } {};
-	// 	bj = bj.rotate;
-	// 	^Pchain(Pbind(\dur, Pseq(bj.debug, inf)), this);
-	// }
-
 	upbeat { ^Pchain(Pbind(\r, Pseq([\r,1], inf)), this) }
 
-	pattern { |pattern| ^Pchain(Pbind(\r, pattern), this)}
-	buleria { |rotate=0| ^Pchain(Pbind(\r, [\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1].rotate(rotate).pseq), this) }
-	r { |pattern|
-		var rhythm = pattern;
-		if(pattern.isSymbol && Ziva.rhythmsDict.keys.includes(pattern)) {
-			rhythm = Ziva.rhythmsDict[pattern].pseq;
+	r { | args | ^this.rh(args) }
+	rh { | args |
+		if( args.isSymbol ) {
+			args = Ziva.rhythmsDict[args] ? args.asString;
+			if( args.isArray) { args.debug("rhythm").pseq };
 		};
-		if (pattern.isArray){
-			rhythm = pattern.pseq;
-		};
-		^Pchain(Pbind(\r, rhythm), this);
+
+		if( args.isString ) { args = args.asBinaryDigits.flat.replace(0,\r).debug("rhythm").pseq };
+
+		^Pchain( Pbind(\r, args), this );
 	}
-	// rh { |rhythm, fast=1|
-		// var dur = if(Ziva.rhythmsDict.keys.includes(rhythm), {Ziva.rhythmsDict[rhythm].durs.pseq * (1/(fast.max(0.001)))}, {1});
-		// // var rests = if(Ziva.rhythmsDict.includes(rhythm), {Ziva.rhythmsDict[rhythm].rests.pseq}, {1});
-		// var sus = if(Ziva.rhythmsDict.keys.includes(rhythm), {Ziva.rhythmsDict[rhythm].sus.pseq}, {1});
-		// rhythm.debug("rhythm");
-		// (Ziva.rhythmsDict.includes(rhythm)).debug("rhythm");
-		// dur.debug("durs");
-		// sus.debug("sus");
-		// ^Pchain(Pbind(\dur, dur, \legato, sus), this);
-	// }
 
 	stopin { |beats=1| ^Pchain(Pbind(\r, Pseq((1!beats),1)), this) }
-
-	pedal { ^Pchain(Pbind(\legato, 4), this)}
-	legato { |amt| ^Pchain(Pbind(\legato, amt ? 1.1), this)}
-	leg { |amt| ^Pchain(Pbind(\legato, amt ? 1.1), this)}
-	tenuto { ^Pchain(Pbind(\legato, 1), this)}
-	stacc { ^Pchain(Pbind(\legato, 0.5), this)}
-	stass { ^Pchain(Pbind(\legato, 0.25), this)}
-	pizz { ^Pchain(Pbind(\legato, 0.1), this)}
 
 	// rate { |rate| ^Pchain(Pbind(\rate, rate, \speed, this), this)}
 	randspeeds { |size=8, speeds=#[-1,1,-0.5,0.5,2,-2]|
@@ -196,110 +156,4 @@
 		var chopped = Pseq( Array.rand(size, 0, chunks-1).debug("chop "++this.name) / chunks, inf);
 		^Pchain(Pbind(\start, chopped, \begin, chopped), this);
 	}
-
-	// kick { |pattern| ^Pchain(Pbind(\degree, 0, \octave, 3, \r, pattern), this)}
-	// sn { |pattern| ^Pchain(Pbind(\degree, 2, \octave, 3, \r, pattern), this)}
-
-	left { ^Pchain(Pbind(\pan, -1), this) }
-	right { ^Pchain(Pbind(\pan, 1), this) }
-	pingpong { ^Pchain(Pbind(\pan, Pseq([-1,1],inf)), this) }
-	randpan  { ^Pchain(Pbind(\pan, Pwhite(-1.0)), this) }
-
-	// gverb { |room = 0.1, size=0.3, wet=1, bus = 5|
-	// 	^Pchain(Pfxb(Pchain(Pbind(\out, bus), this), \gverb, \roomsize, room*100, \revtime, size*10, \mul, wet, \in, bus));
-	// }
-
-	// jpverb { |room = 1, size=1, damp=0, wet=1, bus = 7|
-	// 	^Pchain(Pfxb(Pchain(Pbind(\out, bus), this), \jpverb, \room, room.linlin(0.0,1.0,0.1,60), \size, size.linlin(0.0,1.0,0.5,5), \damp, damp, \mul, wet, \in, bus));
-	// }
-
-	// delay { |dt = 0.5, fb = 0.6, bus = 9|
-	// 	^Pchain(Pfxb(Pchain(Pbind(\out, [0, bus]), this), \delay, \fb, fb, \delayt, dt, \in, bus));
-	// }
-
-	// lfp { |freq = 440, rq = 0.5, bus = 11|
-	// 	^Pchain(Pfxb(Pchain(Pbind(\out, [0, bus]), this), \rlpf, \freq, freq, \rq, rq, \in, bus));
-	// }
-
-	// hfp { |freq = 440, rq = 0.5, bus = 11|
-	// 	^Pchain(Pfxb(Pchain(Pbind(\out, [0, bus]), this), \rhpf, \freq, freq, \rq, rq, \in, bus));
-	// }
-
-	// rata { |repeats=4| ^Pchain(Pbind(\rate, Pn(Pchoose([0.5, 1, -1, 2, 4], 4, 4))), this)}
-
-	/// \brief converts a string to a drum pattern
-	drums { |str|
-		var kits = "brscSlhLftHToyYxXBpiekKOzZ";
-		var pat = Array.fill(str.size, { |i|
-			var c = str.at(i);
-			var k;
-			if(c == $ ) {
-				k = \r.debug("REST");
-			}{
-				k = kits.indexOf(c).debug(i);
-			};
-			k
-		});
-		pat.debug("drum pattern");
-		^Pchain(Pbind(\note, pat.pseq), this);
-	}
-
-	// These methods work like the Pchain shortcut but they add and multiply
-	// values instead of overriding them.
-	// add Patterns
-	// <+ { arg aPattern;
-	// 	if (aPattern.isString) {
-	// 		aPattern = Pixi(aPattern);
-	// 	};
-	// 	aPattern.patternpairs.do{|e, i|
-	// 		if (e.class == Symbol) {
-	// 			^Padd(e, aPattern.patternpairs[i+1], this);
-	// 		} {
-	// 			nil
-	// 		}
-	// 	};
-	// }
-	// // multiply Patterns
-	// <* { arg aPattern;
-	// 	if (aPattern.isString) {
-	// 		aPattern = Pixi(aPattern);
-	// 	};
-	// 	aPattern.patternpairs.do{|e, i|
-	// 		if (e.class == Symbol) {
-	// 			^Pmul(e, aPattern.patternpairs[i+1], this);
-	// 		} {
-	// 			nil
-	// 		}
-	// 	};
-	// }
-
-	// overriding original
-	// compose Patterns
-	// <> { arg aPattern;
-	// 	if (aPattern.isString) {
-	// 		aPattern = Pixi(aPattern);
-	// 	};
-	// 	^Pchain(this, aPattern)
-	// }
-
-	// >> { |... pairs|
-	// 	[this, pairs].debug(">>");
-	// 	^Pfx(pairs);
-	// }
-
-	// fx { |... pairs|
-	// 	[this, pairs].debug("fx");
-
-
-	// pclump { arg n;
-	// 	^Pclump(n, this);
-	// }
-
-	// pavaroh { arg aroh, avaroh, stepsPerOctave=12;
-	// 	^Pavaroh(this, aroh, avaroh, stepsPerOctave);
-	// }
-
-	// prorate { arg proportion;
-	// 	^Prorate(proportion, this);
-	// }
 }

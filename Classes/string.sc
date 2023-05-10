@@ -19,6 +19,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + String {
+	asBinaryDigits {
+		^Array.fill(this.asString.size, { |i|
+			this.asString.at(i).asString.asHexIfPossible.asBinaryDigits[4..];
+		})
+	}
+
 	// \brief convert string to array of notes
 	digits { |octaves=1, degreesPerOctave=7, durmul=1|
 		// replace numbers for letters to keep their right value when converting
