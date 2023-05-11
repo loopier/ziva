@@ -19,6 +19,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + Pattern {
+	to { |name|
+		Ndef(name.asSymbol, this).quant_(1);
+	}
 
 	bpm { |bpm|
 		^Pchain(Pbind(\tempo, bpm/60), this);

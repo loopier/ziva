@@ -334,7 +334,7 @@ Ziva {
 		fxDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
 		fxDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
 		fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
-		fxDict[\lpf] 		= {arg sig; RLPF.ar(sig, \lcutoff.kr(1000), \lres.kr(1.0))};
+		fxDict[\lpf] 		= {arg sig, lcutoff=1000; RLPF.ar(sig, lcutoff, \lres.kr(1.0))};
 		fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
 		fxDict[\hpfS] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(50))};
 		fxDict[\hpf]  		= {arg sig; RHPF.ar(sig, \hcutoff.kr(1000), \hres.kr(1.0))};
