@@ -5,7 +5,7 @@
 			// Pdefn(\scale) is defined in Ziva.sc
 			pat = Psynth(this, \scale, Pdefn(\scale), *pairs);
 		} {
-			pat = Psample(this, \scale, Pdefn(\scale), *pairs);
+			pat = Psample(this, *pairs);
 		};
 
 		^pat;

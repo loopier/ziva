@@ -112,9 +112,17 @@
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
 	leg { | leg | ^Pchain(Pbind(\legato, Ziva.constants[leg] ? leg), this) }
+
+	env { | args |
+		var env = switch( args.size,
+			1, { ^this.perc(args) },
+			2, { ^this.ar(args) },
+			4, { ^this.adsr(args) }
+		);
+	}
 	perc { | rel=1 | ^Pchain(Pbind(\atk, 0.01, \rel, rel, \legato, 0.01), this) }
-	ar { | atk=0.5, rel=0.5 | ^Pchain(Pbind(\atk, atk, \dec, rel, \sus, 1, \rel, rel), this) }
-	adsr { | atk=0.01, dec=0.3, sus=0.5, rel=1.0 | ^Pchain(Pbind(\atk, atk, \dec, dec, \sus, sus, \rel, rel), this) }
+	ar { | env | ^Pchain(Pbind(\atk, env[0], \dec, env[1], \sus, 1, \rel, env[1]), this) }
+	adsr { | env | ^Pchain(Pbind(\atk, env[0], \dec, env[1], \sus, env[2], \rel, env[3]), this) }
 
 	bjorklund {|k,n, rotate=0, scramble=false, sort=false, reverse=false|
 		var bj = Bjorklund(k,n).replace(0,\r);

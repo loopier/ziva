@@ -66,7 +66,7 @@ Ziva {
 			this.loadSounds;
 			this.makeFxDict;
 			this.makeDrumDict;
-			this.scale_(Scale.major);
+			this.scale_(\major);
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
@@ -557,7 +557,7 @@ Ziva {
 	*bpm_ { |bpm| ^this.tempo( bpm );}
 
 	*scale { ^Pdefn(\scale).source.name }
-	*scale_ { | scale | Pdefn(\scale, scale) }
+	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
 
 	// \brief 	create a '~harmony' (and '~h' shortcut) global variable to hold a
 	// 			universal harmonic sequence
