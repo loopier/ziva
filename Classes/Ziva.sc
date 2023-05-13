@@ -66,13 +66,22 @@ Ziva {
 			this.loadSounds;
 			this.makeFxDict;
 			this.makeDrumDict;
+			this.scale_(Scale.major);
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
-			this.clock = TempoClock.new;
+			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 		};
 		^this.server;
+	}
+
+	*hush {
+		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+			if( not( k.asString.beginsWith(\fx_.asString)) ) {
+				k.stop;
+			}
+		}
 	}
 
 	/// \brief	Stop playing all Pdefs
@@ -542,9 +551,13 @@ Ziva {
 		^Ndef((\ziva_lfo++index), dict.at(wave));
 	}
 
-	*tempo { |bpm|
-		this.clock.tempo = bpm/60;
-	}
+	*tempo { ^this.clock.tempo * 60 }
+	*tempo_ { |bpm| ^this.clock.tempo = bpm / 60;}
+	*bpm { ^this.tempo }
+	*bpm_ { |bpm| ^this.tempo( bpm );}
+
+	*scale { ^Pdefn(\scale).source.name }
+	*scale_ { | scale | Pdefn(\scale, scale) }
 
 	// \brief 	create a '~harmony' (and '~h' shortcut) global variable to hold a
 	// 			universal harmonic sequence

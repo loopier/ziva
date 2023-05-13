@@ -2,13 +2,24 @@
 	prSynthOrSample { | ... pairs |
 		var pat;
 		if (SynthDescLib.global.synthDescs.keys.asArray.sort.indexOf(this).isNil.not) {
-			pat = Psynth(this, *pairs);
+			// Pdefn(\scale) is defined in Ziva.sc
+			pat = Psynth(this, \scale, Pdefn(\scale), *pairs);
 		} {
-			pat = Psample(this, *pairs);
+			pat = Psample(this, \scale, Pdefn(\scale), *pairs);
 		};
 
 		^pat;
 	}
+
+	ndef	{ | ... args | ^Ndef(this, *args) }
+	sine	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {SinOsc.ar(freq, phase).range(min,max) * amp})}
+	tri		{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFTri.ar(freq, phase).range(min,max) * amp})}
+	saw		{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFSaw.ar(freq, phase).range(min,max) * amp})}
+	pulse	{ | freq, min=(-1), max=1, amp=1, width=0.5, phase=0 | ^Ndef(this, {LFPulse.ar(freq, phase, width).range(min,max) * amp})}
+	noise0	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise0.ar(freq).range(min,max) * amp})}
+	noise1	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise1.ar(freq).range(min,max) * amp})}
+	noise2	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise2.ar(freq).range(min,max) * amp})}
+
 
 	synth { | ... args |
 		^this.play([Psynth(*args)]);
@@ -24,16 +35,48 @@
 
 
 	play { | args |
-		args.debug("play (%)".format(args.class));
-		// args = args ? [nil];
-		// args.debug("play");
-		// if( args.isArray && args.size == 0 ) { args.add(nil) };
-		// if( args.isSymbol ) { args = [Psynth(args)] };
-		// args.debug("play");
-		^Ndef(this, Ppar(args)).quant_(1).fadeTime_(0.5).play;
+		if(Ndef(this).isPlaying.not) {
+			Ndef(this).quant = 1;
+			Ndef(this).fadeTime = 0.5;
+			Ndef(this).clock = Ziva.clock;
+			Ndef(this).play;
+		} {
+			Ndef(this).resume
+		};
+
+		if(args.size > 0) {Ndef(this, Ppar(args))};
+
+		^Ndef(this);
 	}
 
-	stop { | args | ^Ndef(this).stop }
+	stop	{ ^Ndef(this).pause }
+	pause	{ ^Ndef(this).pause }
+	resume	{ ^Ndef(this).resume }
+	mute	{ ^Ndef(this).pause }
+	unmute	{ ^Ndef(this).resume }
+
+	solo	{
+		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+			if( not( k.asString.beginsWith(\fx_.asString)) ) {
+				if(k != this) {
+					k.debug("mute").mute
+				} {
+					k.debug("unmute").unmute
+				}
+			}
+		}
+		^Ndef(this);
+	}
+
+	unsolo {
+		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+			if( not( k.asString.beginsWith(\fx_.asString)) ) {
+				k.unmute;
+			}
+		}
+		^Ndef(this);
+	}
+
 	lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
 
 	deg { | ... args |
@@ -45,11 +88,13 @@
 	fx { | effects |
 		var fxNdef = Ndef(('fx_'++this).asSymbol);
 		if(fxNdef.source.isNil) {
-			// var bus = Bus.audio(Ziva.server, 2);
+			// var bus = fxNdef.bus ? Bus.audio(Ziva.server, 2);
 			fxNdef.source = {|in| Ndef(this).ar * \amp.kr(1) };
 			fxNdef.quant = 1;
 			fxNdef.fadeTime = 0.5;
+			fxNdef.clock = Ziva.clock;
 			fxNdef.play;
+			// fxNdef <<> Ndef(this);
 		};
 
 		effects.do{ |effect, i|
@@ -64,6 +109,10 @@
 		fxNdef.sources.do{|x,i| if(i > effects.size) {fxNdef.sources = nil}};
 
 		^fxNdef;
+	}
+
+	set { | ... pairs |
+		Ndef(('\fx_'++this).asSymbol).set(*pairs);
 	}
 
 	drywet { | amt = 0.5 |

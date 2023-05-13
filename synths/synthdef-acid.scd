@@ -5,7 +5,7 @@ SynthDef(\acid, {
 	var pan = \pan.kr(0);
 	var accelerate = \accelerate.kr(0);
 	var freq = \freq.kr(440);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1);// * (-12.dbamp);
 	var gate = \gate.kr(1);
 	var cutoff = \cutoff.kr(440);
 	var resonance = \resonance.kr(0.3);

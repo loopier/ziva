@@ -101,7 +101,7 @@
 	amp { |min, max|
 		var amp;
 		if (max.isNil) {
-			amp = min;
+			amp = Ziva.constants[min] ? min;
 		} {
 			amp = Pwhite(min, max);
 		};
@@ -111,6 +111,7 @@
 	bramp { ^Pchain(Pbind(\amp, Pbrown(0.1), this))}
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
+	leg { | leg | ^Pchain(Pbind(\legato, Ziva.constants[leg] ? leg), this) }
 	perc { | rel=1 | ^Pchain(Pbind(\atk, 0.01, \rel, rel, \legato, 0.01), this) }
 	ar { | atk=0.5, rel=0.5 | ^Pchain(Pbind(\atk, atk, \dec, rel, \sus, 1, \rel, rel), this) }
 	adsr { | atk=0.01, dec=0.3, sus=0.5, rel=1.0 | ^Pchain(Pbind(\atk, atk, \dec, dec, \sus, sus, \rel, rel), this) }

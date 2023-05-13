@@ -31,4 +31,7 @@
 	fx { | args |
 		// add to Ndef(thi.key)[...]
 	}
+
+	lpf{ | res=0.1 |  ^{arg sig; RLPF.ar(sig, this, res)} }
+	moogvcf{ | res=0.1 |  ^{arg sig; MoogVCF.ar(sig, this, res, mul: 2)} }
 }
