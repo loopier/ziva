@@ -20,6 +20,8 @@
 	noise1	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise1.ar(freq).range(min,max) * amp})}
 	noise2	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise2.ar(freq).range(min,max) * amp})}
 
+	lfo { | args | ^Ndef(this, args) }
+	// lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
 
 	synth { | ... args |
 		^this.play([Psynth(*args)]);
@@ -77,14 +79,6 @@
 		^Ndef(this);
 	}
 
-	lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
-
-	deg { | ... args |
-		^this.prSynthOrSample(*args);
-	}
-
-	rh { | args | ^this.prSynthOrSample.rh(args) }
-
 	fx { | effects |
 		var fxNdef = Ndef(('fx_'++this).asSymbol);
 		if(fxNdef.source.isNil) {
@@ -115,7 +109,7 @@
 		Ndef(('\fx_'++this).asSymbol).set(*pairs);
 	}
 
-	drywet { | amt = 0.5 |
+	wet { | amt = 0.5 |
 		// use Ndefs volume ??
 		Ndef(this).vol = 1 - amt;
 		Ndef(('fx_'++this).asSymbol).vol = amt;
@@ -123,4 +117,14 @@
 
 	scramble { ^this.asString.scramble.asSymbol }
 
+	rh { | args | ^this.prSynthOrSample.rh(args) }
+	r { | args | ^this.rh(args) }
+	scale { | scale | ^this.prSynthOrSample.scale(scale) }
+	oct { | args | ^this.prSynthOrSample.oct(args) }
+	deg { | args | ^this.prSynthOrSample.deg(args) }
+	dur { | args | ^this.prSynthOrSample.dur(args) }
+	amp { | args | ^this.prSynthOrSample.amp(args) }
+	leg { | args | ^this.prSynthOrSample.leg(args) }
+	env { | args | ^this.prSynthOrSample.env(args) }
+	perc { | args | ^this.prSynthOrSample.perc(args) }
 }
