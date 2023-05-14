@@ -265,8 +265,18 @@
         ^Pslide(this, repeats, len, step, start, wrapAtEnd);
     }
 
-    pwalk { arg stepPattern, directionPattern = 1, startPos = 0;
-        ^Pwalk(this, stepPattern, directionPattern, startPos);
+    // pwalk { arg stepPattern, directionPattern = 1, startPos = 0;
+    //     ^Pwalk(this, stepPattern, directionPattern, startPos);
+    // }
+
+    pwalk { arg maxleap = 1, start = 0, repeats = inf;
+        var weights = geom(maxleap, 1, maxleap).asArray.mirror2.normalizeSum;
+        var steps = to(maxleap.neg,-1).asArray ++ to(1,maxleap).asArray;
+        this.debug("list");
+        weights.debug("weights");
+        steps.debug("steps");
+        repeats.debug("reps");
+        ^Pwalk(this, Pwrand(steps, weights, repeats), Pseq([1,-1], repeats), start);
     }
 
     ppar { arg repeats=1;
