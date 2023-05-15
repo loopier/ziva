@@ -62,18 +62,39 @@ Method | Args <img width=175px/> | Description
 `fx`  |  | List all available sound effects.
 `rh`  |  | List all available rhythms.
 `rhythms`  |  | List all available rhythms.
-`rhythm`  | `name` | List all available rhythms.
-`control`  | `synth` | List all available controls for the given `synth`.
+`rhythm`  | `name` | Post the rhythm values.
+`controls`  | `synth` | List all available controls for the given `synth`.
 `loadSamples`  | `path` | Load sounds files from `path`. `path` must contain subdirectories with the actual soundfiles. The subdirectories' names will be used as `sampleName`.
-`stop`  |  | Stop all sounds.
-`lfo`  | `index, wave, freq, min, max` | Returns an LFO that can be used as parameter in sound methods. `wave` can be: `sine, saw, pulse, tri, noise0, noise1, noise2`. `noise0` is with step interpolation, `noise1` is linear, and `noise2` is exponential. `min` and `max` set the range of the output value. They default to `0` and `1` respectiveley. 
-`track`  | `trackNameOrNumber [, effect1, effect2, ... , effectN]` | Create an effects bus with the list of `effectX`. Order matters. Available `effect` names are listed with `Ziva.fx`, and they must be symbols (with leading ` \ `, as in `\reverb`)
+`hush`  |  | Stop all sounds.
 
-# Instrument methods
+# Playing sounds
 
-Methods to use with instruments. They can be chained as in `~acid.fast.bj(3,5).pinpong`.
+To play a sound:
 
-**Syntax:** `~instrumentName.method1(... args)[.method2(... args)...methodN(... args)]`
+```
+\d1 play: [
+    \acid rh: 'f'
+]
+```
+
+This plays an sound named `acid` (see available sounds with `Ziva.sounds`) and sets its rhythm to `[1,1,1,1]`.
+
+# Sound parameters
+
+Sounds can be modified with parameters. The syntax is: `\sound_name param1: value1 ... paramN: valueN`.
+
+Values can either be numbers (`int` or `float`), hexadecimal numbers surrounded by single-quotes (e.g. `80fa'`), symbols (e.g. `\ff`) or functions (see ###TODO: ADD LINK TO MODULATOR FUNCTIONS###).
+
+Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TODO: ADD LINK TO LFOS###.
+
+## `rh`
+
+Method | Args | Description
+--------|------|------------
+`rh` | `[pattern:Pattern|hex:Symbol]` | Play either a `pattern` or a rhythm written as `hex` values: `[1,r,r,r,1,r,1,r].pseq` is the sames as `'8f'`.
+`bj` | `hits, beats [, scramble, sort, reverse]` | Euclidean rhythm generator. It plays an evenly distributed number of `hits` along a number of `beats`. Rests and hits can be shuffled if `scramble` is set to `true`. Or sorted if `sort` is set to `true` (first rests, then hits). If `reverse` is set to `true`, the pattern will be played backwards.
+
+## `dur`
 
 Method | Args | Description
 --------|------|------------
@@ -89,6 +110,11 @@ Method | Args | Description
 `ultraslow` | | Play at `1/16` tempo.
 `ultraslower` | | Play at `1/32` tempo.
 `ultraslowest` | | Play at `1/64` tempo.
+
+## amp
+
+Method | Args | Description
+--------|------|------------
 `f` | | Set amp to `0.2`.
 `ff` | | Set amp to `0.3`.
 `fff` | | Set amp to `0.5`.
@@ -97,51 +123,55 @@ Method | Args | Description
 `pp` | | Set amp to `0.03`.
 `ppp` | | Set amp to `0.02`.
 `pppp` | | Set amp to `0.01`.
-`perc` | `release` | Add percussive envelope with a `release` in seconds.
-`ar` | `attack, release` | Add an attack-release envelope with `attack` and `release` values in seconds.
-`adsr` | `attack, decay, sustain, release` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.
-`r` | `pattern` | Play sound on anything but `\r`. E.g.: `~acid.r([1, \r, \r, 1, 1].pseq)`.
-`bj` | `hits, beats [, scramble, sort, reverse]` | See `bjorklund`.
-`bjorklund` | `hits, beats [, scramble, sort, reverse]` | Euclidean rhythm generator. It plays an evenly distributed number of `hits` along a number of `beats`. Rests and hits can be shuffled if `scramble` is set to `true`. Or sorted if `sort` is set to `true` (first rests, then hits). If `reverse` is set to `true`, the pattern will be played backwards.
-`upbeat` | | Play pattern every other note, starting with a rest.
-`pan`  | `num|pattern` | Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
+
+## pan
+
+Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
+
+Method | Args | Description
+--------|------|------------
 `left`  | | Send output to left channel.
 `right`  | | Send output to right channel.
 `pingpong`  |  | Alternate left and right panning.
-`randpan`  |  | On every event, set stereo panning to a random value between `-1` and `1`.
+
+## `env`
+
+Envelope of the sound -- only works with functions.
+
+Method | Args | Description
+--------|------|------------
+`perc` | `release` | Add percussive envelope with a `release` in seconds.
+`ar` | `attack, release` | Add an attack-release envelope with `attack` and `release` values in seconds.
+`adsr` | `attack, decay, sustain, release` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.
+
+## `leg`
+
+Legato time.
+
+Method | Args | Description
+--------|------|------------
 `leg` | `length` | See `legato`.
 `legato` | `[length]` | Hold the note for a `length` of secons. Then release. Defaults to `1.0`.
 `pizz` | | Play pizzicato.
 `stass` | | Play staccatissimo.
 `stacc` | | Play staccato.
 `pedal` | | Play pedal. Hold notes during `4` events.
-`once` | `times` | Play for `times` more events, then stop.
-`bpm`  | `beats` | Set the tempo to `beats` per minute. **WARNING: Affects ALL playing instruments.**
 
+# Synth parameters
 
-## Synths
-
-Methods exclusive for synths.
-
-If the method does not exist, it will be passed on as synth argument.
+Following is a list of other parameters that take either numerci values.
+When a `symbol` is accepted, it can be any LFO name.
+When `hex` values are accepted, they are converted to a list of decimal values an sequenced.
+When a `func` is accepted, it can be either a list generator, or a pattern. See ###TODO: ADD LINK TO MODULATOR FUNCTIONS###
 
 Method | Args | Description
 --------|------|------------
-`>>`  | `track` | Send output to effects `track` (set with `Ziva.track(\nameOrNum)`).
-`scale`  | `name` | Set scale for this instrument. To list available scales: `Scale.directory`.
-`deg`  | `num` | Play the given degree `num` in the current scale. `0` is the root. Can be a pattern.
-`note`  | `num` | Play chromatic note. `0` is root at the current octave. Can be a pattern.
-`midinote`  | `num` | Play the MIDI note `num`.  Can be a pattern.
-`freq`  | `hz` | Set the frequency to `hz`.  Can be a pattern.
-`oct`  | `num` | Play in the given **octave**. Can be a pattern.
-`lowest` | | Play at octave 2.
-`lower` | | Play at octave 3.
-`low` | | Play at octave 4.
-`high` | | Play at octave 6.
-`higher` | | Play at octave 7.
-`highest` | | Play at octave 8.
-`midinote`  | `num|pattern` | Play MIDI note. 
-`fm`  | `track, modulationAmount` | Get input from effects `track` with an amplitude of `modulationAmount`. *This is usable only with synths that have an input bus parameter named `\in`.*
+`scale`  | `name:symbol` | Set scale for this instrument. To list available scales: `Scale.directory`.
+`deg`  | `degree:pattern|int|float|hex` | Play the given degree `num` in the current scale. `0` is the root. Can be a pattern. If a `hex`
+`note`  | `note:pattern|int|float|hex` | Play chromatic note. `0` is root at the current octave. Can be a pattern.
+`midinote`  | `note:pattern|int|float|hex` | Play the MIDI note `num`.  Can be a pattern.
+`freq`  | `hz:symbol|pattern|int|float|func` | Set the frequency to `hz`.  Can be a pattern.
+`oct`  | `octave:int|float|hex` | Play in the given **octave**. Can be a pattern.
 
 ## Samples
 
@@ -149,20 +179,79 @@ Methods exclusive for samples.
 
 Method | Args | Description
 --------|------|------------
-`n` | `num|pattern` | Set the sample index.
-`sound` | `name` | Set the sample collection to be played.
-`speed`  | `number|pattern` | Play the sample at the given `speed`. Affects the pitch.
-`randspeeds`  | `[length, speeds]` | Play the sample with a sequence of `length` random values from `speeds`. Defaults to a `length` of `8` speeds from `[-1,1,-0.5,0.5,2,-2]`.
+`n` | `sample:int|pattern` | Set the sample index.
+`speed`  | `rate:symbol|int|float|pattern|func` | Play the sample at the given `speed`. Affects the pitch.
 `tape` | `amount` | Old cassette tape effect. The greater the `amount`, the older the tape.
 `chop` | `[length, chunks]` | Chop the sample in a number of `chunks`, pick a random number of chunks given by `length` and play them in sequence.
 
-## MIDI
+# LFOs
 
-Methods exclusive of midi.
+LFOs are created like regular tracks. In the following example we create a `sine` LFO with a frequency of `0.1`, that ranges from `150` to `2400`. This could be used to modulate a frequency:
+
+```
+\lfo1 lfo: sine(0.1, 150, 2400);
+\d1 play: [ \prophet oct: 3 cutoff: \lfo1 ];
+```
 
 Method | Args | Description
 --------|------|------------
-`cc`  | `cc, value` | Send control `value` for number `cc`.
+`sine` | `freq min max amp phase` | Creates a sine wave that oscillates at `freq` between `min` and `max`.
+`tri` | `freq min max amp phase` | Creates a triangle wave that oscillates at `freq` between `min` and `max`.
+`saw` | `freq min max amp phase` | Creates a sawtooth wave that oscillates at `freq` between `min` and `max`. For ramp (downwards) values, set `min` to a higher value than `max`.
+`pulse` | `freq min max amp phase` | Creates a pulse wave that oscillates at `freq` between `min` and `max`.
+`noise0` | `freq min max amp phase` | Generates random values at an interval of `freq`.
+`noise1` | `freq min max amp phase` | Generates linearly interpolated random values at a rate given by `freq`.
+`noise2` | `freq min max amp phase` | Generates quadratically (exponential) interpolated random values at a rate given by `freq`.
+
+# Pattern Functions
+
+A few functions to create patterns:
+
+Method | Args | Description
+--------|------|------------
+`borwn`|`min:i|f max:i|f interval:i|f`| Brown noise. Returns `Pbrown(min, max, interval).`
+`white`|`min:i|f max:i|f`| White noise, random values. Returns `PWhite(min, max).`
+`borwn`|`min:i|f max:i|f interval:i|f`| Brown noise. Returns `Pbrown(min, max, interval).`
+
+
+# FX - Effects
+
+Three types of effects can be added: presets, customizable, and brand new.
+The mix of flitered and original signal for a given track can be changed with values from `0` (dry) to `1` wet: 
+`\d1 wet: 0.5` 
+
+## Presets
+
+To add effect presets to a track named `d1`, add the names of the effects in the order (left to right) in which they should be chained. To get a list of available effects, evaluate `Ziva.fx`: 
+```
+\d1 play: [\acid rh: '8'];
+\d1 fx: [\delay, \chorus2, \reverbS]:
+```
+
+## Basic custom FX
+
+Some effects accept custom values:
+```
+\d1 fx: [delay(0.3, 8), \reverbS]
+```
+
+Method | Args | Description
+--------|------|------------
+`delay`| `time:symbol|i|f decay:symbol|i|f` | AllpassC.
+`lfp` | `cutoff:symbol|i|f resonance:symbol|i|f` | Resonant low pass filter.
+`hfp` | `cutoff:symbol|i|f resonance:symbol|i|f` | Resonant high pass filter.
+`moogvcf` | `cutoff:symbol|i|f resonance:symbol|i|f` | Moog Voltage Controlled Filtered.
+
+
+## Advanced custom FX
+
+New effects can be added with functions that would normally be accepted as source in a `NodeProxy.sources` slot in SuperCollider:
+
+`\d1 fx: [{|in| AllpassC.ar(sig, 0.2, 0.2, 1)}]`
+
+## MIDI
+
+**TODO.**
 
 # Patterns
 
@@ -202,7 +291,21 @@ Method | Args | Description
 `pn` | `[repeats]` | Repeat previous pattern `repeats` times.
 `pdef` | `key` | Creates a `Pdef(\key, Ppar( ...list... ))`, placing the list as the `Ppar` contents.
 
-# Lists
+# List Generator Functions
+
+Functions to create lists of values. 
+
+## Envelope Generator Functions
+
+Used with sound parameter `env`:
+
+Method | Args | Description
+--------|------|------------
+`adsr`| `attack:f decay:f sustain:f release:f`| Returns an array of 4 values.
+`ar`| `attack:f release:f`| Returns an array of 2 values.
+`perc`| `attack:f decay:f sustain:f release:f`| Returns an array of 1 value.
+
+## Other Functions
 
 Following is a list of the available methods for lists of data. SuperCollider array methods can also be used. See [SuperCollider Array Help](https://doc.sccode.org/Classes/Array.html) 
 
