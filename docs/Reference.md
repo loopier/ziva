@@ -87,6 +87,7 @@ Values can either be numbers (`int` or `float`), hexadecimal numbers surrounded 
 
 Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TODO: ADD LINK TO LFOS###.
 
+
 ## `rh`
 
 Method | Args | Description
@@ -213,6 +214,14 @@ Method | Args | Description
 `white`|`min:i|f max:i|f`| White noise, random values. Returns `PWhite(min, max).`
 `borwn`|`min:i|f max:i|f interval:i|f`| Brown noise. Returns `Pbrown(min, max, interval).`
 
+# Track
+
+Method | Args | Description
+--------|------|------------
+`solo` | | `\d1.solo` or `solo(\d1)`
+`unsolo` | | `\d1.unsolo` or `unsolo(\d1)`
+`mute` | | `\d1.mute` or `mute(\d1)`
+`unmute` | | `\d1.unmute` or `unmute(\d1)`
 
 # FX - Effects
 
