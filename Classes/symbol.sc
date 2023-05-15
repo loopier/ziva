@@ -1,14 +1,11 @@
 + Symbol {
 	prSynthOrSample { | ... pairs |
-		var pat;
-		if (SynthDescLib.global.synthDescs.keys.asArray.sort.indexOf(this).isNil.not) {
+		^if (SynthDescLib.global.synthDescs.keys.includes(this)) {
 			// Pdefn(\scale) is defined in Ziva.sc
-			pat = Psynth(this, \scale, Pdefn(\scale), *pairs);
+			Psynth(this, \scale, Pdefn(\scale), *pairs);
 		} {
-			pat = Psample(this, *pairs);
+			Psample(this, *pairs);
 		};
-
-		^pat;
 	}
 
 	ndef	{ | ... args | ^Ndef(this, *args) }

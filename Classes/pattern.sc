@@ -148,7 +148,7 @@
 		};
 
 		if( args.isString ) { args = args.asBinaryDigits.flat };
-		if( args.isArray ) { args = args.replace(0,\r).debug("rhytm").pseq }
+		if( args.isArray ) { args = args.replace(0,\r).debug("rhythm").pseq }
 
 		^Pchain( Pbind(\r, args), this );
 	}
