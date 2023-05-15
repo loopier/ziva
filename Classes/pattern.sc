@@ -143,7 +143,7 @@
 	r { | args | ^this.rh(args) }
 	rh { | args |
 		if( args.isSymbol ) {
-			args = Ziva.rhythmsDict[args] ? args.asString;
+			args = Ziva.rhythmsDict[args].flat ? args.asString;
 			// if( args.isArray) { args.debug("rhythm").pseq };
 		};
 
