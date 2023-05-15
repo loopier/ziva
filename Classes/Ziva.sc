@@ -160,6 +160,7 @@ Ziva {
 	/// \returns Dictionary
 	*loadSamples { arg path, server = nil;
 		try {
+			path = path ? Ziva.filenameSymbol.asString.asPathName.parentPath +/+ "../samples";
 			this.samplesDict = this.samplesDict ? Dictionary.new;
 			server = server ? this.server ? Server.default;
 			PathName(path).entries.do { |item, i|
