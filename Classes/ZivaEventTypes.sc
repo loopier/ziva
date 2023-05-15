@@ -23,10 +23,10 @@ ZivaEventTypes {
 			~sound = Ziva.samplesDict[~sound] ? [];
 			~sample = Ziva.samplesDict[~sample] ? [];
 			~n = ~n ? 0;
-			~ch = ~ch ? 2;
+			~buf = ~sound.at(~n.mod(~sound.size));
+			~ch = ~ch ? ~buf.numChannels ? 2;
 			~instrument = [\zivaplaybufm, \zivaplaybuf][~ch-1];
 			// ~instrument = [\zsamplermono, \zsampler][~channels-1];
-			~buf = ~sound.at(~n.mod(~sound.size));
 			~speed = ~speed ? ~note.midiratio;
 			// TODO: !!! ~note modifies rate
 			~type = \note;
