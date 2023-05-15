@@ -109,6 +109,13 @@ Ziva {
 		.alwaysOnTop_(alwaysOnTop);
 	}
 
+	/// \brief return the Ndef(KEY) exists or NIL if it doesn't exist.
+	/// \descritpion This is used to lookup symbols in patterns
+	*ndef { | key |
+		if( Ndef.dictFor(Ziva.server).activeProxies.indexOf(key).isNil.not ) { ^Ndef(key) };
+		^nil
+	}
+
 	/// \brief load samples
 	*loadSounds {
 		"loading sounds".debug;

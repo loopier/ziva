@@ -44,6 +44,7 @@
 	////////////////////////////////////////////////////////////////////////////
 	// map all methods that are not understood to a Pbind parameter
 	doesNotUnderstand { |selector ...args|
+		var value = Ziva.ndef(args[0].asSymbol) ? args[0];
 		// selector.debug((this.class ++ " does not understand method").asString);
 
         // super.findRespondingMethodFor(selector);
@@ -51,7 +52,7 @@
 		selector.debug("WARNING! Pchain doesNotUnderstand");
 		selector.debug("WARNING! Trying to set synth parameter")
 		// FIX: call super.doesNotUnderstand
-		^Pchain(Pbind(selector, args[0]), this);
+		^Pchain(Pbind(selector, value), this);
 	}
 
 	>> { |track|
@@ -98,20 +99,15 @@
 		^Pset(\dur, durs, this);
 	}
 
-	amp { |min, max|
-		var amp;
-		if (max.isNil) {
-			amp = Ziva.constants[min] ? min;
-		} {
-			amp = Pwhite(min, max);
-		};
+	amp { | val |
+		var amp = Ziva.ndef(val) ? Ziva.constants[val] ? val;
 		^Pchain(Pbind(\amp, amp), this);
 	}
 
 	bramp { ^Pchain(Pbind(\amp, Pbrown(0.1), this))}
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
-	leg { | leg | ^Pchain(Pbind(\legato, Ziva.constants[leg] ? leg), this) }
+	leg { | val | ^Pchain(Pbind(\legato, Ziva.constants[val] ? val), this) }
 
 	env { | args |
 		var env = switch( args.size,
@@ -120,7 +116,7 @@
 			4, { ^this.adsr(args) }
 		);
 	}
-	perc { | rel=1 | ^Pchain(Pbind(\atk, 0.01, \rel, rel, \legato, 0.01), this) }
+	perc { | rel=1 | ^Pchain(Pbind(\atk, 0.01, \rel, Ziva.ndef(rel) ? rel, \legato, 0.01), this) }
 	ar { | env | ^Pchain(Pbind(\atk, env[0], \dec, env[1], \sus, 1, \rel, env[1]), this) }
 	adsr { | env | ^Pchain(Pbind(\atk, env[0], \dec, env[1], \sus, env[2], \rel, env[3]), this) }
 
@@ -148,10 +144,11 @@
 	rh { | args |
 		if( args.isSymbol ) {
 			args = Ziva.rhythmsDict[args] ? args.asString;
-			if( args.isArray) { args.debug("rhythm").pseq };
+			// if( args.isArray) { args.debug("rhythm").pseq };
 		};
 
-		if( args.isString ) { args = args.asBinaryDigits.flat.replace(0,\r).debug("rhythm").pseq };
+		if( args.isString ) { args = args.asBinaryDigits.flat };
+		if( args.isArray ) { args = args.replace(0,\r).debug("rhytm").pseq }
 
 		^Pchain( Pbind(\r, args), this );
 	}

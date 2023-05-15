@@ -13,16 +13,11 @@ Regular SuperCollider code can be normally used anywhere.
 
 ```
 Ziva.boot;
-~acid = Psynth(\acid);
-~k = Psample(\aekick);
-Ziva.track(0, \chorus2, \reverbS);
+
 (
-[
-    ~acid.faster.bj(5,8,1).randpan >> 0,
-    ~acid.faster.bj(3,8).oct(3),
-    ~k,
-    nil
-].ziva;
+\d1 play: [
+    \acid rh: 'fa',
+];
 )
 ```
 
@@ -30,18 +25,28 @@ Ziva.track(0, \chorus2, \reverbS);
 
 ```
 Ziva.boot;
-~acid = Psynth(\acid);
-~k = Psample(\aekick);
-Ziva.track(0, \chorus2);
-~lfo = Ziva.lfo(1, \sine, 0.1, 300, 3000);
+Ziva.loadSamples("~/loopier/samples");
+Ziva.tempo = 143;
+Ziva.scale = \bhairav;
+
+\filta lfo: sine(0.1, 300, 2500);
+\filte lfo: noise2(0.1, 300, 2500);
+
 (
-[
-    ~acid.f.fast.stacc.bj(5,8).oct([5,6].prand).deg([0,2,4].pseq).randpan,
-    ~acid.p.fast.oct(3).cutoff(~lfo) >> 0,
-    ~k.f.n([2,r,0,0].pseq).bpm(128),
-    nil
-].ziva;
+\d1 play: [
+    \prophet rh: bj(5,8,-1) dur: \fast deg: '0001' oct: [5] amp: \pp cutoff: lfo(\filta) rq: 0.7,
+];
+\d2 play: [
+    \acid rh: bj(5,12) dur: \fast deg: '0001' oct: 3 cutoff: lfo(\filte) amp: \pp,
+];
+\dr play: [
+    \aekick rh: 'a0a0a550' dur: \fast amp: \ff n: 1,
+    \white rh: '0808' dur: \fast perc: 0.1,
+];
 )
+
+\d1 fx: [\chorus2, \reverbS, \hpfS];
+\d2 fx: [\chorus2, \reverbL, \lpfS];
 ```
 
 # System methods
@@ -72,28 +77,26 @@ Methods to use with instruments. They can be chained as in `~acid.fast.bj(3,5).p
 
 Method | Args | Description
 --------|------|------------
-`instrument`  | `name` | Set instrument. Must be a symbol (with leading ` \ `).
-`ins`  | `name` | Set instrument. Must be a symbol (with leading ` \ `).
-`i`  | `name` | Set instrument. Must be a symbol (with leading ` \ `).
 `fast` | | Play at `2x` tempo.
 `faster` | | Play at `4x` tempo.
 `fastest` | | Play at `8x` tempo.
+`ultrafast` | | Play at `16x` tempo.
+`ultrafaster` | | Play at `32x` tempo.
+`ultrafastest` | | Play at `64x` tempo.
 `slow` | | Play at `1/2` tempo.
 `slower` | | Play at `1/4` tempo.
 `slowest` | | Play at `1/8` tempo.
 `ultraslow` | | Play at `1/16` tempo.
 `ultraslower` | | Play at `1/32` tempo.
 `ultraslowest` | | Play at `1/64` tempo.
-`amp` | `min [, max]` | Play random amplitude between `min` and `max`. If `max` is ommited, it will play at even `min` value. **WARNING: It gets loud! Never go over `1.0`.**
-`f` | | Set amp to `0.3`.
-`ff` | | Set amp to `0.5`.
-`fff` | | Set amp to `1.0`.
-`ffff` | | Set amp to `2.0`.
+`f` | | Set amp to `0.2`.
+`ff` | | Set amp to `0.3`.
+`fff` | | Set amp to `0.5`.
+`ffff` | | Set amp to `0.9`.
 `p` | | Set amp to `0.05`.
-`pp` | | Set amp to `0.02`.
-`ppp` | | Set amp to `0.01`.
-`bramp` | | Brownian distribution random amplitude between `0.1` and `1.0`.
-`fadin` | | Increase amplitude at each event by `1/16`.
+`pp` | | Set amp to `0.03`.
+`ppp` | | Set amp to `0.02`.
+`pppp` | | Set amp to `0.01`.
 `perc` | `release` | Add percussive envelope with a `release` in seconds.
 `ar` | `attack, release` | Add an attack-release envelope with `attack` and `release` values in seconds.
 `adsr` | `attack, decay, sustain, release` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.

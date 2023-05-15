@@ -79,6 +79,8 @@
 		^Ndef(this);
 	}
 
+	fadeTime { | seconds | Ndef(this).fadeTime = seconds }
+
 	fx { | effects |
 		var fxNdef = Ndef(('fx_'++this).asSymbol);
 		if(fxNdef.source.isNil) {
@@ -127,4 +129,13 @@
 	leg { | args | ^this.prSynthOrSample.leg(args) }
 	env { | args | ^this.prSynthOrSample.env(args) }
 	perc { | args | ^this.prSynthOrSample.perc(args) }
+
+	moogvcf{ | res=0.7 |  ^{arg sig; MoogVCF.ar(sig, Ndef(this), res, mul: 2)} }
+	delay{ | dec |  ^{arg sig; sig + AllpassC.ar(sig, 2, Ndef(this), Ziva.ndef(dec) ? dec )} }
+	lpf{ | res=0.1 |  ^{arg sig; RLPF.ar(sig, Ndef(this), Ziva.ndef(res) ? res)} }
+	moogvcf{ | res=0.7 |  ^{arg sig; MoogVCF.ar(sig, Ndef(this), Ziva.ndef(res) ? res, mul: 2)} }
+	brown { | max=1.0, int=0.1 | ^Pbrown(Ndef(this), Ziva.ndef(max) ? max, int) }
+	white { | max=1.0 | ^Pwhite(Ndef(this), Ziva.ndef(max) ? max) }
+	ar{ | dec | ^[Ndef(this), Ziva.ndef(dec) ? dec] }
+	perc{ | rel | ^[Ndef(this)] }
 }

@@ -186,6 +186,8 @@
         ^bj;
     }
 
+    once { arg repeats=1; ^Pseq(this, repeats) }
+
     // add trailing rests
     // every { arg beats=4;
     //     ^this++(\r!beats).flat;
