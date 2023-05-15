@@ -34,10 +34,10 @@ Ziva.scale = \bhairav;
 
 (
 \d1 play: [
-    \prophet rh: bj(5,8,-1) dur: \fast deg: '0001' oct: [5] amp: \pp cutoff: lfo(\filta) rq: 0.7,
+    \prophet rh: bj(5,8,-1) dur: \fast deg: '0001' oct: [5] amp: \pp cutoff: \filta rq: 0.7,
 ];
 \d2 play: [
-    \acid rh: bj(5,12) dur: \fast deg: '0001' oct: 3 cutoff: lfo(\filte) amp: \pp,
+    \acid rh: bj(5,12) dur: \fast deg: '0001' oct: 3 cutoff: \filte amp: \pp,
 ];
 \dr play: [
     \aekick rh: 'a0a0a550' dur: \fast amp: \ff n: 1,
@@ -46,7 +46,7 @@ Ziva.scale = \bhairav;
 )
 
 \d1 fx: [\chorus2, \reverbS, \hpfS];
-\d2 fx: [\chorus2, \reverbL, \lpfS];
+\d2 fx: [delay(0.3, 8), \chorus2, \reverbL, \lpfS];
 ```
 
 # System methods
