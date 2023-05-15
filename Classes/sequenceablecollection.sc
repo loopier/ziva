@@ -24,10 +24,10 @@
         ^Pseq(this, repeats);
     }
 
-    ?? { | repeats |
-        if (repeats <= 0) { repeats = inf };
-        ^Prand(this, repeats);
-    }
+    // ?? { | repeats |
+    //     if (repeats <= 0) { repeats = inf };
+    //     ^Prand(this, repeats);
+    // }
 
     ?! { | size=8, repeats=0 |
         if (repeats <= 0) { repeats = inf };
