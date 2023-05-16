@@ -99,7 +99,7 @@ Values can either be numbers (`int` or `float`), hexadecimal numbers surrounded 
 Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TODO: ADD LINK TO LFOS###.
 
 
-## `rh`
+### Rhythm
 
 Method |  Description
 --------|------------
@@ -108,7 +108,7 @@ Method |  Description
 `rh: Pattern` | Play a `pattern`. Accepts both regular SClang syntax for patterns and Živa syntax. Example: `rh: [1,r].pseq` (same as `Array` example).
 `rh: Hex` | Play a rhythm written as `hex` values. Each value describes for beats in binary form. Example:`'8f'` is the same as `[1,r,r,r, 1,r,1,r].pseq`.
 
-## `dur`
+### Duration
 
 Method |  Description
 --------|------------
@@ -126,7 +126,7 @@ Method |  Description
 `dur: \ultraslower` | Play at `1/32` tempo.
 `dur: \ultraslowest` | Play at `1/64` tempo.
 
-## amp
+### Volume (Amplitude)
 
 Method |  Description
 --------|------
@@ -141,7 +141,7 @@ Method |  Description
 `amp: \ppp` | Set amp to `0.02`.
 `amp: \pppp` | Set amp to `0.01`.
 
-## pan
+### Panning
 
 Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
 
@@ -152,7 +152,7 @@ Method |  Description
 `pan: \right`  | Send output to right channel.
 `pan: \pingpong`   | Alternate left and right panning.
 
-## `env`
+### Envelope
 
 Envelope of the sound.
 
@@ -163,7 +163,7 @@ Method |  Description
 `env: adsr(attack:f, decay:f, sustain:f, release:f)` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.
 `perc: release:ifPL` | Add percussive envelope with a `release` in seconds.
 
-## `leg`
+### Legato
 
 Legato time (sustain time).
 
