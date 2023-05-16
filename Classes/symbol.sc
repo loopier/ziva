@@ -122,6 +122,7 @@
 	r { | args | ^this.rh(args) }
 	scale { | scale | ^this.prSynthOrSample.scale(scale) }
 	oct { | args | ^this.prSynthOrSample.oct(args) }
+	freq { | args | ^this.prSynthOrSample.freq(args) }
 	deg { | args | ^this.prSynthOrSample.deg(args) }
 	dur { | args | ^this.prSynthOrSample.dur(args) }
 	amp { | args | ^this.prSynthOrSample.amp(args) }
