@@ -99,7 +99,7 @@
 		};
 
 		// clear unused fx
-		fxNdef.sources.do{|x,i| if(i > effects.size) {fxNdef.sources = nil}};
+		(fxNdef.sources.size - effects.size).do{|i| fxNdef[i + effects.size + 1] = nil};
 
 		^fxNdef;
 	}
