@@ -15,7 +15,7 @@
 
 		if( args.isString ) { args = args.asBinaryDigits.flat.replace(0,\r) };
 
-		args = args.debug("rhythm").pseq
+		args = Pseq(args.debug("rhythm"), inf);
 		^this.prSetPbindPair(\r, args);
 	}
 
