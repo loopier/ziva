@@ -270,7 +270,10 @@ Method |  Description
 
 # FX - Effects
 
-Three types of effects can be added: presets, customizable, and brand new.
+Three types of effects can be added: 
+- presets
+- customizable
+- functions
 
 ## Presets
 
@@ -297,7 +300,7 @@ Method | Args | Description
 `moogvcf( cutoff:ifL, resonance:ifL )` | Moog Voltage Controlled Filtered.
 
 
-## Advanced custom FX
+## Functions - Advanced custom FX
 
 New effects can be added with functions that would normally be accepted as source in a `NodeProxy.sources` slot in SuperCollider:
 
@@ -307,7 +310,7 @@ New effects can be added with functions that would normally be accepted as sourc
 
 The previous code is equivalent to: 
 ```
-
+Ndef(\d1)[1] = \filter -> {|in| AllpassC.ar(sig, 0.2, 0.2, 1)}
 ```
 
 ## FX mix (dry - wet)
