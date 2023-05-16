@@ -305,12 +305,12 @@ Method | Args | Description
 New effects can be added with functions that would normally be accepted as source in a `NodeProxy.sources` slot in SuperCollider:
 
 ```
-\d1 fx: [{|in| AllpassC.ar(sig, 0.2, 0.2, 1)}]
+\d1 fx: [{|in| AllpassC.ar(in, 0.2, 0.2, 1)}]
 ```
 
 The previous code is equivalent to: 
 ```
-Ndef(\d1)[1] = \filter -> {|in| AllpassC.ar(sig, 0.2, 0.2, 1)}
+Ndef(\d1)[1] = \filter -> {|in| AllpassC.ar(in, 0.2, 0.2, 1)}
 ```
 
 ## FX mix (dry - wet)
@@ -324,7 +324,7 @@ The mix of flitered and original signal for a given track can be changed with va
 ];
 )
 \d1 fx: [delay(0.3, 8), \reverbS]
-\d1 wet: 0.5 \\ <--------- set the mix
+\d1 wet: 0.5 \\ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< set the mix
 ```
 
 ## MIDI
@@ -373,16 +373,6 @@ Method | Args | Description
 
 Functions to create lists of values. 
 
-## Envelope Generator Functions
-
-Used with sound parameter `env`:
-
-Method | Args | Description
---------|------|------------
-`adsr`| `attack:f decay:f sustain:f release:f`| Returns an array of 4 values.
-`ar`| `attack:f release:f`| Returns an array of 2 values.
-`perc`| `attack:f decay:f sustain:f release:f`| Returns an array of 1 value.
-
 ## Other Functions
 
 Following is a list of the available methods for lists of data. SuperCollider array methods can also be used. See [SuperCollider Array Help](https://doc.sccode.org/Classes/Array.html) 
@@ -403,7 +393,5 @@ Method | Args | Description
 `bjr` | `hits, beats [, offset, reverse]` | Like `bj`, but adding `\r` (rests) instead of `0`s.
 `bj2` | `hits, beats [, offset, reverse]` | Sets a number of `hits`, whose durations add up to any number of `beats`.
 `!!` | `repeats` | Like `[...].pseq(repeats)`. Usage: `[0,2,4]!!4`.
-`??` | `repeats` | Like `[...].prand(repeats)`. Usage: `[0,2,4]??4`.
 `?!` | `size [, repeats:inf]` | Like `[...].choosen(size).pseq(repeats)`. Usage: `[0,2,4]?!4`.
-`ziva` | | Instruments in the list will be played in parallel (see [Basic Example](#basic-example) above). Like `Pseq(\ziva, Ppar( ...list... )).play.quant_(1)`.
 
