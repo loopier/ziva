@@ -1,8 +1,10 @@
+# Contents
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
 **Table of Contents**
 
-- [Živa Reference](#živa-reference)
-- [Basic Example](#basic-example)
+- [Contents](#contents)
+- [Intro](#intro)
+    - [Basic Example](#basic-example)
     - [A more elaborated example](#a-more-elaborated-example)
 - [System methods](#system-methods)
 - [Playing sounds](#playing-sounds)
@@ -29,7 +31,7 @@
 
 <!-- markdown-toc end -->
 
-# Živa Reference
+# Intro
 
 This document exposes the API available through Živa.
 
@@ -51,7 +53,7 @@ Argument types may sometimes be noted as:
 
 Regular SuperCollider code can be normally used anywhere.
     
-# Basic Example
+## Basic Example
 
 ```
 Ziva.boot;
