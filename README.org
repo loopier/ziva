@@ -29,7 +29,7 @@ TempoClock.default.tempo = 132/60;
 \drums fx: [\delay]
 ```
 
-See the [[./docs/Reference.md][Reference] guide.
+See the [[./docs/Reference.md][Reference]] guide.
 
 * Requirements
 ** All OS
