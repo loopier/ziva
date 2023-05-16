@@ -5,7 +5,15 @@ This document exposes the API available through Živa.
 
 *Optional arguments are surrounded by `[]`*
 
+Argument types may sometimes be noted as:
+- `:i` (int)
+- `:f` (float)
+- `:s` (string)
+- `:S` (symbol)
+- `:F` (function)
+
 *Symbols always start with ` \ `*
+
 
 Regular SuperCollider code can be normally used anywhere.
     
@@ -90,18 +98,18 @@ Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TOD
 
 ## `rh`
 
-Method | Args | Description
---------|------|------------
-`rh: \rhythm_name` | Play a `rhythm`.
-`rh: Pattern` | Play a `pattern`. Accepts both regular SClang syntax for patterns and Živa syntax.
-`rh: Hex` | Play a rhythm written as `hex` values: `'8f'` is the same as `[1,r,r,r,1,r,1,r].pseq`.
-`rh: bj(hits, beats [, scramble:false, sort:false, reverse:false])` | Euclidean rhythm generator. It plays an evenly distributed number of `hits` along a number of `beats`. Rests and hits can be shuffled if `scramble` is set to `true`. Or sorted if `sort` is set to `true` (first rests, then hits). If `reverse` is set to `true`, the pattern will be played backwards.
+Method |  Description
+--------|------------
+`rh: rhythm:S` | Play a `rhythm`. Example: `rh: \tumbao`. See avilable rhythms with `Ziva.rhythms`.
+`rh: Array` | Sequence the array. Example:  `rh: [1,r]`. *Note: `r` are rests, any number is a hit.*
+`rh: Pattern` | Play a `pattern`. Accepts both regular SClang syntax for patterns and Živa syntax. Example: `rh: [1,r].pseq` (same as `Array` example).
+`rh: Hex` | Play a rhythm written as `hex` values. Each value describes for beats in binary form. Example:`'8f'` is the same as `[1,r,r,r, 1,r,1,r].pseq`.
 
 ## `dur`
 
-Method | Args | Description
---------|------|------------
-`dur: time` | The `time` until next event in a sequence of events. 
+Method |  Description
+--------|------------
+`dur: time:if` | The `time` until next event in a sequence of events.
 `dur: \fast` | Play at `2x` tempo.
 `dur: \faster` | Play at `4x` tempo.
 `dur: \fastest` | Play at `8x` tempo.
@@ -117,26 +125,31 @@ Method | Args | Description
 
 ## amp
 
-Method | Args | Description
---------|------|------------
-`f` | | Set amp to `0.2`.
-`ff` | | Set amp to `0.3`.
-`fff` | | Set amp to `0.5`.
-`ffff` | | Set amp to `0.9`.
-`p` | | Set amp to `0.05`.
-`pp` | | Set amp to `0.03`.
-`ppp` | | Set amp to `0.02`.
-`pppp` | | Set amp to `0.01`.
+Method |  Description
+--------|------
+`amp: amplitude:f` | Set output volume of the sound. **WARNING: IT GET'S LOUD!!! -- it defaults to 0.1; keep values below 1.0**.
+`amp: lfo:S` | Set output volume of the sound with an `lfo`.
+`amp: \f` | Set amp to `0.2`.
+`amp: \f` | Set amp to `0.2`.
+`amp: \ff` | Set amp to `0.3`.
+`amp: \fff` | Set amp to `0.5`.
+`amp: \ffff` | Set amp to `0.9`.
+`amp: \p` | Set amp to `0.05`.
+`amp: \pp` | Set amp to `0.03`.
+`amp: \ppp` | Set amp to `0.02`.
+`amp: \pppp` | Set amp to `0.01`.
 
 ## pan
 
 Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
 
-Method | Args | Description
---------|------|------------
-`left`  | | Send output to left channel.
-`right`  | | Send output to right channel.
-`pingpong`  |  | Alternate left and right panning.
+Method |  Description
+--------|------------
+`pan: position:f`  | Send output to a `position`. `-1` is left, `0` is center, `1` is right;
+`pan: lfo:S`  | Send output to a position with an `lfo`.
+`pan: \left`  | Send output to left channel.
+`pan: \right`  | Send output to right channel.
+`pan: \pingpong`   | Alternate left and right panning.
 
 ## `env`
 
