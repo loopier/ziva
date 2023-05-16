@@ -262,11 +262,11 @@ methodName(\name)
 
 Method |  Description
 --------|------------
-`.controls` | Example: `\d1.controls` or `controls(\d1)`.
-`.solo` | Example: `\d1.solo` or `solo(\d1)`.
-`.unsolo` | Example: `\d1.unsolo` or `unsolo(\d1)`.
-`.mute` | Example: `\d1.mute` or `mute(\d1)`.
-`.unmute` | Example: `\d1.unmute` or `unmute(\d1)`.
+`.controls` | Example: `\acid.controls` or `controls(\acid)`.
+`.solo` | Example: `\acid.solo` or `solo(\acid)`.
+`.unsolo` | Example: `\acid.unsolo` or `unsolo(\acid)`.
+`.mute` | Example: `\acid.mute` or `mute(\acid)`.
+`.unmute` | Example: `\acid.unmute` or `unmute(\acid)`.
 
 # FX - Effects
 
