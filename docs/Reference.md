@@ -76,7 +76,8 @@ To play a sound:
 ]
 ```
 
-This plays an sound named `acid` (see available sounds with `Ziva.sounds`) and sets its rhythm to `[1,1,1,1]`.
+This sets a track named `d1` and plays an sound named `acid` (see available sounds with `Ziva.sounds`) and sets its rhythm to `[1,1,1,1]`.
+
 
 # Sound parameters
 
@@ -215,8 +216,11 @@ Method | Args | Description
 
 # Track
 
+Tracks have some methods that don't accept arguments.
+
 Method | Args | Description
 --------|------|------------
+`controls` | | `\d1.controls` or `controls(\d1)`
 `solo` | | `\d1.solo` or `solo(\d1)`
 `unsolo` | | `\d1.unsolo` or `unsolo(\d1)`
 `mute` | | `\d1.mute` or `mute(\d1)`

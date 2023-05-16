@@ -8,6 +8,8 @@
 		};
 	}
 
+	controls { Ziva.controls(this) }
+
 	ndef	{ | ... args | ^Ndef(this, *args) }
 	sine	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {SinOsc.ar(freq, phase).range(min,max) * amp})}
 	tri		{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFTri.ar(freq, phase).range(min,max) * amp})}
