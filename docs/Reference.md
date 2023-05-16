@@ -11,6 +11,9 @@ Argument types may sometimes be noted as:
 - `:s` (string)
 - `:S` (symbol)
 - `:F` (function)
+- `:P` (pattern)
+- `:H` (hex)
+- `:L` (LFO)
 
 *Symbols always start with ` \ `*
 
@@ -127,8 +130,7 @@ Method |  Description
 
 Method |  Description
 --------|------
-`amp: amplitude:f` | Set output volume of the sound. **WARNING: IT GET'S LOUD!!! -- it defaults to 0.1; keep values below 1.0**.
-`amp: lfo:S` | Set output volume of the sound with an `lfo`.
+`amp: amplitude:ifPL` | Set output volume of the sound. **WARNING: IT GET'S LOUD!!! -- it defaults to 0.1; keep values below 1.0**.
 `amp: \f` | Set amp to `0.2`.
 `amp: \f` | Set amp to `0.2`.
 `amp: \ff` | Set amp to `0.3`.
@@ -145,34 +147,34 @@ Left-right stereo panning effect. `-1` for left, `1` for right, `0` for center.
 
 Method |  Description
 --------|------------
-`pan: position:f`  | Send output to a `position`. `-1` is left, `0` is center, `1` is right;
-`pan: lfo:S`  | Send output to a position with an `lfo`.
+`pan: position:ifPL`  | Send output to a `position`. `-1` is left, `0` is center, `1` is right;
 `pan: \left`  | Send output to left channel.
 `pan: \right`  | Send output to right channel.
 `pan: \pingpong`   | Alternate left and right panning.
 
 ## `env`
 
-Envelope of the sound -- only works with functions.
+Envelope of the sound.
 
-Method | Args | Description
---------|------|------------
-`perc` | `release` | Add percussive envelope with a `release` in seconds.
-`ar` | `attack, release` | Add an attack-release envelope with `attack` and `release` values in seconds.
-`adsr` | `attack, decay, sustain, release` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.
+Method |  Description
+--------|------------
+`env: perc(release:f)` | Add percussive envelope with a `release` in seconds.
+`env: ar(attack:f, release:f)` | Add an attack-release envelope with `attack` and `release` values in seconds.
+`env: adsr(attack:f, decay:f, sustain:f, release:f)` | Add an ADSR envelope with `attack`, `decay` and `release` values in seconds, and `sustain` from `0` to `1`.
+`perc: release:ifPL` | Add percussive envelope with a `release` in seconds.
 
 ## `leg`
 
-Legato time.
+Legato time (sustain time).
 
-Method | Args | Description
---------|------|------------
-`leg` | `length` | See `legato`.
-`legato` | `[length]` | Hold the note for a `length` of secons. Then release. Defaults to `1.0`.
-`pizz` | | Play pizzicato.
-`stass` | | Play staccatissimo.
-`stacc` | | Play staccato.
-`pedal` | | Play pedal. Hold notes during `4` events.
+Method |  Description
+--------|------------
+`leg: length:ifPL` | See `legato`.
+`leg: length:ifPL` | Hold the note for a `length` of seconds. Then release. Defaults to `1.0`.
+`leg: \pizz` | Play pizzicato.
+`leg: \stass` | Play staccatissimo.
+`leg: \stacc` | Play staccato.
+`leg: \pedal` | Play pedal. Hold notes during `4` events.
 
 # Synth parameters
 
@@ -181,25 +183,45 @@ When a `symbol` is accepted, it can be any LFO name.
 When `hex` values are accepted, they are converted to a list of decimal values an sequenced.
 When a `func` is accepted, it can be either a list generator, or a pattern. See ###TODO: ADD LINK TO MODULATOR FUNCTIONS###
 
-Method | Args | Description
---------|------|------------
-`scale`  | `name:symbol` | Set scale for this instrument. To list available scales: `Scale.directory`.
-`deg`  | `degree:pattern|int|float|hex` | Play the given degree `num` in the current scale. `0` is the root. Can be a pattern. If a `hex`
-`note`  | `note:pattern|int|float|hex` | Play chromatic note. `0` is root at the current octave. Can be a pattern.
-`midinote`  | `note:pattern|int|float|hex` | Play the MIDI note `num`.  Can be a pattern.
-`freq`  | `hz:symbol|pattern|int|float|func` | Set the frequency to `hz`.  Can be a pattern.
-`oct`  | `octave:int|float|hex` | Play in the given **octave**. Can be a pattern.
+Method |  Description
+--------|------------
+`scale: name:S` | Set scale for this instrument. To list available scales: `Scale.directory`.
+`deg: degree:if` | Play the given `degree` in the current scale. `0` is the root. Example: `deg: 0`.
+`deg: degrees:P` | Play a pattern on a list of `degrees` in the current scale. `0` is the root. Example: `deg: [0,2,4].pseq`.
+`deg: degrees:H` | Play a sequence of `degrees` in the scale, described as hex values. `0` is the root. Example: `deg: '024'`.
+`note: note:if` | Play chromatic note. `0` is root at the chromatic octave. See `deg` for examples.
+`note: notes:P` | Play a pattern on a list of `notes` in the chromatic scale. `0` is the root. Example: `note: [0,2,4].pseq`.
+`note: notes:H` | Play a sequence of chromatic `notes` described as hex values. `0` is the root. Example: `note: '012'`.
+`midinote: note:if` | Play the MIDI `note`. Example: `midinote: 60`.
+`midinote: notes:P` | Play a pattern of MIDI `notes`. Example: `midinote: [60,63,67].pseq`.
+`freq: hz:if` | Set the frequency to `hz`. Example: `freq: 440`.
+`freq: frequencies:P` | Play a pattern of the `frequencies` in hz. Example: `freq: [440, 220, 880].pseq`.
+`freq: lfo:S` | Change the frequency with and `lfo`. Example: `freq: \lfo1` -- See LFOs.
+`oct: octave:if` | Play in the given `octave`. Example: `oct: 3`. Defaults to `5`.
+`oct: octaves:P` | Play a pattern with the given `octaves`. Example: `oct: [3,4,5].pseq`.
+
+Additionally, any synth parameters declared in the SynthDef, may be used. Any newly created synth parameters will also be available, as long as the SynthDef is loaded in the server. To see the available parameters for a given synth, use:
+```
+Ziva.controls(\synthName);
+\\ or
+\synthName.controls;
+```
+Then use it as a regular sound parameter:
+
+Method |  Description
+--------|------------
+`paramName: value` | The parameter type is declared in the SynthDef. For numeric values, usually and LFO may be used. Example: `width: 0.5`. **WARNING: it only works with single-value parameters.**
 
 ## Samples
 
 Methods exclusive for samples.
 
-Method | Args | Description
---------|------|------------
-`n` | `sample:int|pattern` | Set the sample index.
-`speed`  | `rate:symbol|int|float|pattern|func` | Play the sample at the given `speed`. Affects the pitch.
-`tape` | `amount` | Old cassette tape effect. The greater the `amount`, the older the tape.
-`chop` | `[length, chunks]` | Chop the sample in a number of `chunks`, pick a random number of chunks given by `length` and play them in sequence.
+Method |  Description
+--------|------------
+`n: sample:iP` | Set the sample index. Example: `n: 0`; `n: [0,1,2].pseq`
+`speed: rate:ifPL` | Play the sample at the given `rate`. Affects the pitch. Example: `speed: 0.5`; `n: [0.2,0.5,1,2].prand`; `n: \lfo1` -- see LFOs.
+`tape: amount:f` | Old cassette tape effect. The greater the `amount`, the older the tape.
+`start: point:fP` | Chop the sample in a number of `chunks`, pick a random number of chunks given by `length` and play them in sequence.
 
 # LFOs
 
@@ -210,15 +232,15 @@ LFOs are created like regular tracks. In the following example we create a `sine
 \d1 play: [ \prophet oct: 3 cutoff: \lfo1 ];
 ```
 
-Method | Args | Description
---------|------|------------
-`sine` | `freq min max amp phase` | Creates a sine wave that oscillates at `freq` between `min` and `max`.
-`tri` | `freq min max amp phase` | Creates a triangle wave that oscillates at `freq` between `min` and `max`.
-`saw` | `freq min max amp phase` | Creates a sawtooth wave that oscillates at `freq` between `min` and `max`. For ramp (downwards) values, set `min` to a higher value than `max`.
-`pulse` | `freq min max amp phase` | Creates a pulse wave that oscillates at `freq` between `min` and `max`.
-`noise0` | `freq min max amp phase` | Generates random values at an interval of `freq`.
-`noise1` | `freq min max amp phase` | Generates linearly interpolated random values at a rate given by `freq`.
-`noise2` | `freq min max amp phase` | Generates quadratically (exponential) interpolated random values at a rate given by `freq`.
+Method |  Description
+--------|------------
+`lfo: sine(freq, min, max, amp, phase)` | Creates a sine wave that oscillates at `freq` between `min` and `max`. Example: `\lfo1 lfo: sine(0.2, 200 400)`
+`lfo: tri(freq, min, max, amp, phase)` | Creates a triangle wave that oscillates at `freq` between `min` and `max`. Example: `\lfo1 lfo: tri(0.2, 200 400)`
+`lfo: saw(freq, min, max, amp, phase)` | Creates a sawtooth wave that oscillates at `freq` between `min` and `max`. For ramp (downwards) values, set `min` to a higher value than `max`. Example: `\lfo1 lfo: saw(0.2, 200 400)`
+`lfo: pulse(freq, min max amp phase)` | Creates a pulse wave that oscillates at `freq` between `min` and `max`. Example: `\lfo1 lfo: pulse(0.2, 200 400)`
+`lfo: noise0(freq, min max amp phase)` | Generates random values at an interval of `freq`. Example: `\lfo1 lfo: noise0(0.2, 200 400)`
+`lfo: noise1(freq, min, max, amp, phase)` | Generates linearly interpolated random values at a rate given by `freq`. Example: `\lfo1 lfo: noise1(0.2, 200 400)`
+`lfo: noise2(freq, min, max, amp, phase)` | Generates quadratically (exponential) interpolated random values at a rate given by `freq`. Example: `\lfo1 lfo: noise2(0.2, 200 400)`
 
 # Pattern Functions
 
@@ -226,27 +248,29 @@ A few functions to create patterns:
 
 Method | Args | Description
 --------|------|------------
-`borwn`|`min:i|f max:i|f interval:i|f`| Brown noise. Returns `Pbrown(min, max, interval).`
-`white`|`min:i|f max:i|f`| White noise, random values. Returns `PWhite(min, max).`
-`borwn`|`min:i|f max:i|f interval:i|f`| Brown noise. Returns `Pbrown(min, max, interval).`
+`brown(min:if, max:if, interval:if)`| Brown noise. Returns `Pbrown(min, max, interval).`
+`white(min:if, max:if)`| White noise, random values. Returns `PWhite(min, max).`
 
 # Track
 
-Tracks have some methods that don't accept arguments.
+Tracks have some methods that don't accept arguments. The syntax is:
+```
+\name.methodName
+\\ or
+methodName(\name)
+```
 
-Method | Args | Description
---------|------|------------
-`controls` | | `\d1.controls` or `controls(\d1)`
-`solo` | | `\d1.solo` or `solo(\d1)`
-`unsolo` | | `\d1.unsolo` or `unsolo(\d1)`
-`mute` | | `\d1.mute` or `mute(\d1)`
-`unmute` | | `\d1.unmute` or `unmute(\d1)`
+Method |  Description
+--------|------------
+`.controls` | Example: `\d1.controls` or `controls(\d1)`.
+`.solo` | Example: `\d1.solo` or `solo(\d1)`.
+`.unsolo` | Example: `\d1.unsolo` or `unsolo(\d1)`.
+`.mute` | Example: `\d1.mute` or `mute(\d1)`.
+`.unmute` | Example: `\d1.unmute` or `unmute(\d1)`.
 
 # FX - Effects
 
 Three types of effects can be added: presets, customizable, and brand new.
-The mix of flitered and original signal for a given track can be changed with values from `0` (dry) to `1` wet: 
-`\d1 wet: 0.5` 
 
 ## Presets
 
@@ -263,19 +287,42 @@ Some effects accept custom values:
 \d1 fx: [delay(0.3, 8), \reverbS]
 ```
 
+The arguments can accept LFOs.
+
 Method | Args | Description
 --------|------|------------
-`delay`| `time:symbol|i|f decay:symbol|i|f` | AllpassC.
-`lfp` | `cutoff:symbol|i|f resonance:symbol|i|f` | Resonant low pass filter.
-`hfp` | `cutoff:symbol|i|f resonance:symbol|i|f` | Resonant high pass filter.
-`moogvcf` | `cutoff:symbol|i|f resonance:symbol|i|f` | Moog Voltage Controlled Filtered.
+`delay( time:ifL, decay:ifL )` | AllpassC.
+`lfp( cutoff:ifL, resonance:ifL )` | Resonant low pass filter.
+`hfp( cutoff:ifL, resonance:ifL )` | Resonant high pass filter.
+`moogvcf( cutoff:ifL, resonance:ifL )` | Moog Voltage Controlled Filtered.
 
 
 ## Advanced custom FX
 
 New effects can be added with functions that would normally be accepted as source in a `NodeProxy.sources` slot in SuperCollider:
 
-`\d1 fx: [{|in| AllpassC.ar(sig, 0.2, 0.2, 1)}]`
+```
+\d1 fx: [{|in| AllpassC.ar(sig, 0.2, 0.2, 1)}]
+```
+
+The previous code is equivalent to: 
+```
+
+```
+
+## FX mix (dry - wet)
+
+The mix of flitered and original signal for a given track can be changed with values from `0` (dry) to `1` wet. For example: 
+```
+(
+\d1 play: [
+    \acid rh: '8',
+    \saw dur: \fast leg: \pizz
+];
+)
+\d1 fx: [delay(0.3, 8), \reverbS]
+\d1 wet: 0.5 \\ <--------- set the mix
+```
 
 ## MIDI
 
