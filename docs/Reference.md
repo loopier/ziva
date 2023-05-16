@@ -1,3 +1,34 @@
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [Živa Reference](#živa-reference)
+- [Basic Example](#basic-example)
+    - [A more elaborated example](#a-more-elaborated-example)
+- [System methods](#system-methods)
+- [Playing sounds](#playing-sounds)
+- [Sound parameters](#sound-parameters)
+    - [-](#-)
+    - [Duration](#duration)
+    - [Volume (Amplitude)](#volume-amplitude)
+    - [Panning](#panning)
+    - [Envelope](#envelope)
+    - [Legato](#legato)
+- [Synth parameters](#synth-parameters)
+    - [Samples](#samples)
+- [LFOs](#lfos)
+- [Track](#track)
+- [FX - Effects](#fx---effects)
+    - [Presets](#presets)
+    - [Basic custom FX](#basic-custom-fx)
+    - [Functions - Advanced custom FX](#functions---advanced-custom-fx)
+    - [FX mix (dry - wet)](#fx-mix-dry---wet)
+- [MIDI](#midi)
+- [Patterns](#patterns)
+- [List Generator Functions](#list-generator-functions)
+- [Pattern Functions](#pattern-functions)
+
+<!-- markdown-toc end -->
+
 # Živa Reference
 
 This document exposes the API available through Živa.
@@ -41,7 +72,6 @@ Ziva.scale = \bhairav;
 
 \filta lfo: sine(0.1, 300, 2500);
 \filte lfo: noise2(0.1, 300, 2500);
-
 (
 \d1 play: [
     \prophet rh: bj(5,8,-1) dur: \fast deg: '0001' oct: [5] amp: \pp cutoff: \filta rq: 0.7,
@@ -94,9 +124,9 @@ This sets a track named `d1` and plays an sound named `acid` (see available soun
 
 Sounds can be modified with parameters. The syntax is: `\sound_name param1: value1 ... paramN: valueN`.
 
-Values can either be numbers (`int` or `float`), hexadecimal numbers surrounded by single-quotes (e.g. `80fa'`), symbols (e.g. `\ff`) or functions (see ###TODO: ADD LINK TO MODULATOR FUNCTIONS###).
+Values can either be numbers (`int` or `float`), hexadecimal numbers surrounded by single-quotes (e.g. `80fa'`), symbols (e.g. `\ff` or an [LFO](#lfos)) or functions (see [List Generator Functions](#list-generator-functions), [Pattern Functions](#pattern-functions))
 
-Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TODO: ADD LINK TO LFOS###.
+Symbols can be either found in `Ziva.constants` or any declared LFOs. See [LFOs](lfos).
 
 
 ### Rhythm
@@ -179,9 +209,9 @@ Method |  Description
 # Synth parameters
 
 Following is a list of other parameters that take either numerci values.
-When a `symbol` is accepted, it can be any LFO name.
+When a `symbol` is accepted, it can be any [LFO](#lfos) name.
 When `hex` values are accepted, they are converted to a list of decimal values an sequenced.
-When a `func` is accepted, it can be either a list generator, or a pattern. See ###TODO: ADD LINK TO MODULATOR FUNCTIONS###
+When a `func` is accepted, it can be either a list generator, or a pattern. See [List Generator Functions](#list-generator-functions) and [Pattern Functions](#pattern-functions)
 
 Method |  Description
 --------|------------
@@ -241,15 +271,6 @@ Method |  Description
 `lfo: noise0(freq, min max amp phase)` | Generates random values at an interval of `freq`. Example: `\lfo1 lfo: noise0(0.2, 200 400)`
 `lfo: noise1(freq, min, max, amp, phase)` | Generates linearly interpolated random values at a rate given by `freq`. Example: `\lfo1 lfo: noise1(0.2, 200 400)`
 `lfo: noise2(freq, min, max, amp, phase)` | Generates quadratically (exponential) interpolated random values at a rate given by `freq`. Example: `\lfo1 lfo: noise2(0.2, 200 400)`
-
-# Pattern Functions
-
-A few functions to create patterns:
-
-Method | Args | Description
---------|------|------------
-`brown(min:if, max:if, interval:if)`| Brown noise. Returns `Pbrown(min, max, interval).`
-`white(min:if, max:if)`| White noise, random values. Returns `PWhite(min, max).`
 
 # Track
 
@@ -371,10 +392,6 @@ Method | Args | Description
 
 # List Generator Functions
 
-Functions to create lists of values. 
-
-## Other Functions
-
 Following is a list of the available methods for lists of data. SuperCollider array methods can also be used. See [SuperCollider Array Help](https://doc.sccode.org/Classes/Array.html) 
 
 *The variable `r` can be used inside any list to add a rest.*
@@ -392,6 +409,15 @@ Method | Args | Description
 `bj` | `hits, beats [, offset, reverse]` | Like `rhythm`, but with [euclidean rhythms](https://en.wikipedia.org/wiki/Euclidean_rhythm), placing items on any number of `hits` over a number of `beats`, and `0`s elsewhere. 
 `bjr` | `hits, beats [, offset, reverse]` | Like `bj`, but adding `\r` (rests) instead of `0`s.
 `bj2` | `hits, beats [, offset, reverse]` | Sets a number of `hits`, whose durations add up to any number of `beats`.
+
+
+# Pattern Functions
+
+A few functions to create patterns:
+
+Method | Args | Description
+--------|------|------------
+`brown(min:if, max:if, interval:if)`| Brown noise. Returns `Pbrown(min, max, interval).`
+`white(min:if, max:if)`| White noise, random values. Returns `PWhite(min, max).`
 `!!` | `repeats` | Like `[...].pseq(repeats)`. Usage: `[0,2,4]!!4`.
 `?!` | `size [, repeats:inf]` | Like `[...].choosen(size).pseq(repeats)`. Usage: `[0,2,4]?!4`.
-
