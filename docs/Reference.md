@@ -327,7 +327,7 @@ The mix of flitered and original signal for a given track can be changed with va
 \d1 wet: 0.5 \\ <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< set the mix
 ```
 
-## MIDI
+# MIDI
 
 **TODO.**
 
