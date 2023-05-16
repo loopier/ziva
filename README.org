@@ -12,22 +12,22 @@ Regular SuperCollider pattern and Ndef syntax can be used as parameters inside Å
 
 * Documentation
 
-```
+#+begin_src sclang
 Ziva.boot;
 Ziva.loadSamples("~/loopier/samples");
 TempoClock.default.tempo = 132/60;
 (
 \d1 play: [
-	\acid rh: '8c' dur: \fast,
+    \acid rh: '8c' dur: \fast,
 ];
 \drums play: [
-	\trikick rh: 'a',
-	\trihh rh: 'f' dur: \fast,
+    \trikick rh: 'a',
+    \trihh rh: 'f' dur: \fast,
 ];
 )
 \d1 fx: [\reverbL]
 \drums fx: [\delay]
-```
+#+end_src
 
 See the [[./docs/Reference.md][Reference]] guide.
 
