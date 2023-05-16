@@ -25,4 +25,5 @@
 	adsr{ | dec, sus, rel | ^[this, dec, sus, rel] }
 	ar{ | dec | ^[this, dec] }
 
+	chop { | chunks=16 | ^(..chunks).choosen(this) / chunks }
 }
