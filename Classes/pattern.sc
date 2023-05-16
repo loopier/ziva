@@ -77,7 +77,11 @@
 	scale { |name| ^Pchain(Pbind(\scale, Scale.at(name)), this) }
 	deg { |value|
 		if( value.isSymbol ) { value = value.debug("deg Value").asString.debug("deg String") };
-		if( value.isString ) { value = Array.fill(value.size, {|i| Pseq(value[i].asString.asHexIfPossible }).debug("deg Array"), inf) };
+		if( value.isString ) {
+			value = Pseq(
+				Array.fill(value.size, {|i| value[i].asString.asHexIfPossible}).debug("deg Array"),
+				inf)
+		};
 
 		// ^Pchain(Pbind(\degree, value.debug("deg")), this);
 		^Pset(\degree, value.debug("deg"), this);
@@ -148,7 +152,7 @@
 		};
 
 		if( args.isString ) { args = args.asBinaryDigits.flat };
-		if( args.isArray ) { args = Pseq(args.flat.replace(0,\r).debug("rhythm"),inf) };
+		if( args.isArray ) { args = Pseq(args.flat.replace(0,\r).debug("rhythm"), inf) };
 
 		^Pchain( Pbind(\r, args), this );
 	}
