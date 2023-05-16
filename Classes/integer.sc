@@ -18,13 +18,11 @@
 	perc	{ | ... args | ^this.asFloat.perc(*args) }
 
 
-	bj		{ | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
-	bjr		{ | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
-	brown	{ | max=1, int=1 | ^Pbrown(this, max, int) }
-	white	{ | max=1 | ^Pwhite(this, max) }
-	adsr	{ | dec, sus, rel | ^[this, dec, sus, rel] }
-	ar		{ | dec | ^[this, dec] }
-
-	chop { | chunks=16 | ^(..chunks).choosen(this) / chunks }
+	bj { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
+	bjr { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
+	brown { | max=1, int=1 | ^Pbrown(this, max, int) }
+	white { | max=1 | ^Pwhite(this, max) }
+	adsr{ | dec, sus, rel | ^[this, dec, sus, rel] }
+	ar{ | dec | ^[this, dec] }
 
 }
