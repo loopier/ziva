@@ -130,6 +130,7 @@
 	moogvcf{ | res=0.7 |  ^{arg sig; MoogVCF.ar(sig, Ndef(this), res, mul: 2)} }
 	delay{ | dec |  ^{arg sig; sig + AllpassC.ar(sig, 2, Ndef(this), Ziva.ndef(dec) ? dec )} }
 	lpf{ | res=0.1 |  ^{arg sig; RLPF.ar(sig, Ndef(this), Ziva.ndef(res) ? res)} }
+	hpf{ | res=0.1 |  ^{arg sig; RHPF.ar(sig, Ndef(this), Ziva.ndef(res) ? res)} }
 	moogvcf{ | res=0.7 |  ^{arg sig; MoogVCF.ar(sig, Ndef(this), Ziva.ndef(res) ? res, mul: 2)} }
 	brown { | max=1.0, int=0.1 | ^Pbrown(Ndef(this), Ziva.ndef(max) ? max, int) }
 	white { | max=1.0 | ^Pwhite(Ndef(this), Ziva.ndef(max) ? max) }
