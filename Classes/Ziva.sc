@@ -120,7 +120,7 @@ Ziva {
 	*loadSounds {
 		"loading sounds".debug;
 		this.loadSynths;
-		this.loadSamples(Platform.userAppSupportDir++"/downloaded-quarks/ziva/samples");
+		this.loadSamples;
 	}
 
 	/// \brief load synthdefs

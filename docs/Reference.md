@@ -25,7 +25,6 @@ Ziva.boot;
 
 ```
 Ziva.boot;
-Ziva.loadSamples("~/loopier/samples");
 Ziva.tempo = 143;
 Ziva.scale = \bhairav;
 
