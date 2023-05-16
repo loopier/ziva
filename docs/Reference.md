@@ -54,17 +54,17 @@ Methods to setup, run the live coding enviroment and get info from its current s
 
 Method | Args <img width=175px/> | Description
 --------|------|------------
-`boot`  | `[inputChannels, outputChannels,`<br> `server, numBuffers, `<br> `memSize, maxNodes]` | Boot the server with optional parameteres.
-`synths`  |  | List available synths.
-`samples`  |  | List available synths. Outputs: `sampleName (numOfSamples)`.
-`sounds`  |  | List all available sounds (both synths and samples).
-`fx`  |  | List all available sound effects.
-`rh`  |  | List all available rhythms.
-`rhythms`  |  | List all available rhythms.
-`rhythm`  | `name` | Post the rhythm values.
-`controls`  | `synth` | List all available controls for the given `synth`.
-`loadSamples`  | `path` | Load sounds files from `path`. `path` must contain subdirectories with the actual soundfiles. The subdirectories' names will be used as `sampleName`.
-`hush`  |  | Stop all sounds.
+`Ziva.boot(inputChannels:2, outputChannels:2, server:Server.default, numBuffers:16, memSize:32, maxNodes:32)` | Boot the server. All arguments are optional.
+`Ziva.synths`  | List available synths.
+`Ziva.samples`  | List available synths. Outputs: `sampleName (numOfSamples)`.
+`Ziva.sounds`  | List all available sounds (both synths and samples).
+`Ziva.fx`  | List all available sound effects.
+`Ziva.rh`  | List all available rhythms.
+`Ziva.rhythms`  | List all available rhythms.
+`Ziva.rhythm(\rhythm)` Post the values for `ryhthm`.
+`Ziva.controls(\synth)` List all available controls for the given `synth`. Alternatively, use `\synth.controls`
+`Ziva.loadSamples(path:s)` Load sounds files from `path`. `path` must contain subdirectories with the actual soundfiles. The subdirectories' names will be used as `sampleName`.
+`Ziva.hush`  | Stop all sounds.
 
 # Playing sounds
 
@@ -92,25 +92,28 @@ Symbols can be either found in `Ziva.constants` or any declared LFOs. See ###TOD
 
 Method | Args | Description
 --------|------|------------
-`rh` | `[pattern:Pattern|hex:Symbol]` | Play either a `pattern` or a rhythm written as `hex` values: `[1,r,r,r,1,r,1,r].pseq` is the sames as `'8f'`.
-`bj` | `hits, beats [, scramble, sort, reverse]` | Euclidean rhythm generator. It plays an evenly distributed number of `hits` along a number of `beats`. Rests and hits can be shuffled if `scramble` is set to `true`. Or sorted if `sort` is set to `true` (first rests, then hits). If `reverse` is set to `true`, the pattern will be played backwards.
+`rh: \rhythm_name` | Play a `rhythm`.
+`rh: Pattern` | Play a `pattern`. Accepts both regular SClang syntax for patterns and Živa syntax.
+`rh: Hex` | Play a rhythm written as `hex` values: `'8f'` is the same as `[1,r,r,r,1,r,1,r].pseq`.
+`rh: bj(hits, beats [, scramble:false, sort:false, reverse:false])` | Euclidean rhythm generator. It plays an evenly distributed number of `hits` along a number of `beats`. Rests and hits can be shuffled if `scramble` is set to `true`. Or sorted if `sort` is set to `true` (first rests, then hits). If `reverse` is set to `true`, the pattern will be played backwards.
 
 ## `dur`
 
 Method | Args | Description
 --------|------|------------
-`fast` | | Play at `2x` tempo.
-`faster` | | Play at `4x` tempo.
-`fastest` | | Play at `8x` tempo.
-`ultrafast` | | Play at `16x` tempo.
-`ultrafaster` | | Play at `32x` tempo.
-`ultrafastest` | | Play at `64x` tempo.
-`slow` | | Play at `1/2` tempo.
-`slower` | | Play at `1/4` tempo.
-`slowest` | | Play at `1/8` tempo.
-`ultraslow` | | Play at `1/16` tempo.
-`ultraslower` | | Play at `1/32` tempo.
-`ultraslowest` | | Play at `1/64` tempo.
+`dur: time` | The `time` until next event in a sequence of events. 
+`dur: \fast` | Play at `2x` tempo.
+`dur: \faster` | Play at `4x` tempo.
+`dur: \fastest` | Play at `8x` tempo.
+`dur: \ultrafast` | Play at `16x` tempo.
+`dur: \ultrafaster` | Play at `32x` tempo.
+`dur: \ultrafastest` | Play at `64x` tempo.
+`dur: \slow` | Play at `1/2` tempo.
+`dur: \slower` | Play at `1/4` tempo.
+`dur: \slowest` | Play at `1/8` tempo.
+`dur: \ultraslow` | Play at `1/16` tempo.
+`dur: \ultraslower` | Play at `1/32` tempo.
+`dur: \ultraslowest` | Play at `1/64` tempo.
 
 ## amp
 
