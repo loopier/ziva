@@ -293,6 +293,22 @@ Method |  Description
 
 # FX - Effects
 
+Effects can be added per track or globally. They share syntax.
+
+To add effects to a track:
+```
+\trackName fx: [ ... effects ... ];
+```
+
+For global effects:
+```
+\all fx: [ ... effects ... ];
+```
+
+To remove effects, just leave the `fx` array empty: `fx: []`.
+
+To change the effects mix with the original signal see [FX mix (dry - wet)](#fx-mix-dry---wet).
+
 Three types of effects can be added: 
 - presets
 - customizable
