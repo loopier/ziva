@@ -90,7 +90,7 @@ Ziva {
 
 	*hush {
 		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
-			if( not( k.asString.beginsWith(\fx_.asString)) && k != \all ) {
+			if( not( k.asString.beginsWith(\fx_.asString)) && (k != \all) ) {
 				k.stop;
 			}
 		}
