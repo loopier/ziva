@@ -8,7 +8,26 @@
 		};
 	}
 
-	<> { | pbind | ^Pchain(this.prSynthOrSample, pbind) }
+	// Interop with Bacalao pattern parsing (https://github.com/totalgee/bacalao/)
+	<> { arg pattern, adverb;
+		var validateMethod = { arg receiver, method;
+			if (receiver.respondsTo(method).not) {
+				Error("Bacalao needs to be installed to use '<>' with a %.% -- use Quarks.install(\"https://github.com/totalgee/bacalao/\")".format(receiver.class, method)).throw;
+			}
+		};
+		pattern = case
+		{ pattern.isKindOf(String) } {
+			validateMethod.(pattern, 'bparse');
+			pattern.bparse(adverb ? \degree, inf);
+		}
+		{ pattern.isKindOf(Symbol) } {
+			pattern = pattern.asString;
+			validateMethod.(pattern, 'cparse');
+			pattern.cparse(adverb ? \degree, inf);
+		}
+		{ pattern };
+		^Pchain(this.prSynthOrSample, pattern);
+	}
 
 	controls { Ziva.controls(this) }
 
