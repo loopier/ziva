@@ -8,7 +8,7 @@
 		};
 	}
 
-	<> { | pbind | ^Pchain(Pbind(), pbind) }
+	<> { | pbind | ^Pchain(this.prSynthOrSample, pbind) }
 
 	controls { Ziva.controls(this) }
 
