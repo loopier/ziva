@@ -10,19 +10,19 @@
 
 	// Interop with Bacalao pattern parsing (https://github.com/totalgee/bacalao/)
 	<> { arg pattern, adverb;
-		var validateMethod = { arg receiver, method;
+		var validateMethod = { arg receiver, method, typeMsg;
 			if (receiver.respondsTo(method).not) {
-				Error("Bacalao needs to be installed to use '<>' with a %.% -- use Quarks.install(\"https://github.com/totalgee/bacalao/\")".format(receiver.class, method)).throw;
+				Error("Bacalao needs to be installed to use '<>' with % patterns\n  Use Quarks.install(\"https://github.com/totalgee/bacalao/\")".format(typeMsg)).throw;
 			}
 		};
 		pattern = case
 		{ pattern.isKindOf(String) } {
-			validateMethod.(pattern, 'bparse');
+			validateMethod.(pattern, 'bparse', "string");
 			pattern.bparse(adverb ? \degree, inf);
 		}
 		{ pattern.isKindOf(Symbol) } {
 			pattern = pattern.asString;
-			validateMethod.(pattern, 'cparse');
+			validateMethod.(pattern, 'cparse', "character");
 			pattern.cparse(adverb ? \degree, inf);
 		}
 		{ pattern };
