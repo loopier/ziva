@@ -143,6 +143,8 @@ Method |  Description
 Method |  Description
 --------|------------
 `dur: time:if` | The `time` until next event in a sequence of events.
+`dur: times:P` | Pattern of `times` until next event in a sequence of events. Example: `dur: (1..4).prand`.
+`dur: divisors:H` | Set a sequenced list of `divisors` described as hex values. Every value in the list is converted to `1/value` (`0` is converted to `1/0.5`). Example: `dur: '024'` is the same as `dur: [2, 0.5, 0.25].pseq`.
 `dur: \fast` | Play at `2x` tempo.
 `dur: \faster` | Play at `4x` tempo.
 `dur: \fastest` | Play at `8x` tempo.

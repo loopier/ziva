@@ -95,14 +95,6 @@
 	// 	), this);
 	// }
 
-	once { |times = 1| ^Pchain(Pbind(\r, Pseq([1, \r], times)), this) }
-
-	dur { | args |
-		var durs = Ziva.constants[args] ? args;
-		// ^Pchain(Pbind(\dur, durs), this);
-		^Pset(\dur, durs, this);
-	}
-
 	amp { | val |
 		var amp = Ziva.ndef(val) ? Ziva.constants[val] ? val;
 		^Pchain(Pbind(\amp, amp), this);
@@ -143,18 +135,30 @@
 	}
 
 	upbeat { ^Pchain(Pbind(\r, Pseq([\r,1], inf)), this) }
+	once { |times = 1| ^Pchain(Pbind(\r, Pseq([1, \r], times)), this) }
 
 	r { | args | ^this.rh(args) }
 	rh { | args |
-		if( args.isSymbol ) {
-			args = Ziva.rhythmsDict[args] ? args.asString;
-			// if( args.isArray) { args.debug("rhythm").pseq };
-		};
-
+		if( args.isSymbol ) { args = Ziva.rhythmsDict[args] ? args.asString };
 		if( args.isString ) { args = args.asBinaryDigits.flat };
-		if( args.isArray ) { args = Pseq(args.flat.replace(0,\r).debug("rhythm"), inf) };
+		if( args.isArray ) 	{ args = Pseq(args.flat.replace(0,\r).debug("rhythm"), inf) };
 
 		^Pchain( Pbind(\r, args), this );
+	}
+
+	dur { | args |
+		if( args.isSymbol ) { args = Ziva.constants[args] ? args.asString };
+		if( args.isString ) {
+			args = Array.fill(args.size, {|i|
+				var val;
+				if( args[i].asString.asHexIfPossible == 0 ) { val = 2 } { val = 1 / args[i].asString.asHexIfPossible };
+				val.debug("val %".format(args[i]));
+			});
+			args.debug("dur string");
+		};
+		if( args.isArray )	{ args = Pseq(args.flat, inf) };
+		args.debug("dur");
+		^Pchain(Pbind(\dur, args), this);
 	}
 
 	stopin { |beats=1| ^Pchain(Pbind(\r, Pseq((1!beats),1)), this) }
