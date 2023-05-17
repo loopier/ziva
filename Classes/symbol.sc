@@ -82,7 +82,9 @@
 
 	fx { | effects |
 		var fxNdef = Ndef(('fx_'++this).asSymbol);
-		if(fxNdef.source.isNil) {
+		if( this == \all ) { fxNdef = Ndef(this) };
+
+		if( fxNdef.source.isNil && this != \all ) {
 			// var bus = fxNdef.bus ? Bus.audio(Ziva.server, 2);
 			fxNdef.source = {|in| Ndef(this).ar * \amp.kr(1) };
 			fxNdef.quant = 1;

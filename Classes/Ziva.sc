@@ -60,6 +60,7 @@ Ziva {
 		ServerTree.add({this.makeTracks(4)});
 
 		this.server.waitForBoot{
+
 			ZivaEventTypes.new;
 			this.makeConstants;
 			this.makeOscillators;
@@ -67,6 +68,17 @@ Ziva {
 			this.makeFxDict;
 			this.makeDrumDict;
 			this.scale_(\major);
+
+			// global fx -- last node in the chain
+			// code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
+			// Create a Group for our NodeProxy after the Server's default
+			// initialize at audio rate
+			Ndef(\all).ar(2);
+			// replace proxy's private bus with hardware bus
+			Ndef(\all).bus = Bus(\audio, 0, 2, server);
+			Ndef(\all).parentGroup = Group.after(server.defaultGroup).register;
+			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
+
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
