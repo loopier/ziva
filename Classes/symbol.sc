@@ -10,7 +10,7 @@
 
 	prGetFxNdef {
 		^if( this == \all ) {
-			fxNdef = Ndef(this)
+			Ndef(this)
 		} {
 			Ndef(('fx_'++this).asSymbol)
 		}
