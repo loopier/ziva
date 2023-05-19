@@ -8,8 +8,8 @@
 	noise2	{ | ... args | ^this.asFloat.noise2(*args)}
 
 	delay	{ | ... args | ^this.asFloat.delay(*args) }
-	lpf		{ | ... args | ^this.asFloat.lpf(*args.debug("lfp")) }
-	hpf		{ | ... args | ^this.asFloat.hpf(*args.debug("hfp")) }
+	lpf		{ | ... args | ^this.asFloat.lpf(*args.debug("lpf")) }
+	hpf		{ | ... args | ^this.asFloat.hpf(*args.debug("hpf")) }
 	moogvcf	{ | ... args | ^this.asFloat.moogvcf(*args) }
 	brown	{ | ... args | ^this.asFloat.brown(*args) }
 	white	{ | ... args | ^this.asFloat.white(*args) }
