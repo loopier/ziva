@@ -8,6 +8,14 @@
 		};
 	}
 
+	prGetFxNdef {
+		^if( this == \all ) {
+			fxNdef = Ndef(this)
+		} {
+			Ndef(('fx_'++this).asSymbol)
+		}
+	}
+
 	// Interop with Bacalao pattern parsing (https://github.com/totalgee/bacalao/)
 	<> { arg pattern, adverb;
 		var validateMethod = { arg receiver, method, typeMsg;
@@ -102,9 +110,7 @@
 	fadeTime { | seconds | Ndef(this).fadeTime = seconds }
 
 	fx { | effects |
-		var fxNdef = Ndef(('fx_'++this).asSymbol);
-		if( this == \all ) { fxNdef = Ndef(this) };
-
+		var fxNdef = this.prGetFxNdef;
 		if( fxNdef.source.isNil && this != \all ) {
 			// var bus = fxNdef.bus ? Bus.audio(Ziva.server, 2);
 			fxNdef.source = {|in| Ndef(this).ar * \amp.kr(1) };
@@ -134,9 +140,14 @@
 	}
 
 	wet { | amt = 0.5 |
-		// use Ndefs volume ??
-		Ndef(this).vol = 1 - amt;
-		Ndef(('fx_'++this).asSymbol).vol = amt;
+		var fxNdef = this.prGetFxNdef;
+		amt = amt.clip(0,1);
+		fxNdef.objects.indices.do{ arg index;
+			if (index > 0) {
+				var wetKey = ("wet" ++ index).asSymbol;
+				fxNdef.set(wetKey, amt);
+			}
+		}
 	}
 
 	scramble { ^this.asString.scramble.asSymbol }
