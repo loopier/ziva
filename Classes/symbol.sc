@@ -66,7 +66,9 @@
 
 	play { | args |
 		if(Ndef(this).isPlaying.not) {
-			Ndef(this).quant = 1;
+			if (Ndef(this).quant.isNil) {
+				Ndef(this).quant = 1;
+			};
 			Ndef(this).fadeTime = 0.5;
 			Ndef(this).clock = Ziva.clock;
 			Ndef(this).play;
