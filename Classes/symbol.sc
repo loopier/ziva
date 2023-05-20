@@ -173,4 +173,6 @@
 	white { | max=1.0 | ^Pwhite(Ndef(this), Ziva.ndef(max) ? max) }
 	ar{ | dec | ^[Ndef(this), Ziva.ndef(dec) ? dec] }
 	perc{ | rel | ^[Ndef(this)] }
+
+	fold { | max | ^{arg sig; if( max.isNil ) {sig.fold(Ndef(this) * (-1), Ndef(this))} {sig.fold(Ndef(\this) * (-1), max)} } }
 }

@@ -18,4 +18,5 @@
 	adsr	{ | dec, sus, rel | ^[this, dec, sus, rel] }
 	ar		{ | dec 	| ^[this, Ziva.ndef(dec) ? dec] }
 	perc	{ | rel 	| ^[this] }
+	fold	{ | max 	| ^{arg sig; if(max.isNil) {sig.fold(this.neg, this)} {sig.fold(this,max)} } }
 }
