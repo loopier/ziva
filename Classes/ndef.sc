@@ -1,31 +1,60 @@
 + Ndef{
-	prGetPbind {
-		^this.source.list[0];
-	}
+	// prGetPbind { | index = 0 |
+	// 	if( this.source.class == Pbind ) { ^this.source };
 
-	prSetPbindPair { | key, value |
-		"%: %.% - %".format(this.key, key, value, this.prGetPbind)
-		^Ndef(this.key, Pset(key, value, this.prGetPbind))
-	}
+	// 	^this.source.list[index];
+	// }
 
-	rh { | args |
-		if( args.isSymbol ) {
-			args = Ziva.rhythmsDict[args] ? args.asString;
-		};
+	// prGetPairs { | index = 0 |
+	// 	if( this.source.class == Pbind ) { ^this.source.patternpairs };
 
-		if( args.isString ) { args = args.asBinaryDigits.flat.replace(0,\r) };
+	// 	if( this.source.class == Ppar ) {
+	// 		^this.source.patterns.list[index].pratternpairs;
+	// 	}
+	// }
 
-		args = Pseq(args.debug("rhythm"), inf);
-		^this.prSetPbindPair(\r, args);
-	}
+	// prSetPbindPair { | key, value |
+	// 	var pairs = this.source.list[0].patternpairs ++ [key.asSymbol, value];
+	// 	^Ndef(this.key, Ppar([Pbind(*pairs)]));
+	// }
 
-	deg { | args |
-		^this.prSetPbindPair(\degree, args);
+	prChain { | ... args |
+		^Ndef(this.key, Pchain(Pbind(*args), this.source));
 	}
 
 	dur { | args |
-		var durs = Ziva.constants[args] ? args;
-		^this.prSetPbindPair(\dur, durs);
+		if( args.isSymbol ) { args = Ziva.constants[args] ? args.asDurs.pseq };
+		^this.prChain(\dur, args);
+	}
+
+	leg { | args |
+		if( args.isSymbol ) { args = Ziva.ndef(args) ? Ziva.constants[args] ? args.asDurs };
+		^this.prChain(\legato,  args);
+	}
+
+	// env { | args |
+	// 	var bla = args.debug;
+	// 	var env = switch( args.size,
+	// 		1, { ^this.perc(args) },
+	// 		2, { ^this.ar(args) },
+	// 		4, { ^this.adsr(args) }
+	// 	);
+	// }
+	// perc { | rel=1 | ^this.prChain(\atk, 0.01, \rel, Ziva.ndef(rel) ? rel, \legato, 0.01) }
+	// ar 	 { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, 1, \rel, env[1]) }
+	// adsr { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, env[2], \rel, env[3]) }
+
+	amp { | args | ^this.prChain(\amp, Ziva.ndef(args) ? Ziva.constants[args] ? args) }
+
+	rh { | args |
+		args = Pseq(args.asRhythm.debug("% rhythm".format(this.key)), inf);
+		^this.prSetPbindPair(\r, args);
+	}
+
+	oct { | args | ^this.prChain(\octave, args) }
+	deg { | args |
+		if( args.isSymbol ) { args = args.asDegrees };
+		^this.prChain(\degree, args);
 	}
 
 	fx { | args |

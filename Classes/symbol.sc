@@ -16,6 +16,24 @@
 		}
 	}
 
+	asRhythm { ^this.asString.asBinaryDigits.flat.replace(0,\r) }
+
+	asDegrees { ^this.asScaleDegrees }
+	asScaleDegrees {
+		var value = this.asString;
+		^Array.fill(value.size, {|i| value[i].asString.asHexIfPossible});
+	}
+
+	// return list of durations where each hex value is 1/hex (expcept 0 = 2)
+	asDurs {
+		var args = this.asString;
+		args = Array.fill(args.size, {|i|
+			var val;
+			if( args[i].asString.asHexIfPossible == 0 ) { val = 2 } { val = 1 / args[i].asString.asHexIfPossible };
+		});
+		^args;
+	}
+
 	// Interop with Bacalao pattern parsing (https://github.com/totalgee/bacalao/)
 	<> { arg pattern, adverb;
 		var validateMethod = { arg receiver, method, typeMsg;
@@ -52,19 +70,24 @@
 	// lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
 
 	synth { | ... args |
-		^this.play([Psynth(*args)]);
+		// ^this.play([Psynth(*args)]);
+		this.play;
+		^Ndef(this, Psynth(*args));
 	}
 
 	sample { | ... args |
-		^this.play([Psample(*args)]);
+		// ^this.play([Psample(*args)]);
+		this.play;
+		^Ndef(this, Psample(*args));
 	}
 
 	midi { | ... args |
-		^this.play([Pmidi(*args)]);
+		// ^this.play([Pmidi(*args)]);
+		^Ndef(this, Pmidi(*args));
 	}
 
 
-	play { | args |
+	play { | ... args |
 		if(Ndef(this).isPlaying.not) {
 			if (Ndef(this).quant.isNil) {
 				Ndef(this).quant = 1;
@@ -76,7 +99,7 @@
 			Ndef(this).resume
 		};
 
-		if(args.size > 0) {Ndef(this, Ppar(args))};
+		// if(args.size > 0) {Ndef(this, Ppar(args))};
 
 		^Ndef(this);
 	}

@@ -82,6 +82,7 @@ Ziva {
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
+			server.sync;
 			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 		};
