@@ -110,6 +110,8 @@
 	mute	{ ^Ndef(this).pause }
 	unmute	{ ^Ndef(this).resume }
 
+	quant   { | q | Ndef(this).quant = q }
+
 	solo	{
 		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
 			if( not( k.asString.beginsWith(\fx_.asString)) ) {
