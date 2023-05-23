@@ -32,17 +32,17 @@
 		^this.prChain(\legato,  args);
 	}
 
-	// env { | args |
-	// 	var bla = args.debug;
-	// 	var env = switch( args.size,
-	// 		1, { ^this.perc(args) },
-	// 		2, { ^this.ar(args) },
-	// 		4, { ^this.adsr(args) }
-	// 	);
-	// }
-	// perc { | rel=1 | ^this.prChain(\atk, 0.01, \rel, Ziva.ndef(rel) ? rel, \legato, 0.01) }
-	// ar 	 { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, 1, \rel, env[1]) }
-	// adsr { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, env[2], \rel, env[3]) }
+	env { | args |
+		var bla = args.debug("env %".format(args.class));
+		var env = switch( args.size,
+			1, { ^this.perc(args) },
+			2, { ^this.ar(args) },
+			4, { ^this.adsr(args) }
+		);
+	}
+	perc { | rel=1 | ^this.prChain(\atk, 0.01, \rel, Ziva.ndef(rel) ? rel, \legato, 0.01) }
+	ar 	 { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, 1, \rel, env[1]) }
+	adsr { | env | ^this.prChain(\atk, env[0], \dec, env[1], \sus, env[2], \rel, env[3]) }
 
 	amp { | args | ^this.prChain(\amp, Ziva.ndef(args) ? Ziva.constants[args] ? args) }
 

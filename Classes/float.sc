@@ -15,7 +15,7 @@
 	moogvcf { | res=0.7 |  ^{arg sig; MoogVCF.ar(sig, this, Ziva.ndef(res) ? res, mul: 2)} }
 	brown	{ | max=1.0, int=0.1 | ^Pbrown(this, Ziva.ndef(max) ? max, int) }
 	white	{ | max=1.0 | ^Pwhite(this, Ziva.ndef(max) ? max) }
-	adsr	{ | dec, sus, rel | ^[this, dec, sus, rel] }
+	adsr	{ | dec = 0.3, sus = 0.5, rel = 1 | ^[this, dec, sus, rel] }
 	ar		{ | dec 	| ^[this, Ziva.ndef(dec) ? dec] }
 	perc	{ | rel 	| ^[this] }
 	fold	{ | max 	| ^{arg sig; if(max.isNil) {sig.fold(this.neg, this)} {sig.fold(this,max)} } }
