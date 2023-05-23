@@ -72,18 +72,11 @@ Ziva {
 			// global fx -- last node in the chain
 			// code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
 			// Create a Group for our NodeProxy after the Server's default
-			// initialize at audio rate
-			Ndef(\all).ar(2);
-			// replace proxy's private bus with hardware bus
-			Ndef(\all).bus = Bus(\audio, 0, 2, server);
-			Ndef(\all).parentGroup = Group.after(server.defaultGroup).register;
-			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
 
 			// this.makeRhythmsDict;
 			// this.makeTracks(4);
 			"r = \\r".interpret;
-			server.sync;
-			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
+			// this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 		};
 		^this.server;

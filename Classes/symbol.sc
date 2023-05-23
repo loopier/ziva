@@ -12,7 +12,7 @@
 		^if( this == \all ) {
 			Ndef(this)
 		} {
-			Ndef(('fx_'++this).asSymbol)
+			Ndef(('fx_'++this).asSymbol, { Ndef(this).ar * \amp.kr })
 		}
 	}
 
@@ -139,6 +139,15 @@
 
 	fx { | effects |
 		var fxNdef = this.prGetFxNdef;
+		if( not(Ndef.all[Ziva.server.name].keys.includes(\all))) {
+			// initialize at audio rate
+			Ndef(\all).ar(2);
+			// replace proxy's private bus with hardware bus
+			Ndef(\all).bus = Bus(\audio, 0, 2, Ziva.server);
+			Ndef(\all).parentGroup = Group.after(Ziva.server.defaultGroup).register;
+			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
+		};
+
 		if( fxNdef.source.isNil && this != \all ) {
 			// var bus = fxNdef.bus ? Bus.audio(Ziva.server, 2);
 			fxNdef.source = {|in| Ndef(this).ar * \amp.kr(1) };
