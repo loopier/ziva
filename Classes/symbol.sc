@@ -27,6 +27,7 @@
 	// return list of durations where each hex value is 1/hex (expcept 0 = 2)
 	asDurs {
 		var args = this.asString;
+		if( args.asHexIfPossible.class != Integer ) {^args};
 		args = Array.fill(args.size, {|i|
 			var val;
 			if( args[i].asString.asHexIfPossible == 0 ) { val = 2 } { val = 1 / args[i].asString.asHexIfPossible };

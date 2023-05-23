@@ -76,15 +76,14 @@
 
 	scale { |name| ^Pchain(Pbind(\scale, Scale.at(name)), this) }
 	deg { |value|
-		if( value.isSymbol ) { value = value.debug("deg Value").asString.debug("deg String") };
+		if( value.isSymbol ) { value = value.asString };
 		if( value.isString ) {
 			value = Pseq(
-				Array.fill(value.size, {|i| value[i].asString.asHexIfPossible}).debug("deg Array"),
+				Array.fill(value.size, {|i| value[i].asString.asHexIfPossible.debug("deg hex")}),
 				inf)
 		};
 
-		// ^Pchain(Pbind(\degree, value.debug("deg")), this);
-		^Pset(\degree, value.debug("deg"), this);
+		^Pchain(Pbind(\degree, value), this);
 	}
 	oct { |value| ^Pchain(Pbind(\octave, value), this) }
 	// pixi { |msg, durmul=1, oct=1|

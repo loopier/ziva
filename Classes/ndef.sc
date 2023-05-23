@@ -23,7 +23,7 @@
 	}
 
 	dur { | args |
-		if( args.isSymbol ) { args = Ziva.constants[args] ? args.asDurs.pseq };
+		if( args.isSymbol ) { args = Ziva.constants[args] ? args.asDurs.debug("dur").pseq };
 		^this.prChain(\dur, args);
 	}
 
@@ -33,7 +33,7 @@
 	}
 
 	env { | args |
-		var bla = args.debug("env %".format(args.class));
+		var bla = args;
 		var env = switch( args.size,
 			1, { ^this.perc(args) },
 			2, { ^this.ar(args) },
@@ -48,12 +48,12 @@
 
 	rh { | args |
 		args = Pseq(args.asRhythm.debug("% rhythm".format(this.key)), inf);
-		^this.prSetPbindPair(\r, args);
+		^this.prChain(\r, args);
 	}
 
 	oct { | args | ^this.prChain(\octave, args) }
 	deg { | args |
-		if( args.isSymbol ) { args = args.asDegrees };
+		if( args.isSymbol ) { args = Pseq(args.asDegrees,inf) };
 		^this.prChain(\degree, args);
 	}
 
