@@ -157,11 +157,16 @@
 		// clear unused fx
 		(fxNdef.sources.size - effects.size).do{|i| fxNdef[i + effects.size + 1] = nil};
 
+		// Now that we have an FX Ndef playing,
+		// we don't want to play (monitor) the original any more
+		Ndef(this).stop(fxNdef.fadeTime);
+
 		^fxNdef;
 	}
 
 	set { | ... pairs |
-		Ndef(('\fx_'++this).asSymbol).set(*pairs);
+		var fxNdef = this.prGetFxNdef;
+		fxNdef.set(*pairs);
 	}
 
 	wet { | amt = 0.5 |
