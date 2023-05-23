@@ -57,6 +57,8 @@
 		^this.prChain(\degree, args);
 	}
 
+	n { | args | ^this.prChain(\n, args) }
+
 	fx { | args |
 		// add to Ndef(thi.key)[...]
 	}
