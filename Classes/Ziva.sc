@@ -60,6 +60,7 @@ Ziva {
 		ServerTree.add({this.makeTracks(4)});
 
 		this.server.waitForBoot{
+			var allFxGroup;
 
 			ZivaEventTypes.new;
 			this.makeConstants;
@@ -76,7 +77,9 @@ Ziva {
 			Ndef(\all).ar(2);
 			// replace proxy's private bus with hardware bus
 			Ndef(\all).bus = Bus(\audio, 0, 2, server);
-			Ndef(\all).parentGroup = Group.after(server.defaultGroup).register;
+			allFxGroup = Group.after(server.defaultGroup).register;
+			server.sync;
+			Ndef(\all).parentGroup = allFxGroup;
 			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
 
 			// this.makeRhythmsDict;
