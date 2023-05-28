@@ -19,6 +19,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + Pattern {
+	<>> { | name| this.to(name) }
     to { | name |
         name = name.asSymbol;
 		name.debug("creating ndef");
@@ -38,6 +39,7 @@
 
         ^Ndef(name);
     }
+
 
     // stop    { | name | ^Ndef(name.asSymbol).pause }
     // pause    { | name | ^Ndef(name.asSymbol).pause }

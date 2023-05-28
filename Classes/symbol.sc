@@ -4,6 +4,7 @@
 		^ this.prSynthOrSample(selector.asSymbol, *args);
 	}
 
+	<>> { | name | ^this.to(name) }
 	to { | name | ^this.prSynhtOrSample.to(name) }
 
 	prSynthOrSample { | ... pairs |
