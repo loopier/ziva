@@ -19,4 +19,6 @@
 	ar		{ | dec 	| ^[this, Ziva.ndef(dec) ? dec] }
 	perc	{ | rel 	| ^[this] }
 	fold	{ | max 	| ^{arg sig; if(max.isNil) {sig.fold(this.neg, this)} {sig.fold(this,max)} } }
+	// compress{ | amt=1	| ^{arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:amt)} }
+	compress{ | threshold=0.4, below=1, above=0.5 | ^{arg sig; Compander.ar(sig, sig, threshold, below, above, 0.01, 0.01) }}
 }
