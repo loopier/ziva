@@ -418,6 +418,7 @@ Ziva {
 		this.rhythmsDict.put(\tumbau,	 	[[r,r, r,1, r,r, 1,r], [r,r, r,1, r,r, 1,r]]);
 		this.rhythmsDict.put(\horace,	 	[[1,r, r,1, 1,r, r,1], [1,r, r,1, 1,r, r,1]]);
 		this.rhythmsDict.put(\buleria,	 	[r,1,r,r,1,r,r,1,r,1,r,1]);
+		this.rhythmsDict.put(\claphands,	[1,1,1,r,1,1,r,1,r,1,1,r]);
 		this.rhythmsDict.put(\nine,	 		[1,r,r,1,r,1,1,r]);
 		this.rhythmsDict.put(\eleven,	 	[1,r,1,r,1,r,1,r,1,r,1]);
 		this.rhythmsDict.put(\tonebank,	 	[1,1,1,1, r,1,r,1, 1,1,1,r, 1,r,1,r, 1,1,1,1, r,1,r,1]);

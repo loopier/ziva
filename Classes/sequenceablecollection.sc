@@ -80,6 +80,7 @@
     // buleria { ^[\r,\r,1,\r,\r,1,\r,1,\r,1,\r,1] }
 
 
+    rh { | rh, reverse=0 | ^this.rhythm(rh, reverse) }
     rhythm { |rh, reverse=0|
         var pseq = Pseq(this,inf).asStream;
         rh = if(rh.isSymbol && Ziva.rhythmsDict.includesKey(rh)) {
@@ -114,6 +115,7 @@
     tumbau { |reverse=0| ^this.rhythm(\tumbao, reverse) }
     horace { |reverse=0| ^this.rhythm(\horace, reverse) }
     buleria { |reverse=0| ^this.rhythm(\buleria, reverse) }
+    claphands { |reverse=0| ^this.rhythm(\claphands, reverse) }
     nine { |reverse=0| ^this.rhythm(\nine, reverse) }
     eleven { |reverse=0| ^this.rhythm(\eleven, reverse) }
     tonebank { |reverse=0| ^this.rhythm(\tonebank, reverse) }
