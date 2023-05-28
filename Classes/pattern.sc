@@ -19,6 +19,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + Pattern {
+	>> { | name| this.to(name) }
 	<>> { | name| this.to(name) }
     to { | name |
         name = name.asSymbol;
@@ -102,9 +103,9 @@
 		^Pchain(Pbind(selector, value), this);
 	}
 
-	>> { |track|
-		^this.fx(track);
-	}
+	// >> { |track|
+	// 	^this.fx(track);
+	// }
 
 	fx { |track|
 		var sym = (\t++track).asSymbol;
