@@ -19,6 +19,54 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + SequenceableCollection {
+    to { | name |
+        name = name.asSymbol;
+
+        if(Ndef(name).isPlaying.not) {
+            if (Ndef(name).quant.isNil) {
+                Ndef(name).quant = 1;
+            };
+            Ndef(name).fadeTime = 0.5;
+            Ndef(name).clock = Ziva.clock;
+            Ndef(name).play;
+        } {
+            Ndef(name).resume
+        };
+
+        if(this.size > 0) {Ndef(name, Ppar(this))};
+
+        ^Ndef(name);
+    }
+
+    stop    { | name | ^Ndef(name.asSymbol).pause }
+    pause    { | name | ^Ndef(name.asSymbol).pause }
+    resume    { | name | ^Ndef(name.asSymbol).resume }
+    mute    { | name | ^Ndef(name.asSymbol).pause }
+    unmute    { | name | ^Ndef(name.asSymbol).resume }
+    solo    { | name |
+        name = name.asSymbol;
+        Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+            if( not( k.asString.beginsWith(\fx_.asString)) ) {
+                if(k != name) {
+                    k.debug("mute").mute
+                } {
+                    k.debug("unmute").unmute
+                }
+            }
+        }
+        ^Ndef(name);
+    }
+
+    unsolo { | name |
+        name = name.asSymbol;
+        Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+            if( not( k.asString.beginsWith(\fx_.asString)) ) {
+                k.unmute;
+            }
+        }
+        ^Ndef(name);
+    }
+
     !! { | repeats |
         if (repeats <= 0) { repeats = inf };
         ^Pseq(this, repeats);

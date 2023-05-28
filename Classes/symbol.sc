@@ -1,10 +1,20 @@
 + Symbol {
+	doesNotUnderstand { | selector ... args |
+		// "%: %".format(selector, args).debug("Symbol doesNotUnderstand");
+		^ this.prSynthOrSample(selector.asSymbol, *args);
+	}
+
+	to { | name | ^this.prSynhtOrSample.to(name) }
+
 	prSynthOrSample { | ... pairs |
-		^if (SynthDescLib.global.synthDescs.keys.includes(this)) {
+		"%s - pairs: %".format(this, *pairs).debug("synht or sample");
+		SynthDescLib.global.synthDescs.keys.includes(this).debug(this);
+		if (SynthDescLib.global.synthDescs.keys.includes(this)) {
 			// Pdefn(\scale) is defined in Ziva.sc
-			Psynth(this, \scale, Pdefn(\scale), *pairs);
+			this.debug("synth");
+			^Psynth(this, \scale, Pdefn(\scale), *pairs);
 		} {
-			Psample(this, *pairs);
+			^Psample(this, *pairs);
 		};
 	}
 
@@ -52,17 +62,16 @@
 	// lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
 
 	synth { | ... args |
-		^this.play([Psynth(*args)]);
+		^Psynth(this, *args);
 	}
 
 	sample { | ... args |
-		^this.play([Psample(*args)]);
+		^Psample(this, *args);
 	}
 
 	midi { | ... args |
-		^this.play([Pmidi(*args)]);
+		^Pmidi(*args);
 	}
-
 
 	play { | args |
 		if(Ndef(this).isPlaying.not) {
