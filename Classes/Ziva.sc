@@ -69,6 +69,7 @@ Ziva {
 			this.makeFxDict;
 			this.makeDrumDict;
 			this.scale_(\major);
+			this.root_(0);
 
 			// global fx -- last node in the chain
 			// code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
@@ -582,6 +583,8 @@ Ziva {
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
+	*root { ^Pdefn(\root) }
+	*root_ { | root | Pdefn(\root, root) }
 
 	// \brief 	create a '~harmony' (and '~h' shortcut) global variable to hold a
 	// 			universal harmonic sequence

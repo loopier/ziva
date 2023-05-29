@@ -123,6 +123,7 @@
 	i { |instrument| ^Pchain(Pbind(\instrument, instrument), this) }
 
 	scale { |name| ^Pchain(Pbind(\scale, Scale.at(name)), this) }
+	root { |root| ^Pchain(Pbind(\root, root), this) }
 	deg { |value|
 		if( value.isSymbol ) { value = value.debug("deg Value").asString.debug("deg String") };
 		if( value.isString ) {

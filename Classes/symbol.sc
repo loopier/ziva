@@ -13,9 +13,9 @@
 		if (SynthDescLib.global.synthDescs.keys.includes(this)) {
 			// Pdefn(\scale) is defined in Ziva.sc
 			this.debug("synth");
-			^Psynth(this, \scale, Pdefn(\scale), *pairs);
+			^Psynth(this, \scale, Pdefn(\scale), \root, Pdefn(\root), *pairs);
 		} {
-			^Psample(this, *pairs);
+			^Psample(this, \scale, Pdefn(\scale), \root, Pdefn(\root), *pairs);
 		};
 	}
 
@@ -58,6 +58,13 @@
 	noise0	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise0.ar(freq).range(min,max) * amp})}
 	noise1	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise1.ar(freq).range(min,max) * amp})}
 	noise2	{ | freq, min=(-1), max=1, amp=1, phase=0 | ^Ndef(this, {LFNoise2.ar(freq).range(min,max) * amp})}
+	cpu		{
+		switch( this,
+			\avg, { ^Pfunc{ Ziva.server.avgCPU } },
+			\peak, { ^Pfunc{ Ziva.server.peakCPU } },
+			\ugens, { ^Pfunc{ Ziva.server.numUGens } },
+		);
+	}
 
 	lfo { | args | ^Ndef(this, args) }
 	// lfo { | args | ^Ndef(this, Ziva.oscillators[args[0]]).set(*args[1..]) }
@@ -174,6 +181,7 @@
 	rh { | args | ^this.prSynthOrSample.rh(args) }
 	r { | args | ^this.rh(args) }
 	scale { | scale | ^this.prSynthOrSample.scale(scale) }
+	root { | root | ^this.prSynthOrSample.root(root) }
 	oct { | args | ^this.prSynthOrSample.oct(args) }
 	freq { | args | ^this.prSynthOrSample.freq(args) }
 	deg { | args | ^this.prSynthOrSample.deg(args) }
