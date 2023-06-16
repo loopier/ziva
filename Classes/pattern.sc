@@ -41,6 +41,9 @@
         ^Ndef(name);
     }
 
+	midi { |pmidi|
+		^Ppar([Pchain(pmidi,this), this]);
+	}
 
     // stop    { | name | ^Ndef(name.asSymbol).pause }
     // pause    { | name | ^Ndef(name.asSymbol).pause }
@@ -152,7 +155,7 @@
 	bramp { ^Pchain(Pbind(\amp, Pbrown(0.1), this))}
 	fadein { ^Pchain(Pbind(\amp, 0.3 * PLine(0, 1, 16)), this)}
 
-	leg { | val | ^Pchain(Pbind(\legato, Ziva.constants[val] ? val), this) }
+	leg { | val | ^Pchain(Pbind(\legato, Ziva.constants[val] ? Ziva.ndef(val) ? val), this) }
 
 	env { | args |
 		var env = switch( args.size,
