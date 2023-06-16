@@ -16,6 +16,11 @@
 			^Psynth(this, \scale, Pdefn(\scale), \root, Pdefn(\root), *pairs);
 		} {
 			^Psample(this, \scale, Pdefn(\scale), \root, Pdefn(\root), *pairs);
+			// if (this == \midi) {
+			// 	^Pmidi(Pdefn(\scale), \root, Pdefn(\root), *pairs);
+			// } {
+			// 	^Psample(this, \scale, Pdefn(\scale), \root, Pdefn(\root), *pairs);
+			// };
 		};
 	}
 
@@ -178,7 +183,7 @@
 
 	scramble { ^this.asString.scramble.asSymbol }
 
-	rh { | args | ^this.prSynthOrSample.rh(args) }
+	rh { | args | ^this.prSynthOrSample.rh(args).dur(1/4) }
 	r { | args | ^this.rh(args) }
 	scale { | scale | ^this.prSynthOrSample.scale(scale) }
 	root { | root | ^this.prSynthOrSample.root(root) }
@@ -202,4 +207,5 @@
 	perc{ | rel | ^[Ndef(this)] }
 
 	fold { | max | ^{arg sig; if( max.isNil ) {sig.fold(Ndef(this) * (-1), Ndef(this))} {sig.fold(Ndef(\this) * (-1), max)} } }
+	amp { ^{arg sig; Ziva.ndef(this) * sig} }
 }

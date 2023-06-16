@@ -4,7 +4,7 @@ SynthDef(\brass, {
     var pan = \pan.kr(0);
     var freq = \freq.kr(440);
 	// amp
-    var amp = \amp.kr(1);
+    var amp = \amp.kr(1) * 2;
     var atk = \atk.kr(0.05);
     var dec = \dec.kr(0.3);
     var sus = \sus.kr(0.5);
