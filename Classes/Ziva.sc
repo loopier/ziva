@@ -264,11 +264,15 @@ Ziva {
 	}
 
 	/// \brief post synths and samples
-	*samples {
+	*samples { | path |
 		// list synths
 		// list samples - name(items)
 		"samples".debug("-----");
-		this.listLoadedSamples;
+		if (path.isNil) {
+			this.listLoadedSamples;
+		} {
+			this.loadSamples(path);
+		}
 		// currentEnvironment.keys.asArray.sort.do{|key|
 		// 	currentEnvironment[key].size.debug(key);
 		// };
