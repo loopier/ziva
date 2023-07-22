@@ -24,14 +24,13 @@ SynthDef(\brass, {
     var fenv = EnvGen.ar(
         Env.adsr(fatk, fdec, fsus, frel),
         gate: gate,
-        doneAction: 2
 	);
-	var flfo = LFNoise2.kr(15).range(0.5, 1.5);
+	var flfo = LFNoise2.kr(7).range(0.6, 1.4);
     var sig;
 
     sig = Saw.ar(freq);
-	sig = LPF.ar(sig, freq * amp * 10, fenv * flfo);
-	sig = FreeVerb.ar(sig, 0.33, 0.5);
+	sig = LPF.ar(sig, freq * [1,1.005] * amp * 10, fenv * flfo);
+	// sig = FreeVerb.ar(sig, 0.33, 0.5);
 
 	// amp = amp * (-10.dbamp);
 

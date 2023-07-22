@@ -128,7 +128,8 @@ Ziva {
 	/// \brief return the Ndef(KEY) exists or NIL if it doesn't exist.
 	/// \descritpion This is used to lookup symbols in patterns
 	*ndef { | key |
-		if( Ndef.dictFor(Ziva.server).activeProxies.indexOf(key).isNil.not ) { ^Ndef(key) };
+		// if( Ndef.dictFor(Ziva.server).activeProxies.indexOf(key).isNil.not ) { ^Ndef(key) };
+		if( Ndef.dictFor(Ziva.server).keys.includes(key) ) { ^Ndef(key) };
 		^nil
 	}
 
@@ -400,6 +401,7 @@ Ziva {
 			}));
 		})};
 		fxDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
+		fxDict[\limiter]	= {arg sig; Limiter.ar(sig) * (-6.dbamp)};
 	}
 
 	/// \brief	Predefined rhythms to be used with durs
@@ -599,7 +601,7 @@ Ziva {
 		degs.debug("hamrmonic degs");
 		durs.debug("hamrmonic durs");
 		pairs.debug("hamrmonic pairs");
-		Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play;
+		Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play(clock: Ziva.clock, quant: 1);
 		^Pfunc { ~harmony[\degree] };
 	}
 }

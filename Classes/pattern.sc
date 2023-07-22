@@ -131,7 +131,7 @@
 		if( value.isSymbol ) { value = value.debug("deg Value").asString.debug("deg String") };
 		if( value.isString ) {
 			value = Pseq(
-				Array.fill(value.size, {|i| value[i].asString.asHexIfPossible}).debug("deg Array"),
+				Array.fill(value.size, {|i| value[i].asString.asHexIfPossible(\r)}).debug("deg Array"),
 				inf)
 		};
 
@@ -225,4 +225,5 @@
 		var chopped = Pseq( Array.rand(size, 0, chunks-1).debug("chop "++this.name) / chunks, inf);
 		^Pchain(Pbind(\start, chopped, \begin, chopped), this);
 	}
+
 }

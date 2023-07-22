@@ -191,7 +191,7 @@
 	freq { | args | ^this.prSynthOrSample.freq(args) }
 	deg { | args | ^this.prSynthOrSample.deg(args) }
 	dur { | args | ^this.prSynthOrSample.dur(args) }
-	amp { | args | ^this.prSynthOrSample.amp(args) }
+	amp { | args | ^this.prSynthOrSample.amp(Ziva.ndef(this) ? args) }
 	leg { | args | ^this.prSynthOrSample.leg(args) }
 	env { | args | ^this.prSynthOrSample.env(args) }
 	perc { | args | ^this.prSynthOrSample.perc(args) }
@@ -207,5 +207,6 @@
 	perc{ | rel | ^[Ndef(this)] }
 
 	fold { | max | ^{arg sig; if( max.isNil ) {sig.fold(Ndef(this) * (-1), Ndef(this))} {sig.fold(Ndef(\this) * (-1), max)} } }
-	amp { ^{arg sig; Ziva.ndef(this) * sig} }
+	am { ^{arg sig; Ziva.ndef(this) * sig} }
+	compress{ | amt=1	| ^{arg sig; Compander.ar(4*(sig),sig,Ziva.ndef(\this),1,4,mul:amt)} }
 }
