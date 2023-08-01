@@ -36,6 +36,7 @@ Ziva {
 	classvar <> isRecoring;
 	classvar <> constants; // dictionary for constant values
 	classvar <> oscillators;
+	classvar <> sources; // source functions for Ndef
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -55,6 +56,11 @@ Ziva {
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 
+		// Create a global variable at the top environment holding Ziva's ProxySpace.
+		// Using ~ziva = ProxySpace.new(...) doesn't work.
+		currentEnvironment.put(\ziva, ProxySpace.new(this.server).quant_(1));
+		~ziva.push;
+
 		// gets called when server boots
 		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
 		ServerTree.add({this.makeTracks(4)});
@@ -65,30 +71,33 @@ Ziva {
 			ZivaEventTypes.new;
 			this.makeConstants;
 			this.makeOscillators;
+			this.makeSources;
 			this.loadSounds;
 			this.makeFxDict;
 			this.makeDrumDict;
 			this.scale_(\major);
 
-			// global fx -- last node in the chain
-			// code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
-			// Create a Group for our NodeProxy after the Server's default
-			// initialize at audio rate
-			Ndef(\all).ar(2);
-			// replace proxy's private bus with hardware bus
-			Ndef(\all).bus = Bus(\audio, 0, 2, server);
-			allFxGroup = Group.after(server.defaultGroup).register;
-			server.sync;
-			Ndef(\all).parentGroup = allFxGroup;
-			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
+			// // global fx -- last node in the chain
+			// // code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
+			// // Create a Group for our NodeProxy after the Server's default
+			// // initialize at audio rate
+			// Ndef(\all).ar(2);
+			// // replace proxy's private bus with hardware bus
+			// Ndef(\all).bus = Bus(\audio, 0, 2, server);
+			// allFxGroup = Group.after(server.defaultGroup).register;
+			// server.sync;
+			// Ndef(\all).parentGroup = allFxGroup;
 
-			// this.makeRhythmsDict;
-			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 		};
 		^this.server;
+	}
+
+	// get out of Ziva ProxySpace
+	*pop {
+		topEnvironment.at(\ziva).pop;
 	}
 
 	*hush {
@@ -353,6 +362,16 @@ Ziva {
 		oscillators[\noise0] = {LFNoise0.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
 		oscillators[\noise1] = {LFNoise1.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
 		oscillators[\noise2] = {LFNoise2.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
+	}
+
+	*makeSources {
+		sources = IdentityDictionary.new;
+		sources[\sine] = { SinOsc.ar(\freq.kr(400)) };
+		sources[\saw] = { Saw.ar(\freq.kr(400)) };
+		sources[\vca] = { \in.ar * \amp.kr(1) };
+		sources[\adsr] = { \in.ar * Env.adsr(\atk.kr(0.01), \dec.kr(0.3), \sus.kr(0.5), \rel.kr(1)) };
+		sources[\vcf] = { MoogVCF.ar(\in.ar(0), \cutoff.kr(400), \res.kr(0.0)) };
+		sources[\pan] = { Pan2.ar(\in.ar, \pan.kr(0)) };
 	}
 
 	*makeFxDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
