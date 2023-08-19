@@ -1,4 +1,5 @@
 + NodeProxy {
+
 	synth { | synth |
 		if(Ndef(synth).source.isNil) {
 			synth.debug("Creating new synth");
@@ -6,9 +7,9 @@
 			this.quant = 1;
 			this.play;
 		} {
-			this.prSendParamToPbind(\instrument, \synth)
+			this.source = this.prSendParamToPbind(\instrument, \synth)
 		}
-		^this;
+		// ^this;
 	}
 
 	sample { | sample |
@@ -20,11 +21,12 @@
 
 	prSendParamToPbind { |param, value|
 		var pairs = this.source.patternpairs;
-		pairs = pairs.asDict[param] = value;
+		pairs = pairs.asDict;
+		pairs[param] = value;
 		pairs = pairs.asPairs;
 		param.debug("Sending pattern parameter");
 		pairs.debug("pairs");
-		this.source = Pbind(*pairs);
+		^Pbind(*pairs);
 	}
 
 	doesNotUnderstand { |selector ...args|
@@ -33,13 +35,14 @@
 		// FIX: call super.doesNotUnderstand
 		selector.debug("Sending to pbind");
 		this.source = this.prSendParamToPbind(selector, *args);
+		// this.set(selector, *args);
 		// ^this;
 	}
 
-	dur { | ...args |
-		this.prSendParamToPbind(\dur, *args);
-		// ^this;
-	}
+	// dur { | ...args |
+	// 	this.prSendParamToPbind(\dur, *args);
+	// 	// ^this;
+	// }
 
 	fx { | effect |
 		this.add(\filter -> Ziva.fxDict[effect.asSymbol]);
