@@ -1,33 +1,42 @@
 + NodeProxy {
 
 	synth { | synth |
-		if(Ndef(synth).source.isNil) {
-			synth.debug("Creating new synth");
-			this.source = Psynth(synth);
-			this.quant = 1;
-			this.play;
-		} {
-			this.source = this.prSendParamToPbind(\instrument, \synth)
-		}
-		// ^this;
+		this.source = Psynth(synth);
+		this.quant = 1;
+		this.play;
 	}
 
 	sample { | sample |
 		this.source = Psample(sample);
 		this.quant = 1;
 		this.play;
-		^this;
+	}
+
+	lfo { | func |
+		if( func.isSymbol ) {
+			this.source = Ziva.oscillators[func];
+		}{
+			this.source = func;
+		}
 	}
 
 	prSendParamToPbind { |param, value|
 		var pairs = this.source.patternpairs;
+		value.debug("values");
 		pairs = pairs.asDict;
 		pairs[param] = value;
 		pairs = pairs.asPairs;
-		param.debug("Sending pattern parameter");
 		pairs.debug("pairs");
 		^Pbind(*pairs);
 	}
+
+	oct { |value| this.source = this.prSendParamToPbind(\octave, value) }
+	deg { |value| this.source = this.prSendParamToPbind(\degree, value) }
+	leg { |value| this.source = this.prSendParamToPbind(\legato, value) }
+	// atk { |value| this.source = this.prSendParamToPbind(\attack, value) }
+	// dec { |value| this.source = this.prSendParamToPbind(\decay, value) }
+	// sus { |value| this.source = this.prSendParamToPbind(\sustain, value) }
+	// rel { |value| this.source = this.prSendParamToPbind(\release, value) }
 
 	doesNotUnderstand { |selector ...args|
 		// selector.debug((this.class ++ " does not understand method").asString);
@@ -39,12 +48,11 @@
 		// ^this;
 	}
 
-	// dur { | ...args |
-	// 	this.prSendParamToPbind(\dur, *args);
-	// 	// ^this;
-	// }
-
 	fx { | effect |
-		this.add(\filter -> Ziva.fxDict[effect.asSymbol]);
+		if( effect.isSymbol ) {
+			this.add(\filter -> Ziva.fxDict[effect.asSymbol]);
+		} {
+			this.add(\filter -> effect);
+		}
 	}
 }
