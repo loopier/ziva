@@ -414,6 +414,7 @@ Ziva {
 			}));
 		})};
 		fxDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
+		fxDict[\fold] 		= {arg sig; sig.fold(\foldmin.kr(0.01), \foldmax.kr(1))} };
 	}
 
 	/// \brief	Predefined rhythms to be used with durs
