@@ -27,7 +27,9 @@
 	}
 
 	prSendParamToPbind { |param, value|
-		var pairs = this.source.patternpairs;
+		var pairs;
+		if(this.source.isNil) {^nil};
+		pairs = this.source.patternpairs;
 		value.debug("values");
 		pairs = pairs.asDict;
 		pairs[param] = value;
@@ -60,5 +62,9 @@
 		} {
 			this.add(\filter -> effect);
 		}
+	}
+
+	fold {
+		^{|in| Fold.ar(in, this, this.neg) }
 	}
 }
