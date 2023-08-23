@@ -1,15 +1,21 @@
 + NodeProxy {
 
 	synth { | synth |
-		this.source = Psynth(synth);
-		this.quant = 1;
 		this.play;
+		this.quant = 1;
+		this.source = Psynth(synth);
 	}
 
 	sample { | sample |
-		this.source = Psample(sample);
-		this.quant = 1;
 		this.play;
+		this.quant = 1;
+		this.source = Psample(sample);
+	}
+
+	midi { | channel |
+		this.play;
+		this.quant = 1;
+		this.source = Pmidi(MIDIOut(0), \chan, channel);
 	}
 
 	lfo { | func |
