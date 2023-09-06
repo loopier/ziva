@@ -64,7 +64,7 @@
 		}
 	}
 
-	fold {
-		^{|in| Fold.ar(in, this, this.neg) }
-	}
+	// fold {
+	// 	^{|in| Fold.ar(in, this, this.neg) }
+	// }
 }
