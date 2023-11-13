@@ -1,9 +1,9 @@
 (
   name: "Živa",
   summary: "Live coding tools to make life easier",
-  version: "0.0.5",
+  version: "0.0.6",
   schelp: "Ziva",
-  dependencies: ["https://github.com/loopier/drumpattern", "Bjorklund", "ddwCommon"],
+  dependencies: ["Bjorklund", "ddwCommon"],
   license: "GPL",
   copyright: "Roger Pibernat, 2022"
 )

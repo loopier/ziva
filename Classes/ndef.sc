@@ -1,37 +1,21 @@
-+ Ndef{
-	prGetPbind {
-		^this.source.list[0];
++ Ndef {
+	sound {|snd|
+		if( Ziva.samples.includes(snd) ) {
+			this.source = Pbind(\type, \sample, \sound, snd);
+		} {
+			this.source = Pbind(\type, \note, \instrument, snd);
+		}
 	}
 
-	prSetPbindPair { | key, value |
-		"%: %.% - %".format(this.key, key, value, this.prGetPbind)
-		^Ndef(this.key, Pset(key, value, this.prGetPbind))
+	s { |snd| this.sound(snd) }
+
+	doesNotUnderstand { |selector, args|
+		var pairs = this.source.patternpairs.asDict.put(selector.asSymbol, args).asPairs;
+		this.source = Pbind(*pairs);
 	}
 
-	rh { | args |
-		if( args.isSymbol ) {
-			args = Ziva.rhythmsDict[args] ? args.asString;
-		};
 
-		if( args.isString ) { args = args.asBinaryDigits.flat.replace(0,\r) };
-
-		args = Pseq(args.debug("rhythm"), inf);
-		^this.prSetPbindPair(\r, args);
+	fx { |effects|
+		// ndef[ndef.sources.size] = \filter -> Ziva.fxDict[effect.asSymbol];
 	}
-
-	deg { | args |
-		^this.prSetPbindPair(\degree, args);
-	}
-
-	dur { | args |
-		var durs = Ziva.constants[args] ? args;
-		^this.prSetPbindPair(\dur, durs);
-	}
-
-	fx { | args |
-		// add to Ndef(thi.key)[...]
-	}
-
-	lpf{ | res=0.1 |  ^{arg sig; RLPF.ar(sig, this, res)} }
-	moogvcf{ | res=0.1 |  ^{arg sig; MoogVCF.ar(sig, this, res, mul: 2)} }
 }

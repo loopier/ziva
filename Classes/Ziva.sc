@@ -36,6 +36,8 @@ Ziva {
 	classvar <> isRecoring;
 	classvar <> constants; // dictionary for constant values
 	classvar <> oscillators;
+	classvar <> sources; // source functions for Ndef
+	classvar <> tracks;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -55,6 +57,11 @@ Ziva {
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
 
+		// Create a global variable at the top environment holding Ziva's ProxySpace.
+		// Using ~ziva = ProxySpace.new(...) doesn't work.
+		// currentEnvironment.put(\ziva, ProxySpace.new(this.server).quant_(1));
+		// ~ziva.push;
+
 		// gets called when server boots
 		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
 		ServerTree.add({this.makeTracks(4)});
@@ -65,30 +72,34 @@ Ziva {
 			ZivaEventTypes.new;
 			this.makeConstants;
 			this.makeOscillators;
+			this.makeSources;
 			this.loadSounds;
 			this.makeFxDict;
 			this.makeDrumDict;
 			this.scale_(\major);
+			// this.tracks = Array.fill(8, {|i| Ndef((\fxtrack++i).asSymbol, { \in.ar!2 })});
 
-			// global fx -- last node in the chain
-			// code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
-			// Create a Group for our NodeProxy after the Server's default
-			// initialize at audio rate
-			Ndef(\all).ar(2);
-			// replace proxy's private bus with hardware bus
-			Ndef(\all).bus = Bus(\audio, 0, 2, server);
-			allFxGroup = Group.after(server.defaultGroup).register;
-			server.sync;
-			Ndef(\all).parentGroup = allFxGroup;
-			// Ndef(\all, {\in.ar(0!outputChannels) * \amp.kr(1)});
+			// // global fx -- last node in the chain
+			// // code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
+			// // Create a Group for our NodeProxy after the Server's default
+			// // initialize at audio rate
+			// Ndef(\all).ar(2);
+			// // replace proxy's private bus with hardware bus
+			// Ndef(\all).bus = Bus(\audio, 0, 2, server);
+			// allFxGroup = Group.after(server.defaultGroup).register;
+			// server.sync;
+			// Ndef(\all).parentGroup = allFxGroup;
 
-			// this.makeRhythmsDict;
-			// this.makeTracks(4);
 			"r = \\r".interpret;
 			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 		};
 		^this.server;
+	}
+
+	// get out of Ziva ProxySpace
+	*pop {
+		topEnvironment.at(\ziva).pop;
 	}
 
 	*hush {
@@ -160,7 +171,7 @@ Ziva {
 		SynthDescLib.global.synthDescs.keys.asArray.sort.do { |desc|
 			// Skip names that start with "system_"
 			if("^(system_|pbindFx_)".matchRegexp(desc.asString).not) {
-				names.add(desc.asString);
+				names.add(desc.asString.asSymbol);
 			}
 		};
 
@@ -175,7 +186,9 @@ Ziva {
 	/// \returns Dictionary
 	*loadSamples { arg path, server = nil;
 		try {
-			path = path ?? { Ziva.filenameSymbol.asString.asPathName.parentPath +/+ "../samples" };
+			path = path ?? {
+				PathName(PathName(Ziva.filenameSymbol.asString).parentPath).parentPath+/+"samples"
+			};
 			this.samplesDict = this.samplesDict ?? { Dictionary.new };
 			server = server ? this.server ? Server.default;
 			PathName(path).entries.do { |item, i|
@@ -186,6 +199,7 @@ Ziva {
 		} {
 			// "ERROR: Sample path not set.  Use .loadSamples(PATH).".postln;
 			"WARNING: The samples list is empty.  Use .loadSamples(PATH).".postln;
+			path.debug("Could not load samples from");
 		}
 	}
 
@@ -263,14 +277,14 @@ Ziva {
 	}
 
 	/// \brief post synths and samples
-	*samples {
-		// list synths
-		// list samples - name(items)
-		"samples".debug("-----");
-		this.listLoadedSamples;
-		// currentEnvironment.keys.asArray.sort.do{|key|
-		// 	currentEnvironment[key].size.debug(key);
-		// };
+	*samples { | path |
+		if (path.isNil) {
+			"samples".debug("-----");
+			this.listLoadedSamples;
+		} {
+			this.loadSamples(path);
+		}
+		^this.samplesDict.keys.asArray.sort;
 	}
 
 	*sounds {
@@ -355,6 +369,16 @@ Ziva {
 		oscillators[\noise2] = {LFNoise2.kr(\freq.kr(1)).range(\min.kr(0),\max.kr(1))};
 	}
 
+	*makeSources {
+		sources = IdentityDictionary.new;
+		sources[\sine] = { SinOsc.ar(\freq.kr(400)) };
+		sources[\saw] = { Saw.ar(\freq.kr(400)) };
+		sources[\vca] = { \in.ar * \amp.kr(1) };
+		sources[\adsr] = { \in.ar * Env.adsr(\atk.kr(0.01), \dec.kr(0.3), \sus.kr(0.5), \rel.kr(1)) };
+		sources[\vcf] = { MoogVCF.ar(\in.ar(0), \cutoff.kr(400), \res.kr(0.0)) };
+		sources[\pan] = { Pan2.ar(\in.ar, \pan.kr(0)) };
+	}
+
 	*makeFxDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
 		fxDict = IdentityDictionary.new;
 		fxDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, \mix.kr(0.85), \room.kr(0.86), \damp.kr(0.3))};
@@ -395,6 +419,7 @@ Ziva {
 			}));
 		})};
 		fxDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
+		fxDict[\fold] 		= {arg sig; sig.fold(\foldmin.kr(0.01), \foldmax.kr(1))};
 	}
 
 	/// \brief	Predefined rhythms to be used with durs
@@ -473,6 +498,15 @@ Ziva {
 		};
 	}
 
+	*newPlayer { |name, snd|
+		if( Ziva.samples.includes(snd.asSymbol) ) {
+			Ndef(name.asSymbol, Pbind(\type, \sample, \sound, snd.asSymbol));
+		} {
+			Ndef(name.asSymbol, Pbind(\instrument, snd.asSymbol));
+		};
+		Ndef(name.asSymbol).source.postcs;
+		^Ndef(name.asSymbol)
+	}
 
 	/// \brief	Construct the fx tracks.
 	/// \description
@@ -497,7 +531,7 @@ Ziva {
 			var tracksym = (\t++name).asSymbol;
 			var bus = Ndef(ndefsym).bus ? Bus.audio(this.server, 2);
 
-			Ndef(ndefsym, { In.ar(bus, 2) * \amp.kr(1) }).play.fadeTime_(1);
+			Ndef(ndefsym, { \in.ar(0!2) * \amp.kr(1) }).play.fadeTime_(1);
 			this.tracksDict.put(tracksym, bus);
 			this.tracksDict[tracksym].debug(ndefsym);
 
