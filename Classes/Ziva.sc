@@ -505,7 +505,10 @@ Ziva {
 			Ndef(name.asSymbol, Pbind(\instrument, snd.asSymbol));
 		};
 		Ndef(name.asSymbol).source.postcs;
-		^Ndef(name.asSymbol)
+		Ndef((name++"_fx").asSymbol, { \in.ar(0!2) });
+		Ndef(name.asSymbol) <>> Ndef((name++"_fx").asSymbol);
+		Ndef((name++"_fx").asSymbol).play;
+		^Ndef(name.asSymbol);
 	}
 
 	/// \brief	Construct the fx tracks.

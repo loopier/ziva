@@ -16,6 +16,7 @@
 
 
 	fx { |effects|
+		var fxname = this.key.debug("fx to key");
 		// ndef[ndef.sources.size] = \filter -> Ziva.fxDict[effect.asSymbol];
 	}
 }
