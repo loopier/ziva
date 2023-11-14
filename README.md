@@ -1,6 +1,8 @@
 ## TODO
 
+- **fix fx**: `Ndef(\name_fx)` needs to add effects on `+Ndef{ fx {...} }`
 ``` supercollider
+
 ```
 
 ## Usage

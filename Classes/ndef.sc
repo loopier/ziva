@@ -16,7 +16,13 @@
 
 
 	fx { |effects|
-		var fxname = this.key.debug("fx to key");
-		// ndef[ndef.sources.size] = \filter -> Ziva.fxDict[effect.asSymbol];
+		var fxndef = Ndef((this.key++'_fx').asSymbol);
+		if( effects.isArray ) {
+			effects.do{|effect, i|
+				fxndef[i] = \filter -> Ziva.fxDict[effect.asSymbol];
+			};
+		} {
+			fxndef[fxndef.sources.size] = \filter -> Ziva.fxDict[effects.asSymbol];
+		}
 	}
 }
