@@ -1,6 +1,6 @@
 ## TODO
 
-- **fix fx**: `Ndef(\name_fx)` needs to add effects on `+Ndef{ fx {...} }`
+- [ ] add fx functions: `delay(0.1,3)` and `{|in| HPF.ar(in) }`
 ``` supercollider
 
 ```

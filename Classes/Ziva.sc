@@ -499,16 +499,20 @@ Ziva {
 	}
 
 	*newPlayer { |name, snd|
+		var fxname = (name++'_fx').asSymbol;
+		name = name.asSymbol;
 		if( Ziva.samples.includes(snd.asSymbol) ) {
-			Ndef(name.asSymbol, Pbind(\type, \sample, \sound, snd.asSymbol));
+			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol));
 		} {
-			Ndef(name.asSymbol, Pbind(\instrument, snd.asSymbol));
+			Ndef(name, Pbind(\instrument, snd.asSymbol));
 		};
-		Ndef(name.asSymbol).source.postcs;
-		Ndef((name++"_fx").asSymbol, { \in.ar(0!2) });
-		Ndef(name.asSymbol) <>> Ndef((name++"_fx").asSymbol);
-		Ndef((name++"_fx").asSymbol).play;
-		^Ndef(name.asSymbol);
+		Ndef(name).source.postcs;
+		Ndef(fxname, { \in.ar(0!2) });
+		Ndef(fxname).play;
+		Ndef(name) <>> Ndef(fxname);
+		name.debug("ndef");
+		fxname.debug("ndef_fx");
+		^Ndef(name);
 	}
 
 	/// \brief	Construct the fx tracks.

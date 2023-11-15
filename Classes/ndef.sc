@@ -19,9 +19,12 @@
 		var fxndef = Ndef((this.key++'_fx').asSymbol);
 		if( effects.isArray ) {
 			effects.do{|effect, i|
-				fxndef[i] = \filter -> Ziva.fxDict[effect.asSymbol];
+				fxndef[i+1] = \filter -> Ziva.fxDict[effect.asSymbol];
 			};
+			// clear rest
+			fxndef.sources[effects.size..] = nil;
 		} {
+			fxndef.sources.size.debug(fxndef.name);
 			fxndef[fxndef.sources.size] = \filter -> Ziva.fxDict[effects.asSymbol];
 		}
 	}
