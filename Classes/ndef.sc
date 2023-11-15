@@ -23,7 +23,7 @@
 		"Add FX to %: %".format(this.name, effects).postln;
 		if( effects.isArray ) {
 			effects.do{|effect, i|
-				fxndef[i+1] = \filter -> Ziva.fxDict[effect.asSymbol];
+				fxndef[i+1] = \filter -> (Ziva.fxDict[effect.asSymbol] ? effect); // second option is a function
 			};
 			// clear unused indices if needed
 			if( effects.size < fxndef.sources.size ) {
