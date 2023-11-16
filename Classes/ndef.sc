@@ -19,7 +19,7 @@
 
 
 	fx { |effects|
-		var fxndef = Ndef((this.key++'_fx').asSymbol);
+		var fxndef = Ndef(('fx_'++this.key).asSymbol);
 		"Add FX to %: %".format(this.name, effects).postln;
 		if( effects.isArray ) {
 			effects.do{|effect, i|

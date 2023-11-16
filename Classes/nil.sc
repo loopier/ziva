@@ -4,7 +4,7 @@
 		var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
 		Ziva.newPlayer(name.asSymbol, snd).debug("New instrument");
 		History.eval("% = Ndef('%')".format(code, name));
-		History.eval("%fx = Ndef('%_fx')".format(code, name));
+		History.eval("%fx = Ndef('fx_%')".format(code, name));
 		code.debug("code");
 		name.debug("name");
 		// ^Ndef(name);

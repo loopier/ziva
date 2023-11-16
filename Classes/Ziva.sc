@@ -102,10 +102,11 @@ Ziva {
 		topEnvironment.at(\ziva).pop;
 	}
 
-	*hush {
-		Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+	*hush { |time|
+		// Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
+		Ndef.all[\localhost].keysValuesDo{|k,v|
 			if( not( k.asString.beginsWith(\fx_.asString)) && (k != \all) ) {
-				k.stop;
+				Ndef(k.asSymbol).clear(time);
 			}
 		}
 	}
@@ -500,17 +501,23 @@ Ziva {
 	}
 
 	*newPlayer { |name, snd|
-		var fxname = (name++'_fx').asSymbol;
+		var fxname = ('fx_'++name).asSymbol;
 		name = name.asSymbol;
 		if( Ziva.samples.includes(snd.asSymbol) ) {
 			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol));
 		} {
 			Ndef(name, Pbind(\instrument, snd.asSymbol));
 		};
+		// source
 		Ndef(name).source.postcs;
+		Ndef(name).quant = 1;
+		// fx
 		Ndef(fxname, { \in.ar(0!2) });
 		Ndef(fxname).play;
+		Ndef(fxname).fadeTime = 1;
+		Ndef(fxname).quant = 1;
 		Ndef(name) <>> Ndef(fxname);
+
 		name.debug("ndef");
 		fxname.debug("ndef_fx");
 		^Ndef(name);
