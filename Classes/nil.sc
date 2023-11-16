@@ -4,6 +4,7 @@
 		var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
 		Ziva.newPlayer(name.asSymbol, snd).debug("New instrument");
 		History.eval("% = Ndef('%')".format(code, name));
+		History.eval("%fx = Ndef('%_fx')".format(code, name));
 		code.debug("code");
 		name.debug("name");
 		// ^Ndef(name);
@@ -11,10 +12,19 @@
 
 	s { |snd| this.sound(snd) }
 
-	fx {|effects|
+	lfo { |func|
 		var code = thisProcess.interpreter.cmdLine.split($ )[0];
 		var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
-		History.eval("% = Ndef('%', { 'in'.ar(0!2) })".format(code, name));
-		^Ndef(name);
+		Ndef(name.asSymbol, func);
+		History.eval("% = Ndef('%')".format(code, name));
+		code.debug("code");
+		name.debug("name");
 	}
+
+	// fx {|effects|
+	// 	var code = thisProcess.interpreter.cmdLine.split($ )[0];
+	// 	var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
+	// 	History.eval("% = Ndef('%', { 'in'.ar(0!2) })".format(code, name));
+	// 	^Ndef(name);
+	// }
 }

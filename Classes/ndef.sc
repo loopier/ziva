@@ -37,4 +37,31 @@
 			fxndef[fxndef.sources.size] = \filter -> Ziva.fxDict[effects.asSymbol];
 		}
 	}
+
+	lfo { |func|
+		this.source = func;
+	}
+
+	// functions
+	lpf {| res = 1 | ^{| in | RLPF.ar(in, this, res)}}
+	hpf {| res = 1 | ^{| in | RHPF.ar(in, this, res)}}
+	bpf {| res = 1 | ^{| in | BPF.ar(in, this, res)}}
+
+	// wet { | index, amt=1 | Ndef((this.key++'_fx')).set((\wet++index).asSymbol, amt) }
+	wet { | index, amt=1 | this.set((\wet++index).asSymbol, amt) }
+
+	delay {| decay=0 | ^{| in | AllpassC.ar(in, 4, this, decay )}}
+	fbdelay {| fb=0.8 |
+		^{| in |
+			var local;
+			// read feedback , add to source
+			local = LocalIn.ar(2) + in;
+			// delay sound
+			local = DelayN.ar(local, 4, this);
+			// reverse channels to give ping pong effect, apply decay factor
+			// LocalOut.ar(local.reverse * fb);
+			LocalOut.ar(local * fb);
+			local
+		}
+	}
 }

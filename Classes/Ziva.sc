@@ -388,7 +388,7 @@ Ziva {
 		fxDict[\gverb] 		= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)};
 		fxDict[\gverbL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:30, revtime:3, damping:0.3, inputbw:0.5, drylevel:0.5, earlyreflevel:0.5, taillevel:0.5), 100)};
 		fxDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
-		fxDict[\delay]  	= {arg sig; sig + AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
+		fxDict[\delay]  	= {arg sig; AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
 		fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
 		fxDict[\lpf] 		= {arg sig, lcutoff=1000; RLPF.ar(sig, lcutoff, \lres.kr(1.0))};
 		fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
@@ -405,11 +405,11 @@ Ziva {
 		fxDict[\bitcrush]	= {arg sig; Latch.ar(sig, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)};
 		fxDict[\antique]	= {arg sig; LPF.ar(sig, 1700) + Dust.ar(7, 0.6)};
 		fxDict[\crush]		= {arg sig; sig.round(0.5 ** (\crush.kr(6.6)-1));};
-		fxDict[\chorus]		= {arg sig; Mix.fill(7, {
+		fxDict[\chorus2]	= {arg sig; Mix.fill(7, {
 			var maxdelaytime= rrand(0.005,0.02);
 			DelayC.ar(sig, maxdelaytime,LFNoise1.kr(Rand(4.5,10.5),0.25*maxdelaytime,0.75*maxdelaytime) );
 		})};
-		fxDict[\chorus2]	= {arg sig; Mix.fill(7, {
+		fxDict[\chorus]	= {arg sig; Mix.fill(7, {
 			var maxdelaytime= rrand(0.005,0.02);
 			Splay.ar(Array.fill(4,{
 				var maxdelaytime= rrand(0.005,0.02);
@@ -419,6 +419,7 @@ Ziva {
 			}));
 		})};
 		fxDict[\compress]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
+		fxDict[\limit]	= {arg sig; Compander.ar(4*(sig),sig,0.4,1,4,mul:\compressamt.kr(1))};
 		fxDict[\fold] 		= {arg sig; sig.fold(\foldmin.kr(0.01), \foldmax.kr(1))};
 	}
 
