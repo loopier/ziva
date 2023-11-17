@@ -2,7 +2,7 @@
 SynthDef(\white, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
@@ -16,7 +16,7 @@ SynthDef(\white, {
 SynthDef(\pink, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
@@ -30,7 +30,7 @@ SynthDef(\pink, {
 SynthDef(\brown, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
@@ -44,7 +44,7 @@ SynthDef(\brown, {
 SynthDef(\sine, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var freq = \freq.kr(440);
 	var feedback = \feedback.kr(0);
 	var gate = \gate.kr(1);
@@ -60,7 +60,7 @@ SynthDef(\sine, {
 SynthDef(\saw, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var freq = \freq.kr(440);
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
@@ -74,7 +74,7 @@ SynthDef(\saw, {
 
 SynthDef(\pulse, {
 	var out = \out.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var pan = \pan.kr(0);
 	var freq = \freq.kr(440);
 	var width = \width.kr(0.5);
@@ -90,7 +90,7 @@ SynthDef(\pulse, {
 
 SynthDef(\impulse, {
 	var out = \out.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var pan = \pan.kr(0);
 	var freq = \freq.kr(440);
 	var width = \width.kr(0.5);
@@ -106,7 +106,7 @@ SynthDef(\impulse, {
 
 SynthDef(\lfpar, {
 	var out = \out.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var pan = \pan.kr(0);
 	var freq = \freq.kr(440);
 	var width = \width.kr(0.5);
@@ -122,7 +122,7 @@ SynthDef(\lfpar, {
 
 SynthDef(\env, {
 	var out = \out.kr(0);
-	var amp = \amp.kr(1) * (-12.dbamp);
+	var amp = \amp.kr(1) * (-0.dbamp);
 	var pan = \pan.kr(0);
 	var freq = \freq.kr(440);
 	var width = \width.kr(0.5);

@@ -42,10 +42,42 @@
 		this.source = func;
 	}
 
+	spread { | amt=0.0 |
+		var pairs;
+		if(this.source.isKindOf(Pbind)) {
+			pairs = this.source.patternpairs.asDict.put(\pan, [amt.neg, amt]).asPairs;
+			this.source = Pbind(*pairs);
+		}
+	}
+
 	// functions
+	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
+	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
+	gverb {| time, damp | ^{| in | HPF.ar(GVerb.ar(in, roomsize:this, revtime:time, damping:damp, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
+	delay {| decay=0 | ^{| in | AllpassC.ar(in, 4, this, decay )}}
+	fbdelay {| fb=0.8 |
+		^{| in |
+			var local;
+			// read feedback , add to source
+			local = LocalIn.ar(2) + in;
+			// delay sound
+			local = DelayN.ar(local, 4, this);
+			// reverse channels to give ping pong effect, apply decay factor
+			// LocalOut.ar(local.reverse * fb);
+			LocalOut.ar(local * fb);
+			local
+		}
+	}
 	lpf {| res = 1 | ^{| in | RLPF.ar(in, this, res)}}
 	hpf {| res = 1 | ^{| in | RHPF.ar(in, this, res)}}
 	bpf {| res = 1 | ^{| in | BPF.ar(in, this, res)}}
+	brf {| res = 1 | ^{| in | BRF.ar(in, this, res)}}
+	vcf {| res=0.7, mul=1 |  ^{| in | MoogVCF.ar(in, this, res, mul: mul)} }
+	tremolo {| depth=0.3 | ^{| in | in * SinOsc.ar(this, 0, depth, 0)}}
+	vibrato {| depth=0.3 | ^{| in | PitchShift.ar(in, 0.008, SinOsc.ar(this, 0, depth, 1))}}
+	crush {^{| in | in.round(0.5 ** (this-1));}}
+	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
+	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
 
 	// wet { | index, amt=1 | Ndef((this.key++'_fx')).set((\wet++index).asSymbol, amt) }
 	wet { | index, amt=1 | this.set((\wet++index).asSymbol, amt) }
