@@ -38,6 +38,7 @@ Ziva {
 	classvar <> oscillators;
 	classvar <> sources; // source functions for Ndef
 	classvar <> tracks;
+	classvar <> meter;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -78,6 +79,11 @@ Ziva {
 			this.makeDrumDict;
 			this.scale_(\major);
 			// this.tracks = Array.fill(8, {|i| Ndef((\fxtrack++i).asSymbol, { \in.ar!2 })});
+
+			this.meter = ServerMeter.new(server, 2,2);
+			this.meter.window.background = Color(0.25,0.25,0.25);
+			this.meter.window.bounds = Rect(0,1080, 134,230);
+			this.meter.alwaysOnTop = true;
 
 			// // global fx -- last node in the chain
 			// // code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
