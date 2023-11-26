@@ -77,6 +77,7 @@
 	vibrato {| depth=0.3 | ^{| in | PitchShift.ar(in, 0.008, SinOsc.ar(this, 0, depth, 1))}}
 	crush {^{| in | in.round(0.5 ** (this-1));}}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
+	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
 	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
 
 	// wet { | index, amt=1 | Ndef((this.key++'_fx')).set((\wet++index).asSymbol, amt) }
