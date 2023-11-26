@@ -83,7 +83,7 @@ Ziva {
 			this.meter = ServerMeter.new(server, 2,2);
 			this.meter.window.background = Color(0.25,0.25,0.25);
 			this.meter.window.bounds = Rect(0,1080, 134,230);
-			this.meter.alwaysOnTop = true;
+			this.meter.window.alwaysOnTop = true;
 
 			// // global fx -- last node in the chain
 			// // code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
@@ -517,11 +517,13 @@ Ziva {
 		// source
 		Ndef(name).source.postcs;
 		Ndef(name).quant = 1;
+		Ndef(name).clock = Ziva.clock;
 		// fx
 		Ndef(fxname, { \in.ar(0!2) });
 		Ndef(fxname).play;
 		Ndef(fxname).fadeTime = 1;
 		Ndef(fxname).quant = 1;
+		Ndef(fxname).clock = Ziva.clock;
 		Ndef(name) <>> Ndef(fxname);
 
 		name.debug("ndef");
