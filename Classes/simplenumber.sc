@@ -56,6 +56,7 @@
 	// })}}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	compress2{ | below=1, above=0.5 | ^{arg in; Compander.ar(in, in, this, below, above, 0.01, 0.01) }}
+	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
 	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
 }
 
@@ -108,7 +109,8 @@
 	// 		del;
 	// 	}))
 	// })}}
-	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
+	// compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
+	// limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
 	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
 }
 
