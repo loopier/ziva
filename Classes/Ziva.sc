@@ -99,6 +99,8 @@ Ziva {
 			"r = \\r".interpret;
 			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
+			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
+
 		};
 		^this.server;
 	}
@@ -632,10 +634,10 @@ Ziva {
 		^Ndef((\ziva_lfo++index), dict.at(wave));
 	}
 
-	*tempo { ^this.clock.tempo * 60 }
-	*tempo_ { |bpm| ^this.clock.tempo = bpm / 60;}
-	*bpm { ^this.tempo }
-	*bpm_ { |bpm| ^this.tempo( bpm );}
+	*tempo { ^this.clock.tempo }
+	*tempo_ { |tempo| ^this.clock.tempo = tempo}
+	*bpm { ^(this.tempo * 60) }
+	*bpm_ { |bpm| ^( this.tempo( bpm ) / 60 );}
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
