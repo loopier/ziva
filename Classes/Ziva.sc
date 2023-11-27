@@ -82,7 +82,7 @@ Ziva {
 
 			this.meter = ServerMeter.new(server, 2,2);
 			this.meter.window.background = Color(0.25,0.25,0.25);
-			this.meter.window.bounds = Rect(0,1080, 134,230);
+			this.meter.window.bounds = Rect(0,1080-230, 134,230);
 			this.meter.window.alwaysOnTop = true;
 
 			// // global fx -- last node in the chain
