@@ -398,6 +398,7 @@ Ziva {
 		fxDict[\gverbL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:30, revtime:3, damping:0.3, inputbw:0.5, drylevel:0.5, earlyreflevel:0.5, taillevel:0.5), 100)};
 		fxDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
 		fxDict[\delay]  	= {arg sig; AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
+		fxDict[\swdelay]  	= {arg sig; SwitchDelay.ar(sig, 2, \dry.kr(1), \wet.kr(1), \delaytime.kr(1), \feedback.kr(0.7) )};
 		fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
 		fxDict[\lpf] 		= {arg sig, lcutoff=1000; RLPF.ar(sig, lcutoff, \lres.kr(1.0))};
 		fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
@@ -512,9 +513,9 @@ Ziva {
 		var fxname = ('fx_'++name).asSymbol;
 		name = name.asSymbol;
 		if( Ziva.samples.includes(snd.asSymbol) ) {
-			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol));
+			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root)));
 		} {
-			Ndef(name, Pbind(\instrument, snd.asSymbol));
+			Ndef(name, Pbind(\instrument, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root)));
 		};
 		// source
 		Ndef(name).source.postcs;
@@ -523,14 +524,14 @@ Ziva {
 		// fx
 		Ndef(fxname, { \in.ar(0!2) });
 		Ndef(fxname).play;
-		Ndef(fxname).fadeTime = 1;
+		// Ndef(fxname).fadeTime = 1;
 		Ndef(fxname).quant = 1;
 		Ndef(fxname).clock = Ziva.clock;
 		Ndef(name) <>> Ndef(fxname);
 
 		name.debug("ndef");
 		fxname.debug("ndef_fx");
-		^Ndef(name);
+		// ^Ndef(name);
 	}
 
 	/// \brief	Construct the fx tracks.

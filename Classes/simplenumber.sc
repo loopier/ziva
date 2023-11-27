@@ -1,4 +1,11 @@
 + Float {
+	// utils
+	bj { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
+	bjr { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
+	brown { | max=1, int=1 | ^Pbrown(this, max, int) }
+	white { | max=1 | ^Pwhite(this, max) }
+	chop { | chunks=16 | ^(..chunks).choosen(this) / chunks }
+
 	// funcs
 	sine	{ | min=(-1), max=1, amp=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) * amp}}
 	tri		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) * amp}}
@@ -13,6 +20,7 @@
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
 	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay )}}
+	swdelay {| fb=0.7, dry=1, wet=1 | ^{|in| SwitchDelay.ar(in, dry, wet, this, fb )}}
 	fbdelay {| fb=0.8 |
 		^{| in |
 			var local;
@@ -61,6 +69,13 @@
 }
 
 + Integer {
+	// utils
+	bj { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
+	bjr { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
+	brown { | max=1, int=1 | ^Pbrown(this, max, int) }
+	white { | max=1 | ^Pwhite(this, max) }
+	chop { | chunks=16 | ^(..chunks).choosen(this) / chunks }
+
 	// functions
 	sine	{ | min=(-1), max=1, amp=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) * amp}}
 	tri		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) * amp}}
@@ -75,6 +90,7 @@
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
 	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay )}}
+	swdelay {| fb=0.7, dry=1, wet=1 | ^{|in| SwitchDelay.ar(in, dry, wet, this, fb )}}
 	fbdelay {| fb=0.8 |
 		^{| in |
 			var local;
