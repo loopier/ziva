@@ -1,8 +1,12 @@
 ## TODO
 
-- [ ] add fx functions: `delay(0.1,3)` and `{|in| HPF.ar(in) }`
 ``` supercollider
-
+// proof of concept
+~fb lfo: sine(0.1, 0, 1)
+~filta lfo: sine(0.1, 400, 1000)
+~za s: \fmx fb: ~fb
+~fxa fx1: vcf(~filta, 0.7) fx2: \reverb w1: 0.5
+~za <>> ~fxa
 ```
 
 ## Usage
