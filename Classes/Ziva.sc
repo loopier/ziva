@@ -69,6 +69,8 @@ Ziva {
 
 		MIDIClient.init;
 
+		ProxySpace.push(server, \ziva).quant_(1);
+
 		this.server.waitForBoot{
 			var allFxGroup;
 
@@ -102,7 +104,6 @@ Ziva {
 			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
-
 		};
 		^this.server;
 	}
