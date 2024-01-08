@@ -2,10 +2,15 @@
 
 ``` supercollider
 // proof of concept
+
+// lfo's
 ~fb lfo: sine(0.1, 0, 1)
 ~filta lfo: sine(0.1, 400, 1000)
+// snd synth
 ~za s: \fmx fb: ~fb
+// fx
 ~fxa fx1: vcf(~filta, 0.7) fx2: \reverb w1: 0.5
+// routing
 ~za <>> ~fxa
 ```
 

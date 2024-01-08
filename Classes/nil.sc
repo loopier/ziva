@@ -29,10 +29,10 @@
 		// name.debug("name");
 	}
 
-	// fx {|effects|
-	// 	var code = thisProcess.interpreter.cmdLine.split($ )[0];
-	// 	var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
-	// 	History.eval("% = Ndef('%', { 'in'.ar(0!2) })".format(code, name));
-	// 	^Ndef(name);
-	// }
+	fx {|effects|
+		var code = thisProcess.interpreter.cmdLine.split($ )[0];
+		var name = code.findRegexp("~[a-zA-Z0-9]+")[0][1].replace("~", "").asSymbol;
+		History.eval("% = Ndef('%', { 'in'.ar(0!2) })".format(code, name));
+		^Ndef(name);
+	}
 }

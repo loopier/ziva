@@ -10,7 +10,7 @@
 	s { |snd| this.sound(snd) }
 
 	midi {|ch|
-		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch);
+		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 	doesNotUnderstand { |selector, args|

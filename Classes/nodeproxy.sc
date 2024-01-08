@@ -10,33 +10,60 @@
 	s { |snd| this.sound(snd) }
 
 	doesNotUnderstand { |selector, args|
-		var pairs;
+		// it's an efect with 'fxN'
+		if("^fx\\d+".matchRegexp(selector.asString)) {
+			this.fx(selector.asString[2..].asInteger, args);
+			^this;
+		};
+
+		// it's an efect with 'fxN'
+		if("^wet\\d+".matchRegexp(selector.asString)) {
+			this.drywet(selector.asString[3..].asInteger, args);
+			^this;
+		};
+
 		if(this.source.isKindOf(Pbind)) {
-			pairs = this.source.patternpairs.asDict.put(selector.asSymbol, args).asPairs;
+			var pairs = this.source.patternpairs.asDict.put(selector.asSymbol, args).asPairs;
 			this.source = Pbind(*pairs);
-		}
+		};
 	}
 
+	fx { |index, effect|
+		if(this.source.isNil) {
+			this.source = { \in.ar(0!2) };
+		};
 
-	fx { |effects|
-		var fxndef = Ndef(('fx_'++this.key).asSymbol);
-		"Add FX to %: %".format(this.name, effects).postln;
-		if( effects.isArray ) {
-			effects.do{|effect, i|
-				fxndef[i+1] = \filter -> (Ziva.fxDict[effect.asSymbol] ? effect); // second option is a function
-			};
-			// clear unused indices if needed
-			if( effects.size < fxndef.sources.size ) {
-				var diff = fxndef.sources.size - effects.size;
-				diff.do{|i| fxndef[effects.size + i + 1] = nil };
-			};
-
-			fxndef.sources.do{|x| x.postcs};
+		if( effect.isNil ) {
+			this[index] = nil;
 		} {
-			fxndef.sources.size.debug(fxndef.name);
-			fxndef[fxndef.sources.size] = \filter -> Ziva.fxDict[effects.asSymbol];
-		}
+			this[index] = \filter -> (Ziva.fxDict[effect.asSymbol] ? effect);
+		};
 	}
+
+	drywet { |index, amt|
+		(\wet++index).asSymbol.debug("drywet");
+		this.set((\wet++index).asSymbol, amt)
+	}
+
+	// fx { |effects|
+	// 	var fxndef = Ndef(('fx_'++this.key).asSymbol);
+	// 	"Add FX to %: %".format(this.name, effects).postln;
+	// 	if( effects.isArray ) {
+	// 		effects.do{|effect, i|
+	// 			fxndef[i+1] = \filter -> (Ziva.fxDict[effect.asSymbol] ? effect); // second option is a function
+	// 		};
+	// 		// clear unused indices if needed
+	// 		if( effects.size < fxndef.sources.size ) {
+	// 			var diff = fxndef.sources.size - effects.size;
+	// 			diff.do{|i| fxndef[effects.size + i + 1] = nil };
+	// 		};
+
+	// 		fxndef.sources.do{|x| x.postcs};
+	// 	} {
+	// 		fxndef.sources.size.debug(fxndef.name);
+	// 		fxndef[fxndef.sources.size] = \filter -> Ziva.fxDict[effects.asSymbol];
+	// 	}
+	// }
 
 	lfo { |func|
 		this.source = func;
