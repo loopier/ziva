@@ -67,6 +67,8 @@ Ziva {
 		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
 		ServerTree.add({this.makeTracks(4)});
 
+		MIDIClient.init;
+
 		this.server.waitForBoot{
 			var allFxGroup;
 
@@ -513,25 +515,30 @@ Ziva {
 		var fxname = ('fx_'++name).asSymbol;
 		name = name.asSymbol;
 		if( Ziva.samples.includes(snd.asSymbol) ) {
-			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root)));
+			Ndef(name, Pbind(\type, \sample, \sound, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1));
 		} {
-			Ndef(name, Pbind(\instrument, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root)));
+			Ndef(name, Pbind(\instrument, snd.asSymbol, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1));
 		};
 		// source
 		Ndef(name).source.postcs;
 		Ndef(name).quant = 1;
-		Ndef(name).clock = Ziva.clock;
+		// Ndef(name).clock = Ziva.clock;
 		// fx
 		Ndef(fxname, { \in.ar(0!2) });
 		Ndef(fxname).play;
 		// Ndef(fxname).fadeTime = 1;
 		Ndef(fxname).quant = 1;
-		Ndef(fxname).clock = Ziva.clock;
+		// Ndef(fxname).clock = Ziva.clock;
 		Ndef(name) <>> Ndef(fxname);
 
 		name.debug("ndef");
 		fxname.debug("ndef_fx");
 		// ^Ndef(name);
+	}
+
+	*newMidiPlayer { |name, ch=0|
+		Ndef(name, Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root)));
+		Ndef(name).quant = 1;
 	}
 
 	/// \brief	Construct the fx tracks.
@@ -635,10 +642,14 @@ Ziva {
 		^Ndef((\ziva_lfo++index), dict.at(wave));
 	}
 
-	*tempo { ^this.clock.tempo }
-	*tempo_ { |tempo| ^this.clock.tempo = tempo}
-	*bpm { ^(this.tempo * 60) }
-	*bpm_ { |bpm| ^( this.tempo( bpm ) / 60 );}
+	// *tempo { ^this.clock.tempo }
+	// *tempo_ { |tempo| this.clock.tempo = tempo}
+	// *bpm { ^(this.clock.tempo * 60) }
+	// *bpm_ { |bpm| this.clock.tempo = bpm / 60;}
+	*tempo { ^TempoClock.default.tempo }
+	*tempo_ { |tempo| TempoClock.default.tempo = tempo}
+	*bpm { ^(TempoClock.default.tempo * 60) }
+	*bpm_ { |bpm| TempoClock.default.tempo = bpm / 60;}
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }

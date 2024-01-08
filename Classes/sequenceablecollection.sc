@@ -19,7 +19,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 + SequenceableCollection {
-    !! { | repeats |
+    !! { | repeats=0 |
         if (repeats <= 0) { repeats = inf };
         ^Pseq(this, repeats);
     }
@@ -39,6 +39,8 @@
         // Ziva.play(this);
         ^Ziva.pdef(key, quant, this.flat);
     }
+
+    unison { | voices=2, spread=0.01 | ^(this + Array.interpolation(voices, spread.neg, spread) ) }
 
     chooseN { |size=4|
         ^({this.choose}.dup(size));
@@ -62,6 +64,14 @@
     anddup { |n, other|
         ^other.add(this.dup(n)).flat;
     }
+
+    // duplicate a list with an offset added to every value (total-serialism)
+    clone { | ... args |
+        ^args +.x this
+    }
+
+    // add rests for a given number of bars
+    every { | bars=2, beatsPerBar=8 | ^(this ++ (\r!(bars * beatsPerBar))) }
 
     // returns an array of variations of the given array following
     // the algorithm used to compose sextines in poetry.

@@ -1,17 +1,13 @@
-+ Ndef {
++ NodeProxy {
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
-			this.source = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
 		} {
-			this.source = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
 		}
 	}
 
 	s { |snd| this.sound(snd) }
-
-	midi {|ch|
-		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch);
-	}
 
 	doesNotUnderstand { |selector, args|
 		var pairs;
@@ -20,6 +16,7 @@
 			this.source = Pbind(*pairs);
 		}
 	}
+
 
 	fx { |effects|
 		var fxndef = Ndef(('fx_'++this.key).asSymbol);
@@ -43,10 +40,6 @@
 
 	lfo { |func|
 		this.source = func;
-	}
-
-	gain { |level|
-		this.amp = level.min(1).explin(0.01, 1.0, 0, 1);
 	}
 
 	spread { | amt=0.0 |
