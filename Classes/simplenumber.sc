@@ -36,6 +36,8 @@
 	noise2	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise2.ar(this).range(min,max) * amp}}
 
 	// fx
+	gain { ^{| in | in * this } }
+	// amp { ^{| in | in * this} }
 	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
@@ -85,6 +87,9 @@
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	compress2{ | below=1, above=0.5 | ^{arg in; Compander.ar(in, in, this, below, above, 0.01, 0.01) }}
 	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
+}
+
++ Float {
 	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
 }
 
