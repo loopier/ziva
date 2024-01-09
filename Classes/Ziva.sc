@@ -288,12 +288,17 @@ Ziva {
 		^this.synthDefList;
 	}
 
+	*listSamples {
+		"samples".debug("-----");
+		this.listLoadedSamples;
+	}
+
 	/// \brief post synths and samples
 	*samples { | path |
-		if (path.isNil) {
-			"samples".debug("-----");
-			this.listLoadedSamples;
-		} {
+		if (path.isNil.not) {
+		// 	"samples".debug("-----");
+		// 	this.listLoadedSamples;
+		// } {
 			this.loadSamples(path);
 		}
 		^this.samplesDict.keys.asArray.sort;
