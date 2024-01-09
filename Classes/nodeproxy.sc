@@ -17,6 +17,17 @@
 		this.sound(snd);
 	}
 
+	midi {|ch|
+		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+	}
+
+	// zynaddsubfx
+	zyn { |ch|
+		this.source = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+	}
+
+	z { |ch| this.zyn(ch); }
+
 	n { |num| this.prSetPbindParam(\n, num) }
 
 	doesNotUnderstand { |selector, args|
@@ -46,7 +57,8 @@
 			Event.partialEvents.pitchEvent.keys.includes(selector) ||
 			Event.partialEvents.playerEvent.keys.includes(selector) ||
 			Event.partialEvents.serverEvent.keys.includes(selector) ||
-			Ziva.synthControls(this.source.patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector)
+			Ziva.synthControls(this.source.patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
+			Zynaddsubfx.respondsTo(selector)
 		) {
 			this.prSetPbindParam(selector, args);
 		};
