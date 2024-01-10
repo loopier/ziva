@@ -26,7 +26,18 @@
 		this.source = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
+	// zynaddsubfx
 	z { |ch| this.zyn(ch); }
+
+	// zynaddsubfx
+	hold { |value=true|
+		// Zynaddsubfx.panic;
+		if( value == 1 || value == true ) {
+			this.prSetPbindParam(\hasGate, [false].pseq(1));
+		} {
+			this.prSetPbindParam(\hasGate, true);
+		}
+	}
 
 	n { |num| this.prSetPbindParam(\n, num) }
 
@@ -58,7 +69,7 @@
 			Event.partialEvents.playerEvent.keys.includes(selector) ||
 			Event.partialEvents.serverEvent.keys.includes(selector) ||
 			Ziva.synthControls(this.source.patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
-			Zynaddsubfx.respondsTo(selector)
+			Zynaddsubfx.oscInterfaceDict.includesKey(selector)
 		) {
 			this.prSetPbindParam(selector, args);
 		};
