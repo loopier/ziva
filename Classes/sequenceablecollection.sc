@@ -50,6 +50,8 @@
         ^this.chooseN(size);
     }
 
+    pick { | size=8, repeats=0| ^this.choosen(size,repeats) }
+
     // duplicate N times (same as .dup(n)) and concatenate OTHER to the end
     dupand { |n, other|
         ^this.dup(n).add(other).flat;
@@ -223,8 +225,12 @@
         ^Pindex(this, indexPat, repeats);
     }
 
-    pser { arg repeats=1, offset=0;
+    pser { arg repeats=inf, offset=0;
         ^Pser(this, repeats, offset);
+    }
+
+    pwrap { arg lo, hi;
+        ^Pwrap(this.pseq, lo, hi);
     }
 
     pshuf { arg repeats=1;

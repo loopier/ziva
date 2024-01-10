@@ -11,7 +11,8 @@
 
 	// array
 	geom{ |start=0, grow=1| ^Array.geom(this, start, grow) }
-	ser { |start=0, step=1| ^Array.series(this, start, step) }
+	series { |start=0, step=1| ^Array.series(this, start, step) }
+	ser { |start=0, step=1| ^this.series(this, start, step) }
 	interp { |start=0.0, end=1.0| ^Array.interpolation(this, start, end) }
 	rnd { | min=0, max=1.0 | ^Array.rand(this, min, max) }
 	rnd2 { | value=0 | ^Array.rand2(this, value) }
