@@ -86,14 +86,13 @@ Zynaddsubfx {
 			flfofq: 	(msg: "/part%/kit%/adpars/GlobalPar/FilterLfo/freq", convert: {|x| x.max(0.08).min(85.0) * 1.0}),
 			flfoamp: 	(msg: "/part%/kit%/adpars/GlobalPar/FilterLfo/Pintensity", convert: {|x| x.asInteger}),
 		);
-		// Zynaddsubfx.oscInterfaceDict.keysValuesDo{|k,v| v.debug(k)};
 	}
 
 	*eventParamToMsg { |part=0, eventParam, value|
 		if( value.isNil.not ) {
 			Zynaddsubfx.send(
 				addr: this.oscInterfaceDict[eventParam.asSymbol][\msg].replace($%, part),
-				value: this.oscInterfaceDict[eventParam.asSymbol][\convert].(value.debug("zyn %".format(eventParam)))
+				value: this.oscInterfaceDict[eventParam.asSymbol][\convert].(value)
 			);
 		}
 	}
