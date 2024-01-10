@@ -40,6 +40,7 @@
 	}
 
 	n { |num| this.prSetPbindParam(\n, num) }
+	r { |args| this.prSetPbindParam(\r, args) }
 
 	doesNotUnderstand { |selector, args|
 		// it's an efect with 'fxN'
