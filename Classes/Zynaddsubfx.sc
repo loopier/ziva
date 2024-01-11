@@ -16,7 +16,10 @@ Zynaddsubfx {
 
 		Zynaddsubfx.initDict;
 		Zynaddsubfx.initEventType;
+	}
 
+	*boot {
+		"zynaddsubfx -a -P 4001".unixCmd;
 	}
 
 	*initEventType {
