@@ -39,7 +39,7 @@ SynthDef(\theremin, {
 	f = freq + detune;
 	a = SinOsc.ar(f + (f * SinOsc.ar(mod,0,0.02)), mul: amp.lag(1));
 	z = Mix.ar(a);
-	sig = a;
+	sig = a * (12.dbamp);
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).add;
 )

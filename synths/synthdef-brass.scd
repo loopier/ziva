@@ -33,7 +33,7 @@ SynthDef(\brass, {
 	sig = LPF.ar(sig, freq * amp * 10, fenv * flfo);
 	sig = FreeVerb.ar(sig, 0.33, 0.5);
 
-	// amp = amp * (-10.dbamp);
+	amp = amp * (12.dbamp);
 
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).add;
