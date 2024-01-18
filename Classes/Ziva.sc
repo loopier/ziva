@@ -104,7 +104,7 @@ Ziva {
 			// Ndef(\all).parentGroup = allFxGroup;
 
 			"r = \\r".interpret;
-			this.clock = TempoClock.new(rrand(60,190).debug("tempo")/60).permanent_(true);
+			this.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
 		};
@@ -655,10 +655,10 @@ Ziva {
 	// *tempo_ { |tempo| this.clock.tempo = tempo}
 	// *bpm { ^(this.clock.tempo * 60) }
 	// *bpm_ { |bpm| this.clock.tempo = bpm / 60;}
-	*tempo { ^TempoClock.default.tempo }
-	*tempo_ { |tempo| TempoClock.default.tempo = tempo}
-	*bpm { ^(TempoClock.default.tempo * 60) }
-	*bpm_ { |bpm| TempoClock.default.tempo = bpm / 60;}
+	*tempo { ^this.tempo }
+	*tempo_ { |tempo| this.tempo = tempo}
+	*bpm { ^(this.clock.tempo * 60) }
+	*bpm_ { |bpm| this.tempo = bpm / 60;}
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
