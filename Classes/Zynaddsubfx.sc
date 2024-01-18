@@ -91,10 +91,10 @@ Zynaddsubfx {
 		);
 	}
 
-	*eventParamToMsg { |part=0, eventParam, value|
+	*eventParamToMsg { |part=0, eventParam, value, kit=0|
 		if( value.isNil.not ) {
 			Zynaddsubfx.send(
-				addr: this.oscInterfaceDict[eventParam.asSymbol][\msg].replace($%, part),
+				addr: this.oscInterfaceDict[eventParam.asSymbol][\msg].replace("part%", "part%".format(part)).replace("kit%", "kit%".format(kit)),
 				value: this.oscInterfaceDict[eventParam.asSymbol][\convert].(value)
 			);
 		}

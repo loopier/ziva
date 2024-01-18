@@ -40,6 +40,8 @@ Ziva {
 	classvar <> tracks;
 	classvar <> meter;
 
+	classvar <> environment;
+
 	// *new { |sound|
 	// 	^super.new.synth(sound);
 	// }
@@ -69,7 +71,8 @@ Ziva {
 
 		MIDIClient.init;
 
-		ProxySpace.push(server, \ziva).quant_(1);
+		Ziva.environment = ProxySpace.push(server, \ziva).quant_(1);
+		Pdefn(\root, 0);
 
 		this.server.waitForBoot{
 			var allFxGroup;
