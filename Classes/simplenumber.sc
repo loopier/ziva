@@ -42,7 +42,7 @@
 	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
-	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay )}}
+	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay)}}
 	swdelay {| fb=0.7, dry=1, wet=1 | ^{|in| SwitchDelay.ar(in, dry, wet, this, fb )}}
 	fbdelay {| fb=0.8 |
 		^{| in |
@@ -87,7 +87,7 @@
 	// })}}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	compress2{ | below=1, above=0.5 | ^{arg in; Compander.ar(in, in, this, below, above, 0.01, 0.01) }}
-	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
+	limit {| dur=0.01 | ^{| in | Limiter.ar(in, this, dur)}}
 }
 
 + Float {
