@@ -2,7 +2,12 @@
 	prSetPbindParam { |param, value|
 		var pairs = this.source.patternpairs.asDict.put(param.asSymbol, value).asPairs;
 		this.source.patternpairs = pairs;
-		this.source.patternpairs.debug(value.class);
+		this.source.patternpairs;
+	}
+
+	prSymbolToBinaryDigits { |symbol|
+		symbol = "0x".catArgs(symbol.asString);
+		^symbol.interpret.asBinaryDigits(symbol.replace("0x","").size * 4);
 	}
 
 	sound {|snd|
@@ -40,7 +45,14 @@
 	}
 
 	n { |num| this.prSetPbindParam(\n, num) }
-	r { |args| this.prSetPbindParam(\r, args) }
+
+	r { |args|
+		if( args.isSymbol ) {
+			args = this.prSymbolToBinaryDigits(args);
+		};
+		this.prSetPbindParam(\r, args.replace(0,\r).debug("rhythm").pseq);
+	}
+
 
 	doesNotUnderstand { |selector, args|
 		// it's an efect with 'fxN'
