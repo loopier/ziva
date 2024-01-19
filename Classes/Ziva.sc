@@ -40,7 +40,7 @@ Ziva {
 	classvar <> tracks;
 	classvar <> meter;
 
-	classvar <> environment;
+	classvar <> proxyspace;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -71,7 +71,8 @@ Ziva {
 
 		MIDIClient.init;
 
-		Ziva.environment = ProxySpace.push(server, \ziva).quant_(1);
+		Ziva.proxyspace = ProxySpace.push(server, \ziva).quant_(1);
+		Ziva.proxyspace.put(\mixer, { \in.ar(0!2) });
 		Pdefn(\root, 0);
 
 		this.server.waitForBoot{
@@ -105,6 +106,8 @@ Ziva {
 
 			"r = \\r".interpret;
 			this.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
+
+			Ziva.proxyspace.at(\mixer).play;
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
 		};
