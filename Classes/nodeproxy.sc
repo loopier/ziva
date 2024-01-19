@@ -68,6 +68,18 @@
 			^this;
 		};
 
+		// it's an efect with 'fxN'
+		if("^mix\\d+".matchRegexp(selector.asString)) {
+			this.mix(selector.asString[3..].asInteger, args);
+			^this;
+		};
+
+		// it's an efect with 'fxN'
+		if("^mix\\d+".matchRegexp(selector.asString)) {
+			this.mix(selector.asString[3..].asInteger, args);
+			^this;
+		};
+
 		// only convert event and synth keys
 		if(
 			Event.parentEvents.default.keys.includes(selector) ||
@@ -103,6 +115,37 @@
 	drywet { |index, amt|
 		(\wet++index).asSymbol.debug("drywet");
 		this.set((\wet++index).asSymbol, amt)
+	}
+
+	// second argument is adverb
+	// usage:
+	// 	~bla =>.2 ~alo
+	// this will set Ndef(\alo).source to slot Ndef(\bla)[2]
+	=> { |source, index=\1|
+		// source.source.postcs.debug(index.asSymbol);
+		this.addSource(index.asInteger, source);
+	}
+
+	addSource { |index, source|
+		if(this.source.isNil) {
+			this.source = { \in.ar(0!2) };
+		};
+
+		if( source.isNil ) {
+			this[index] = nil;
+		} {
+			this[index] = \mix -> source;
+		};
+	}
+
+	mix { |index, gain|
+		if(this.source.isNil) {
+			this.source = { \in.ar(0!2) };
+		};
+
+		if( gain.isNil.not ) {
+			this.set((\mix++index).asSymbol, gain);
+		};
 	}
 
 	lfo { |func|
