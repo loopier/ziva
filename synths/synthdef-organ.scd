@@ -9,10 +9,10 @@ SynthDef(\organ, {
     var out = \out.kr(0);
     var pan = \pan.kr(0);
     var freq = \freq.kr(440);
-    var amp = \amp.kr(1);//* (-10.dbamp);
+    var amp = \amp.kr(-6.dbamp);//* (-10.dbamp);
     var atk = \atk.kr(0.001);
     var dec = \dec.kr(0.3);
-    var sus = \sus.kr(0.4);
+    var sus = \sus.kr(1.0);
     var rel = \rel.kr(0.1);
     var gate = \gate.kr(1);
 	var vrate = \vrate.kr(6);
