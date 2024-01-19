@@ -82,4 +82,5 @@ Ziva.hush(5); // 5-second fade out - defaults to 0.1
 - add `midifighter`
 - `~bla s: \bass =>>.2 0.5` to send directly to the mixer
 - `~bla 2.=> ~mixer` is opposit of `~mixer <=.2 ~mixert` -- maybe `~bla =>.2 ~mixer`
+- replicate HydraSynth's FX signal chain: `sig -> prefx -> delay -> reverb -> postfx`
 
