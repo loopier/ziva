@@ -20,7 +20,8 @@ Ziva.bpm = 96;
 // set a bass with an effect
 ~bla s: \bass degree: [0,4,7,0,4,7,0,4,7,4].pseq legato: 0.1 rel: 0.4 dur: (1/4) fx1: \chorus;
 // set some ear candy using lfos in effects parameters
-~alo.stop s: \crisp amp: (1/(1..10).pwalk) dur: (1/(1..100).pwalk) pan: (1/(-10..10).pwalk) fx1: fbdelay(~delt, ~delfb) fx2: vcf(~co, ~res);
+~alo s: \crisp amp: (1/(1..10).pwalk) dur: (1/(1..100).pwalk) pan: (1/(-10..10).pwalk);
+~alo fx1: fbdelay(~delt, ~delfb) fx2: vcf(~co, ~res);
 
 // set up a mixer with a global effect
 ~mixer fx20: \reverb;
