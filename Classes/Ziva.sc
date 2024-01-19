@@ -107,6 +107,9 @@ Ziva {
 			"r = \\r".interpret;
 			this.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 
+			// add a limiter to the end of the chain (not realy the end, but its not
+			// likely there are 200 sources in the mixer Ndef)
+			Ziva.proxyspace.at(\mixer)[200] = \filter -> {| in | Limiter.ar(in)};
 			Ziva.proxyspace.at(\mixer).play;
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
