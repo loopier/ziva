@@ -87,6 +87,7 @@
 	// })}}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	compress2{ | below=1, above=0.5 | ^{arg in; Compander.ar(in, in, this, below, above, 0.01, 0.01) }}
+	limiter {| dur=0.01 | ^limit(dur)}
 	limit {| dur=0.01 | ^{| in | Limiter.ar(in, this, dur)}}
 }
 
