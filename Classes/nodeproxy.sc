@@ -96,7 +96,7 @@
 		if( effect.isNil ) {
 			this[index] = nil;
 		} {
-			this[index] = \filter -> (Ziva.fxDict[effect.asSymbol] ? effect);
+			this[index] = \filterIn -> (Ziva.fxDict[effect.asSymbol] ? effect);
 		};
 	}
 
