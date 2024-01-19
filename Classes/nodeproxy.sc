@@ -129,6 +129,16 @@
 	// second argument is adverb
 	// usage:
 	//
+	// ~sound =>.2 ~mixer
+	//
+	// see `<=` below
+	=> { |destination, index=\1|
+		destination.addSource(index.asInteger, this);
+	}
+
+	// second argument is adverb
+	// usage:
+	//
 	// ~mixer <=.2 ~sound
 	//
 	// this will set Ndef(\sound).source to slot Ndef(\mixer)[2]

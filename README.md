@@ -58,11 +58,16 @@ Ziva.controls(\pulse);
 ~mixer fx2: limit(1);
 
 // patch sounds to mixer
-//
-~mixer <=.1 ~bass mix1: 0.3;
-~mixer <=.2 ~candy mix2: 0.4; // adding dry signal to mix
-~mixer <=.3 ~lead mix3: 0.3;
-~mixer <=.4 ~track mix4: 0.5; // reverberated track
+// the number in `<=.N` is the channel number in the mixer
+~mixer <=.1 ~bass mix1: 0.1;
+~mixer <=.2 ~candy mix2: 0.1; // adding dry signal to mix
+~mixer <=.3 ~lead mix3: 0.1;
+~mixer <=.4 ~gtr mix4: 0.1; // reverberated track
+
+// patching can also be done but the amout must be set on
+// a separate line
+~bass =>.1 ~mixer;
+~mixer  mix1: 0.0;
 
 // set a global effect that affects the final output
 // control dry wet hpf with an lfo
@@ -71,7 +76,11 @@ Ziva.controls(\pulse);
 ~mixer wet100: ~drywet;
 )
 
-Ziva.hush(5); // 5-second fade out - defaults to 0.1
+// stop everything instantly
+Ziva.hush;
+
+// or fade out in 5 seconds
+Ziva.hush(5);
 ```
 ## TODO
 
