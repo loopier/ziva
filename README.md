@@ -1,3 +1,9 @@
+## Ideas
+
+Use a `~mixer` nodeproxy as final node.
+Add other proxies to first slots ([1..99]) using a custom operator with an adverb (`=>.3`?) 
+Add fx to higher-numbered slots ([100..])
+
 ## TODO
 
 ``` supercollider
@@ -49,12 +55,16 @@ Ziva.bpm = 96;
 
 // lfo's
 ~fb lfo: sine(0.1, 0, 1)
-~filta lfo: sine(0.1, 400, 1000)
-// snd synth
-~za s: \fmx fb: ~fb
-// fx
-~fxa fx1: vcf(~filta, 0.7) fx2: \reverb w1: 0.5
-// routing
+~cutoff lfo: sine(0.1, 400, 1000)
+// snd synth with effects
+~za s: \fmx fb: ~fb fx1: vcf(~cutoff, 0.7) fx2: \reverb wet1: 0.5
+
+```
+
+
+
+```
+// routing to other 
 ~za <>> ~fxa
 ~fa.play;
 ```
