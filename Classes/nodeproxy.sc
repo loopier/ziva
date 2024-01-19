@@ -147,6 +147,19 @@
 		this.addSource(index.asInteger, source);
 	}
 
+	// second argument is adverb
+	// usage:
+	//
+	// ~sound =>>.2 0.5
+	//
+	// automatically patch ~sound to a mixer channel with a value
+	// -- shortcut for ~mixer <=.N ~mixer mixN: amount
+	=>> { |mixAmt=0.1, index=\1|
+		var mixer = Ziva.proxyspace.at(\mixer);
+		mixer[index.asInteger] = this;
+		mixer.set(\mix++index, mixAmt);
+	}
+
 	addSource { |index, source|
 		if(this.source.isNil) {
 			this.source = { \in.ar(0!2) };
