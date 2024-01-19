@@ -1,6 +1,6 @@
 # Živa
 
-Syntax sugar for live coding with supercollider.
+Syntax sugar for live coding in supercollider.
 
 ## Usage
 
@@ -22,7 +22,7 @@ Ziva.bpm = 96;
 // set some ear candy using lfos in effects parameters
 ~alo.stop s: \crisp amp: (1/(1..10).pwalk) dur: (1/(1..100).pwalk) pan: (1/(-10..10).pwalk) fx1: fbdelay(~delt, 0.1) fx2: vcf(~co, ~res);
 
-// set up a mixer with a global effect
+// set up a global effect in the mixer
 ~mixer fx20: \reverb;
 
 // patch ~bla to mixer slot 1
