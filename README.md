@@ -73,14 +73,17 @@ Ziva.controls(\pulse);
 
 Ziva.hush(5); // 5-second fade out - defaults to 0.1
 ```
+## TODO
 
 ## Ideas
 
-- when creating a new ndef, patch it to the next available `~mixer` slot.
-- `mix(2, 0.5)` is the same as `~mixer mix.2: 0.5`
-- add `mousex|y`
-- add `midifighter`
-- `~bla s: \bass =>>.2 0.5` to send directly to the mixer
-- `~bla 2.=> ~mixer` is opposit of `~mixer <=.2 ~mixert` -- maybe `~bla =>.2 ~mixer`
+- change `mixN` to `mix.N`
+- change `fxN` to `fx.N`
+- when creating a new ndef, automatically patch it to the next available `~mixer` slot.
+- `mix(2, 0.5)` or `2.mix(0.5)` or `0.5.mix(2)` is the same as `~mixer mix2: 0.5`
+- add `mousex|y(min, max)` to control parameters with the mouse
+- add `midifighter(CC)` or `mf(CC)` to control parameters with MidiFighter
+- `~bla =>>.2 0.5` shortcut of `~mixer <=.2 ~bla mix2: 0.5
+- `~bla 2.=> ~mixer` is opposite of `~mixer <=.2 ~mixer` -- maybe `~bla =>.2 ~mixer`
 - replicate HydraSynth's FX signal chain: `sig -> prefx -> delay -> reverb -> postfx`
 
