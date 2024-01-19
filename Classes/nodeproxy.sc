@@ -10,6 +10,8 @@
 		^symbol.interpret.asBinaryDigits(symbol.replace("0x","").size * 4);
 	}
 
+	s { |snd| this.sound(snd);}
+
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
 			this.source = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
@@ -18,23 +20,23 @@
 		};
 	}
 
-	s { |snd|
-		this.sound(snd);
-	}
+	// samples
+	n { |num| this.prSetPbindParam(\n, num) }
+
+	// midi
+	m { |ch| this.midi(ch) }
 
 	midi {|ch|
 		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 	// zynaddsubfx
+	z { |ch| this.zyn(ch); }
+
 	zyn { |ch|
 		this.source = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
-	// zynaddsubfx
-	z { |ch| this.zyn(ch); }
-
-	// zynaddsubfx
 	hold { |value=true|
 		// Zynaddsubfx.panic;
 		if( value == 1 || value == true ) {
@@ -44,8 +46,7 @@
 		}
 	}
 
-	n { |num| this.prSetPbindParam(\n, num) }
-
+	// rhythms
 	r { |args|
 		if( args.isSymbol ) {
 			args = this.prSymbolToBinaryDigits(args);
@@ -53,11 +54,10 @@
 		this.prSetPbindParam(\r, args.replace(0,\r).debug("rhythm").pseq);
 	}
 
-
 	doesNotUnderstand { |selector, args|
 		// it's an efect with 'fxN'
 		if("^fx\\d+".matchRegexp(selector.asString)) {
-			args.debug(selector);
+			// args.debug(selector);
 			this.fx(selector.asString[2..].asInteger, args);
 			^this;
 		};
@@ -101,8 +101,14 @@
 	}
 
 	fx { |index, effect|
+		if(index < 100){
+			index = index.asInteger + 100;
+			"[WARNING] Index for % < 100 has been reindexed: % \n".postf(this.key, index);
+		};
+
 		if(this.source.isNil) {
-			this.source = { \in.ar(0!2) };
+			// this.source = { \in.ar(0!2) };
+			this.source = Pbind(\amp, 0);
 		};
 
 		if( effect.isNil ) {
@@ -113,6 +119,9 @@
 	}
 
 	drywet { |index, amt|
+		if(index < 100){
+			index = index.asInteger + 100;
+		};
 		(\wet++index).asSymbol.debug("drywet");
 		this.set((\wet++index).asSymbol, amt)
 	}
@@ -122,7 +131,7 @@
 	// 	~bla =>.2 ~alo
 	// this will set Ndef(\alo).source to slot Ndef(\bla)[2]
 	=> { |source, index=\1|
-		// source.source.postcs.debug(index.asSymbol);
+		if( this.source.isNil ) { this.source = Pbind(\amp, 0) };
 		this.addSource(index.asInteger, source);
 	}
 
