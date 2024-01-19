@@ -131,6 +131,7 @@ Ziva {
 	}
 
 	*clear {
+		currentEnvironment.clear;
 		Pdef.removeAll;
 		// Server.freeAll;
 	}
