@@ -128,9 +128,11 @@
 
 	// second argument is adverb
 	// usage:
-	// 	~bla =>.2 ~alo
-	// this will set Ndef(\alo).source to slot Ndef(\bla)[2]
-	=> { |source, index=\1|
+	//
+	// ~mixer <=.2 ~sound
+	//
+	// this will set Ndef(\sound).source to slot Ndef(\mixer)[2]
+	<= { |source, index=\1|
 		if( this.source.isNil ) { this.source = Pbind(\amp, 0) };
 		this.addSource(index.asInteger, source);
 	}
