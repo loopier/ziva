@@ -119,12 +119,21 @@ Ziva {
 		topEnvironment.at(\ziva).pop;
 	}
 
-	*hush { |time|
+	// mutes mixer slots that have \mixN role in the given time
+	*hush { |time=0.1|
 		// Ndef.dictFor(Ziva.server).keysValuesDo{|k,v|
-		Ndef.all[\localhost].keysValuesDo{|k,v|
-			if( not( k.asString.beginsWith(\fx_.asString)) && (k != \all) ) {
-				Ndef(k.asSymbol).clear(time);
-			}
+		// Ndef.all[\localhost].keysValuesDo{|k,v|
+		// 	if( not( k.asString.beginsWith(\fx_.asString)) && (k != \all) ) {
+		// 		Ndef(k.asSymbol).clear(time);
+		// 	}
+		// }
+
+		Ziva.proxyspace.at(\mixer).do{ |ndef|
+			ndef.nodeMap.keysValuesDo{|k,v|
+				if( k.asString.contains("mix") ) {
+					ndef.set(k, Ndef(ndef.key++k, { Line.kr(v, 0, time) })).debug(k)
+				}
+			};
 		}
 	}
 
@@ -344,6 +353,13 @@ Ziva {
 	*controls { |synth|
         "% controls".format(synth).postln;
         this.synthControls(synth).collect(_.postln)
+	}
+
+	*mixer {
+		// TODO: add mixer values from Ziva.proxyspace.at(\mixer).nodeMap
+		Ziva.proxyspace.at(\mixer).sources.do{|x,i|
+			"%: %\n".postf(i, x.source.asCompileString);
+		}
 	}
 
 	*makeConstants {
