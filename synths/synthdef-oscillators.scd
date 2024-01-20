@@ -6,7 +6,7 @@ SynthDef(\white, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(1);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = WhiteNoise.ar(amp);
@@ -20,7 +20,7 @@ SynthDef(\pink, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(1);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = PinkNoise.ar(amp);
@@ -34,7 +34,7 @@ SynthDef(\brown, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(1);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = BrownNoise.ar(amp);
@@ -50,7 +50,7 @@ SynthDef(\sine, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(0);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = SinOscFB.ar(freq, feedback, amp);
@@ -65,7 +65,7 @@ SynthDef(\saw, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(0);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = Saw.ar(freq, amp);
@@ -81,7 +81,7 @@ SynthDef(\pulse, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(0);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = Pulse.ar(freq, width, amp);
@@ -97,7 +97,7 @@ SynthDef(\impulse, {
 	var gate = \gate.kr(1);
 	var attack = \atk.kr(0.01);
 	var decay = \dec.kr(0.3);
-	var sustain = \sus.kr(0.5);
+	var sustain = \sus.kr(1);
 	var release = \rel.kr(0);
 	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
 	var sig = Impulse.ar(freq, width, amp);
