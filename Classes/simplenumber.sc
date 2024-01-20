@@ -64,9 +64,9 @@
 	vcf { | res=0.7, mul=1 |  ^{| in | MoogVCF.ar(in, this, res, mul: mul)} }
 	tremolo {| depth=0.3 | ^{| in | in * SinOsc.ar(this, 0, depth, 0)}}
 	vibrato {| depth=0.3 | ^{| in | PitchShift.ar(in, 0.008, SinOsc.ar(this, 0, depth, 1))}}
+	distort {| post, spread | ^this.asFloat.distort(post, spread) }
 	// techno {| x | ^{| in | RLPF.ar(in, SinOsc.ar(0.1).exprange(880,12000), 0.2)}}
 	// technosaw {| x | ^{| in | RLPF.ar(in, LFSaw.ar(0.2).exprange(880,12000), 0.2)}}
-	// distort {| x | ^{| in | (3111.33*in.distort/(1+(2231.23*in.abs))).distort*0.02}}
 	// cyberpunk {| x | ^{| in | Squiz.ar(in, 4.5, 5, 0.1)}}
 	// bitcrush {| x | ^{| in | Latch.ar(in, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)}}
 	// antique {| x | ^{| in | LPF.ar(in, 1700) + Dust.ar(7, 0.6)}}
@@ -92,7 +92,18 @@
 }
 
 + Float {
-	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
+	distor { |post=1, spread=0.2| ^{|in| Splay.ar((in * this.abs).distort, spread) * post }}
+	// asymetric fold
+	// \param neg	absolute value of the negative pole value, will be converted to negative
+	afold { |neg=0.1, post=1|
+		var posPre = this.max(0.01);
+		var negPre = neg.max(0.01).neg;
+		^{| in |
+			LeakDC.ar(in.fold(negPre, posPre) * (1/negPre.abs + posPre)) * post
+		}
+	}
+	// symetric fold
+	fold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
 }
 
 // + Integer {

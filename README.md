@@ -33,7 +33,7 @@ Ziva.controls(\pulse);
 ~delt lfo: noise2(1, 0.04, 0.3); // used in delay time
 ~delfb lfo: noise2(1, 0.4, 0.95); // used in delay feedback
 // distortion lfo to add wabble
-~folda lfo: noise1(10.5, 0.01, 0.9); // used in distortion
+~folda lfo: noise1(7, 0.1, 0.9); // used in distortion
 
 // prepare the instruments
 // deep bass with a chorus effect
@@ -44,13 +44,14 @@ Ziva.controls(\pulse);
 // shy lead
 ~lead s: \theremin dur: (4..8).prand degree: [3,4,5].prand legato: 1.2 octave: [6,5,6] fx1: hpf(400);
 // distorted guitarish sound
-~gtr s: \pulse dur: ((1..8).prand) degree: ([2,3,4].prand + [0,4,7]) atk: 0.5 rel: 0.4 legato: 1 octave: [3,4].prand amp: 0.1 fx1: nil fx2: \chorus fx3: nil;
+~gtr s: \pulse dur: ((1..8).prand) degree: ([2,3,4,5].prand + [0,4,7]) atk: 0.5 rel: 0.4 legato: 1 octave: [4,5].prand amp: 1 fx1: fold(~folda) fx2: \chorus fx3: nil;
 
 // patch sounds to mixer
-// the number in `<=.N` is the channel number in the mixer
-~mixer <=.1 ~bass mix1: 0.1;
-~mixer <=.2 ~candy mix2: 0.1; // adding dry signal to mix
-~mixer <=.3 ~lead mix3: 0.3;
+// the number in `>>>.N` is the channel number in the mixer
+// the final value is the mix level
+~bass >>>.1 0.2;
+~candy >>>.2 0.2;
+~lead >>>.3 0.4;
 
 // a track with a dedicated signal chain
 // a track is just an insturment without any
@@ -58,28 +59,19 @@ Ziva.controls(\pulse);
 // at least one effect attached to it
 ~track fx1: \reverbL;
 // a track is also a mixer
-// patch an instrument to the track
-~track <=.1 ~gtr mix1: 0.1; //
-// we can patch the other way (from right to left)
-~candy =>.2 ~track;
-// but then the mix has to be done separately
-~track mix2: 0.3; // a bit of reverb
+// patch an instrument to the track and set the mix level
+~gtr =>.1 ~track mix1: 0.2;
 
-// we finally patch the track to the output mixer with
-// yet another syntax. This only patches the source to
-// the main output mixer, it cannot be used to patch anything
-// to a submixer like `track`
-// this is the same as writing:
-// ~mixer <=.4 mix4: 0.1
-~track =>>.4 0.1;
+// we finally patch the track with reverb to the output mixer with
+~track >>>.4 0.1;
 
-// we finally set a global effect that affects the final output and
-// but first, prepare an lfo to control the wetness
-~drywet lfo: sine(0.1, 0, 1);
+// set a global effect that affects the final output
 // add the effect
 ~mixer fx1: hpf(70);
+// an lfo to control the wetness
+~drywet lfo: sine(0.1, 0, 1);
 // and control the wetness with the lfo
-~mixer wet100: ~drywet;
+~mixer wet1: ~drywet;
 )
 
 // stop everything instantly
@@ -98,7 +90,7 @@ Ziva.hush(5);
 - `mix(2, 0.5)` or `2.mix(0.5)` or `0.5.mix(2)` is the same as `~mixer mix2: 0.5`
 - add `mousex|y(min, max)` to control parameters with the mouse
 - add `midifighter(CC)` or `mf(CC)` to control parameters with MidiFighter
-- `~bla =>>.2 0.5` shortcut of `~mixer <=.2 ~bla mix2: 0.5
+- `~bla >>>.2 0.5` shortcut of `~mixer <=.2 ~bla mix2: 0.5
 - `~bla 2.=> ~mixer` is opposite of `~mixer <=.2 ~mixer` -- maybe `~bla =>.2 ~mixer`
 - replicate HydraSynth's FX signal chain: `sig -> prefx -> delay -> reverb -> postfx`
 

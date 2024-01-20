@@ -126,38 +126,63 @@
 		this.set((\wet++index).asSymbol, amt)
 	}
 
+	// send output to destination
 	// second argument is adverb
 	// usage:
 	//
 	// ~sound =>.2 ~mixer
-	//
-	// see `<=` below
 	=> { |destination, index=\1|
+		destination.unpatch(index);
 		destination.addSource(index.asInteger, this);
+		destination.set((\mix++index).asSymbol, 0.9);
+		^destination;
+	}
+
+	// unmap patch
+	=< { |destination, index=\1|
+		destination.unpatch(index);
+	}
+
+	unpatch { |index=\1|
+		this.set((\mix++index), nil);
+		this.[index.asInteger] = nil;
+	}
+
+	// // second argument is adverb
+	// // usage:
+	// //
+	// // ~mixer <=.2 ~sound
+	// //
+	// // this will set Ndef(\sound).source to slot Ndef(\mixer)[2]
+	// <= { |source, index=\1|
+	// 	if( this.source.isNil ) { this.source = Pbind(\amp, 0) };
+	// 	this.addSource(index.asInteger, source);
+	// }
+
+	to { |destination, index=\1, mixAmt=1|
+		destination.addSource(index.asInteger, this);
+		destination.mix(index.asInteger, mixAmt);
 	}
 
 	// second argument is adverb
 	// usage:
 	//
-	// ~mixer <=.2 ~sound
-	//
-	// this will set Ndef(\sound).source to slot Ndef(\mixer)[2]
-	<= { |source, index=\1|
-		if( this.source.isNil ) { this.source = Pbind(\amp, 0) };
-		this.addSource(index.asInteger, source);
-	}
-
-	// second argument is adverb
-	// usage:
-	//
-	// ~sound =>>.2 0.5
+	// ~sound >>>.2 0.5
 	//
 	// automatically patch ~sound to a mixer channel with a value
 	// -- shortcut for ~mixer <=.N ~mixer mixN: amount
-	=>> { |mixAmt=0.1, index=\1|
+	>>> { |mixAmt=0.1, index=\1|
+		this.mixer(index.asInteger, mixAmt);
+	}
+
+	<<< {
+		this.mixer.sources;
+	}
+
+	mixer { |index=1, mixAmt=0.1|
 		var mixer = Ziva.proxyspace.at(\mixer);
-		mixer[index.asInteger] = this;
-		mixer.set(\mix++index, mixAmt);
+		mixer.addSource(index.asInteger, this);
+		mixer.set((\mix++index).asSymbol, mixAmt);
 	}
 
 	addSource { |index, source|
@@ -172,7 +197,7 @@
 		};
 	}
 
-	mix { |index, gain|
+	mix { |index, gain=0.1|
 		if(this.source.isNil) {
 			this.source = { \in.ar(0!2) };
 		};
@@ -215,5 +240,17 @@
 	crush {^{| in | in.round(0.5 ** (this-1));}}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
-	fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
+	distor { |smooth=0.5, post=1| ^{|in| CrossoverDistortion.ar(in, this, smooth) * post }}
+	// asymetric fold
+	// \param neg	absolute value of the negative pole value, will be converted to negative
+	// -- old version -- fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
+	afold { |neg, post=1|
+		var posPre = this.max(0.01);
+		var negPre = neg.max(0.01).neg;
+		^{| in |
+			LeakDC.ar(in.fold(negPre, posPre) * (1/negPre.abs + posPre)) * post
+		}
+	}
+	// symetric fold
+	fold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
 }
