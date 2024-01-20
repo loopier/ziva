@@ -71,7 +71,7 @@ Ziva {
 
 		MIDIClient.init;
 
-		Ziva.proxyspace = ProxySpace.push(server, \ziva).quant_(1);
+		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
 		Ziva.proxyspace.put(\mixer, { \in.ar(0!2) });
 		Pdefn(\root, 0);
 
@@ -678,10 +678,10 @@ Ziva {
 	// *tempo_ { |tempo| this.clock.tempo = tempo}
 	// *bpm { ^(this.clock.tempo * 60) }
 	// *bpm_ { |bpm| this.clock.tempo = bpm / 60;}
-	*tempo { ^this.tempo }
-	*tempo_ { |tempo| this.tempo = tempo}
-	*bpm { ^(this.clock.tempo * 60) }
-	*bpm_ { |bpm| this.tempo = bpm / 60;}
+	*tempo { ^Ziva.clock.tempo }
+	*tempo_ { |tempo| Ziva.clock.tempo = tempo}
+	*bpm { ^(Ziva.clock.tempo * 60) }
+	*bpm_ { |bpm| Ziva.clock.tempo = bpm / 60;}
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
