@@ -131,7 +131,7 @@
 	// usage:
 	//
 	// ~sound =>.2 ~mixer
-	=> { |destination, index=\1|
+	=>> { |destination, index=\1|
 		destination.unpatch(index);
 		destination.addSource(index.asInteger, this);
 		destination.set((\mix++index).asSymbol, 0.9);
@@ -139,7 +139,7 @@
 	}
 
 	// unmap patch
-	=< { |destination, index=\1|
+	=<< { |destination, index=\1|
 		destination.unpatch(index);
 	}
 
