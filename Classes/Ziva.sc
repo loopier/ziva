@@ -108,8 +108,7 @@ Ziva {
 			this.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 
 			// add a limiter to the end of the chain (not realy the end, but its not
-			// likely there are 200 sources in the mixer Ndef)
-			Ziva.proxyspace.at(\mixer)[200] = \filter -> {| in | Limiter.ar(in)};
+			// likely there are hundreds of sources in the mixer Ndef)
 			Ziva.proxyspace.at(\mixer).play;
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
@@ -146,8 +145,7 @@ Ziva {
 	}
 
 	*clear {
-		currentEnvironment.clear;
-		Pdef.removeAll;
+		Ziva.proxyspace.clear;
 		// Server.freeAll;
 	}
 
@@ -424,7 +422,7 @@ Ziva {
 
 	*makeFxDict { // more to come here + parameter control - for your own effects, simply add a new line to here and it will work out of the box
 		fxDict = IdentityDictionary.new;
-		fxDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, \mix.kr(0.85), \room.kr(0.86), \damp.kr(0.3))};
+		fxDict[\reverb] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, \reverb.kr(0.85), \room.kr(0.86), \damp.kr(0.3))};
 		fxDict[\reverbL] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.95, 0.96, 0.7)};
 		fxDict[\reverbS] 	= {arg sig; (sig*0.6)+FreeVerb.ar(sig, 0.45, 0.46, 0.2)};
 		fxDict[\gverbS] 	= {arg sig; sig + GVerb.ar(sig, roomsize:10, revtime:1, damping:0.1, inputbw:0.0, drylevel:0.0, earlyreflevel:1.0, taillevel:0.2, mul: (-6.dbamp))};
@@ -433,13 +431,15 @@ Ziva {
 		fxDict[\gverbXL] 	= {arg sig; HPF.ar(GVerb.ar(sig, roomsize:40, revtime:4, damping:0.2, inputbw:0.5, drylevel:0.2, earlyreflevel:0.3, taillevel:0.5), 100)};
 		fxDict[\delay]  	= {arg sig; AllpassC.ar(sig, 2, \delt.kr(0.15), \dect.kr(1.3) )};
 		fxDict[\swdelay]  	= {arg sig; SwitchDelay.ar(sig, 2, \dry.kr(1), \wet.kr(1), \delaytime.kr(1), \feedback.kr(0.7) )};
-		fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
-		fxDict[\lpf] 		= {arg sig, lcutoff=1000; RLPF.ar(sig, lcutoff, \lres.kr(1.0))};
-		fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(50))};
-		fxDict[\hpfS] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(50))};
-		fxDict[\hpf]  		= {arg sig; RHPF.ar(sig, \hcutoff.kr(1000), \hres.kr(1.0))};
-		fxDict[\hpfL] 		= {arg sig; HPF.ar(sig, \hcutoff.kr(1500))};
-		fxDict[\bpf] 		= {arg sig; BPF.ar(sig, \bcutoff.kr(1500), \bres.kr(1.0))};
+		// fxDict[\lpfS] 		= {arg sig; LPF.ar(sig, \lcutoff.kr(3000))};
+		fxDict[\lpf] 		= {arg sig, lcutoff=1000; RLPF.ar(sig, \lpfco, \lpfres.kr(1.0))};
+		// fxDict[\lpfL] 		= {arg sig; LPF.ar(sig, \lpfco.kr(50))};
+		// fxDict[\hpfS] 		= {arg sig; HPF.ar(sig, \hpfco.kr(50))};
+		fxDict[\hpf]  		= {arg sig; RHPF.ar(sig, \hpfco.kr(1000), \hpfres.kr(1.0))};
+		// fxDict[\hpfL] 		= {arg sig; HPF.ar(sig, \hpfco.kr(1500))};
+		fxDict[\bpf] 		= {arg sig; BPF.ar(sig, \bpfco.kr(1500), \bpfres.kr(1.0)) };
+		fxDict[\brf]		= {arg sig; BRF.ar(sig, \brfco.kr(1500), \brfres.kr(1.0)) };
+		fxDict[\vcf]		= {arg sig; MoogVCF.ar(sig, \vcfco, \vcfres.ar(0.7)) };
 		fxDict[\tremolo]	= {arg sig; (sig * SinOsc.ar(2.1, 0, 5.44, 0))*0.5};
 		fxDict[\vibrato]	= {arg sig; PitchShift.ar(sig, 0.008, SinOsc.ar(2.1, 0, 0.11, 1))};
 		fxDict[\techno] 	= {arg sig; RLPF.ar(sig, SinOsc.ar(0.1).exprange(880,12000), 0.2)};
@@ -457,7 +457,7 @@ Ziva {
 			var maxdelaytime= rrand(0.005,0.02);
 			Splay.ar(Array.fill(4,{
 				var maxdelaytime= rrand(0.005,0.02);
-				var del = DelayC.ar(sig[0], maxdelaytime,LFNoise1.kr(Rand(0.1,0.6),0.25*maxdelaytime,0.75*maxdelaytime));
+				var del = DelayC.ar(sig[0], maxdelaytime, LFNoise1.kr(Rand(0.1,0.6), 0.25*maxdelaytime, 0.75*maxdelaytime));
 				// LinXFade2.ar(sig, del, \chorusamt.kr(0.0).linlin(0.0,1.0, -1.0,1.0));
 				del;
 			}));
