@@ -50,7 +50,17 @@
         ^this.chooseN(size);
     }
 
-    pick { | size=8, repeats=0| ^this.choosen(size,repeats) }
+    // pick first N random items from this array
+    // then N random items from this array
+    // if either FIRST or THEN are arrays, it copies the selection as many times as the array length
+    pick { | first=8, then=nil, repeats=0 |
+        var arr=(..7).debug;
+        var result;
+        if( first.isArray ) { result = this.choosen(first[0]).dup(first.size) } { result = this.choosen(first) };
+        if( then.isArray ) { result = result ++ this.choosen(then[0]).dup(then.size) } { result = result ++ this.choosen(then) };
+
+        ^result.flat.debug("pick").pseq
+    }
 
     // duplicate N times (same as .dup(n)) and concatenate OTHER to the end
     dupand { |n, other|
