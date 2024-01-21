@@ -1,6 +1,6 @@
 # Document Title
 
-## utils
+## Utils
 
 ### bj( `hits`, `beats`, `offset=0` )
 
@@ -9,7 +9,7 @@ Returns an array of hits (`1`s) evently distributed in an amount of beats, filli
 - **beats** - `int` - number of beats (size of the array)
 - **offset** - `int` - shift towards the right if positive, or to the left if negative.
 
-**Example:** `bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`
+Example:`bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`
 
 ### bjr( hits, beats, offset=0 )
 
