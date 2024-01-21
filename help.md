@@ -4,10 +4,12 @@
 
 ### bj( `hits`, `beats`, `offset=0` )
 
-Returns an array of hits (`1`) evently distributed in an amount of beats, filling the rest with `0`s. 
+Returns an array of hits (`1`s) evently distributed in an amount of beats, filling the rest with `0`s. 
 - **hits** - `int` or `array` - number of hits (`1`s)
 - **beats** - `int` - number of beats (size of the array)
 - **offset** - `int` - shift towards the right if positive, or to the left if negative.
+
+*Example: `bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`*
 
 ### bjr( hits, beats, offset=0 )
 
