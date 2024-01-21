@@ -1,17 +1,20 @@
 # Document Title
+
 ## utils
-### bj( hits, beats, offset=0 )
 
-    Returns an array of hits (`1`) evently distributed in an amount of beats, filling the rest with `0`s. 
-    - **hits** - `int` or `array` - number of hits (`1`s)
-    - **beats** - `int` - number of beats (size of the array)
-    - **offset** - `int` - shift towards the right if positive, or to the left if negative.
-### `bjr( hits, beats, offset=0 )`
+### bj( `hits`, `beats`, `offset=0` )
 
-    Returns an array of hits evently distributed in an amount of beats, filling the rest with `rest`s. 
-    - **hits** - `int` or `array` - number of hits (`1`s). If it's an array, it iterates over it puting one value on each hit.
-    - **beats** - `int` - number of beats (size of the array)
-    - **offset** - `int` - shift towards the right if positive, or to the left if negative.
+Returns an array of hits (`1`) evently distributed in an amount of beats, filling the rest with `0`s. 
+- **hits** - `int` or `array` - number of hits (`1`s)
+- **beats** - `int` - number of beats (size of the array)
+- **offset** - `int` - shift towards the right if positive, or to the left if negative.
+
+### bjr( hits, beats, offset=0 )
+
+Returns an array of hits evently distributed in an amount of beats, filling the rest with `rest`s. 
+- **hits** - `int` or `array` - number of hits (`1`s). If it's an array, it iterates over it puting one value on each hit.
+- **beats** - `int` - number of beats (size of the array)
+- **offset** - `int` - shift towards the right if positive, or to the left if negative.
 ### `brown( min, max=1, int=1 )`
 ### `white( min, max=1 )`
 ### `chop( size, chunks=16 )`
