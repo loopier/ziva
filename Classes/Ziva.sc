@@ -73,6 +73,8 @@ Ziva {
 
 		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
 		Ziva.proxyspace.put(\mixer, { \in.ar(0!2) });
+		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
+		Ziva.proxyspace.clock = Ziva.clock;
 		Pdefn(\root, 0);
 
 		this.server.waitForBoot{
@@ -107,7 +109,6 @@ Ziva {
 			// Ndef(\all).parentGroup = allFxGroup;
 
 			"r = \\r".interpret;
-			this.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 
 			// add a limiter to the end of the chain (not realy the end, but its not
 			// likely there are hundreds of sources in the mixer Ndef)
