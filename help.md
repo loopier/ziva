@@ -1,6 +1,6 @@
 # Document Title
 ## utils
-### `bj( hits, beats, offset=0 )`
+### bj( hits, beats, offset=0 )
 
     Returns an array of hits (`1`) evently distributed in an amount of beats, filling the rest with `0`s. 
     - **hits** - `int` or `array` - number of hits (`1`s)
