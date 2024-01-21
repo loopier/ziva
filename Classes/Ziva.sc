@@ -55,7 +55,7 @@ Ziva {
 	}
 
 	*boot { |inputChannels = 2, outputChannels = 2, server = nil,
-		numBuffers = 16, memSize = 32, maxNodes = 32|
+		numBuffers = 16, memSize = 32, maxNodes = 32, meter = true|
 		server = server ? Server.default;
 		this.server = server;
 		this.serverOptions(this.server, inputChannels, outputChannels, numBuffers, memSize, maxNodes);
@@ -88,10 +88,12 @@ Ziva {
 			this.scale_(\major);
 			// this.tracks = Array.fill(8, {|i| Ndef((\fxtrack++i).asSymbol, { \in.ar!2 })});
 
-			this.meter = ServerMeter.new(server, 2,2);
-			this.meter.window.background = Color(0.25,0.25,0.25);
-			this.meter.window.bounds = Rect(0,1080-230, 134,230);
-			this.meter.window.alwaysOnTop = true;
+			if(meter) {
+				this.meter = ServerMeter.new(server, 2,2);
+				this.meter.window.background = Color(0.25,0.25,0.25);
+				this.meter.window.bounds = Rect(0,1080-230, 134,230);
+				this.meter.window.alwaysOnTop = true;
+			};
 
 			// // global fx -- last node in the chain
 			// // code from https://scsynth.org/t/use-nodeproxy-to-write-effects-on-main-out-channels/2849/2
