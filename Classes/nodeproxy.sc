@@ -10,8 +10,11 @@
 		^symbol.interpret.asBinaryDigits(symbol.replace("0x","").size * 4);
 	}
 
+	/// \brief	see `sound`
 	s { |snd| this.sound(snd);}
 
+	/// \brief	set the sound
+	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
 			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
@@ -20,23 +23,29 @@
 		};
 	}
 
-	// samples
+	/// \brief	set a sample index
+	/// \param	num:	the index of the samples in the folder (alphabetiaclly ordered)
 	n { |num| this.prSetPbindParam(\n, num) }
 
-	// midi
+	/// \brief	connect to MIDI(0)
+	/// \param	ch:		channel number [0..15]
 	m { |ch| this.midi(ch) }
 
 	midi {|ch|
 		this[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
-	// zynaddsubfx
+	/// \brief	see `zyn`
 	z { |ch| this.zyn(ch); }
 
+	/// \brief	send MIDI events and OSC messages to ZynAddSubFx (OSC 127.0.0.1:4001)
+	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		this[0] = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
+	/// \brief	Disable gate on MIDI messages.
+	/// \param	value: `true` to disable gate, `false` to enable it
 	hold { |value=true|
 		// Zynaddsubfx.panic;
 		if( value == 1 || value == true ) {
@@ -46,7 +55,9 @@
 		}
 	}
 
-	// rhythms
+	/// \brief	set a rythm with hexadecimal symbol
+	/// \descritpion	hexadecimal values will be converted to 8-beat (sic) rythms where 0 is rest and 1 is hit
+	/// \param	args:	a symbol representing a hexadecimal number. E.g.: '808a808f'
 	r { |args|
 		if( args.isSymbol ) {
 			args = this.prSymbolToBinaryDigits(args);
@@ -100,6 +111,10 @@
 		};
 	}
 
+	///	\brief	set an effect with an index
+	/// \description	effects can be added in any order
+	/// \param	index:	index of the effect (indices < 100 will be converted to 100 + index)
+	/// \param	effect:	either a symbol with an effect name, or a function using the signal input {|in| ...}
 	fx { |index, effect|
 		if(index < 100){
 			index = index.asInteger + 100;
@@ -118,6 +133,9 @@
 		};
 	}
 
+	///	\brief	set the dry (0) - wet (1) value of the effect at that index
+	///	\param	index:	index of the effect
+	///	\param	amt:	0 = 100% dry signal; 1 = 100% wet signal
 	drywet { |index, amt|
 		if(index < 100){
 			index = index.asInteger + 100;
@@ -126,11 +144,18 @@
 		this.set((\wet++index).asSymbol, amt)
 	}
 
-	// send output to destination
-	// second argument is adverb
-	// usage:
-	//
-	// ~sound =>.2 ~mixer
+	/// \brief	send output to destination
+	/// \descriptions	send the signal on the left to the Nth slot of the signal on the right.
+	/// 	This can be used to send signals through a common fx chain before sending it to the mixer.
+	/// 	Usage:
+	///
+	/// 	~track1 fx1: \reverb			// create a track with a reverb (note we don't specify a sound; no sound `s:`)
+	/// 	~sndA =>>.1 ~track1 mix1: 0.5 	// set ~sndA to channel 1 of this track
+	/// 	~sndB =>>.2 ~track1 mix2: 0.2 	// set ~sndB to channel 2 of this track
+	/// 	~track1 >>>.1 0.2 			Adverbs for Binar	// send the track output to the mixer
+	///
+	/// \param	destination:	another NodeProxy (instrument or track)
+	/// \param	index:			(adverb) usage: =>>.N - index or "channel" of the destination where the signal is sent
 	=>> { |destination, index=\1|
 		destination.unpatch(index);
 		destination.addSource(index.asInteger, this);
@@ -138,11 +163,14 @@
 		^destination;
 	}
 
-	// unmap patch
+	/// \brief	unpatch a signal from a destination
+	/// \param	destination:	another NodeProxy (instrument or track)
+	/// \param	index:			(adverb) usage: =>>.N - index or "channel" of the destination where the signal is sent
 	=<< { |destination, index=\1|
 		destination.unpatch(index);
 	}
 
+	/// \brief	see =<<
 	unpatch { |index=\1|
 		this.set((\mix++index), nil);
 		this.[index.asInteger] = nil;
@@ -164,13 +192,14 @@
 		destination.mix(index.asInteger, mixAmt);
 	}
 
-	// second argument is adverb
-	// usage:
-	//
-	// ~sound >>>.2 0.5
-	//
-	// automatically patch ~sound to a mixer channel with a value
-	// -- shortcut for ~mixer <=.N ~mixer mixN: amount
+	/// \brief	send a signal to the mixer
+	/// \description	There's a main mixer where all signals must be patched in order to hear the sound.
+	/// 	The mixer channel is specified with a number.
+	/// 	usage:
+	///
+	/// 	~sndA >>>.2 0.5	// patch ~sndA's signal output to main mixer's channel 2 with a gain of 0.5
+	///	\param	mixAmt:	gain
+	///	\param	index:	(adverb) usage: >>>.N - index or channel in the mixer where the signal will be patched
 	>>> { |mixAmt=0.1, index=\1|
 		this.mixer(index.asInteger, mixAmt);
 	}
@@ -207,10 +236,21 @@
 		};
 	}
 
+	/// \brief	set an LFO with a function
+	/// \description	LFOs can be used to modulate parameters.
+	/// \usage
+	///		~freq lfo: sine(1, 400, 3000);
+	///		~res lfo: sine(1, 0, 0.7);
+	///		~sndA s: \saw octave: 3 fx1: vcf(~freq, ~res) >>>.1 1;
+	/// \param	func:	function that defines the modulation - see `Functions`
 	lfo { |func|
 		this[0] = func;
 	}
 
+	/// \brief	set a seed to get persistent randomness
+	/// \description	keep the same random values when reevaluating
+	/// \usage			~snd.seed(1234) s: \bass degree: [0,2,4].pick(8) >>>.1 1
+	/// \param	num:	same results will come back when restoring a number
     seed { |num| thisThread.randSeed = num }
 
 	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
