@@ -1,8 +1,8 @@
 + NodeProxy {
 	prSetPbindParam { |param, value|
-		var pairs = this.source.patternpairs.asDict.put(param.asSymbol, value).asPairs;
-		this.source.patternpairs = pairs;
-		this.source.patternpairs;
+		var pairs = this[0].patternpairs.asDict.put(param.asSymbol, value).asPairs;
+		this[0].patternpairs = pairs;
+		this[0].patternpairs;
 	}
 
 	prSymbolToBinaryDigits { |symbol|
@@ -14,9 +14,9 @@
 
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
-			this.source = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
 		} {
-			this.source = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
 		};
 	}
 
@@ -27,14 +27,14 @@
 	m { |ch| this.midi(ch) }
 
 	midi {|ch|
-		this.source = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 	// zynaddsubfx
 	z { |ch| this.zyn(ch); }
 
 	zyn { |ch|
-		this.source = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this[0] = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 	hold { |value=true|
@@ -93,7 +93,7 @@
 			Event.partialEvents.pitchEvent.keys.includes(selector) ||
 			Event.partialEvents.playerEvent.keys.includes(selector) ||
 			Event.partialEvents.serverEvent.keys.includes(selector) ||
-			Ziva.synthControls(this.source.patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
+			Ziva.synthControls(this[0].patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
 			Zynaddsubfx.oscInterfaceDict.includesKey(selector)
 		) {
 			this.prSetPbindParam(selector, args);
@@ -106,9 +106,9 @@
 			"[WARNING] Index for % < 100 has been reindexed: % \n".postf(this.key, index);
 		};
 
-		if(this.source.isNil) {
-			// this.source = { \in.ar(0!2) };
-			this.source = Pbind(\amp, 0);
+		if(this[0].isNil) {
+			// this[0] = { \in.ar(0!2) };
+			this[0] = Pbind(\amp, 0);
 		};
 
 		if( effect.isNil ) {
@@ -155,7 +155,7 @@
 	// //
 	// // this will set Ndef(\sound).source to slot Ndef(\mixer)[2]
 	// <= { |source, index=\1|
-	// 	if( this.source.isNil ) { this.source = Pbind(\amp, 0) };
+	// 	if( this[0].isNil ) { this[0] = Pbind(\amp, 0) };
 	// 	this.addSource(index.asInteger, source);
 	// }
 
@@ -186,8 +186,8 @@
 	}
 
 	addSource { |index, source|
-		if(this.source.isNil) {
-			this.source = { \in.ar(0!2) };
+		if(this[0].isNil) {
+			this[0] = { \in.ar(0!2) };
 		};
 
 		if( source.isNil ) {
@@ -198,8 +198,8 @@
 	}
 
 	mix { |index, gain=0.1|
-		if(this.source.isNil) {
-			this.source = { \in.ar(0!2) };
+		if(this[0].isNil) {
+			this[0] = { \in.ar(0!2) };
 		};
 
 		if( gain.isNil.not ) {
@@ -208,7 +208,7 @@
 	}
 
 	lfo { |func|
-		this.source = func;
+		this[0] = func;
 	}
 
     seed { |num| thisThread.randSeed = num }
