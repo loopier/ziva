@@ -64,5 +64,5 @@
 - `afold( ###, neg=0.1, post=1 )` 
 - `fold( threshold, post=1 )` 
     Symetric wave folding.
-    - `*threshold*` - values > `threshold` will be folded.
-    - `*post*` - gain after the folding.
+    - *threshold* - values > `threshold` will be folded.
+    - *post* - gain after the folding.
