@@ -9,7 +9,9 @@ Returns an array of hits (`1`s) evently distributed in an amount of beats, filli
 - **beats** - `int` - number of beats (size of the array)
 - **offset** - `int` - shift towards the right if positive, or to the left if negative.
 
-Example:`bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`
+Example: 
+- `bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`
+- `bj(3,7,1) -> [ 0, 1, 0, 1, 0, 1, 0 ]`
 
 ### bjr( hits, beats, offset=0 )
 
@@ -17,6 +19,11 @@ Returns an array of hits evently distributed in an amount of beats, filling the 
 - **hits** - `int` or `array` - number of hits (`1`s). If it's an array, it iterates over it puting one value on each hit.
 - **beats** - `int` - number of beats (size of the array)
 - **offset** - `int` - shift towards the right if positive, or to the left if negative.
+
+Example: 
+- `bjr(3,7) -> [ 1, r, 1, r, 1, r, r ]`
+- `bjr(3,7,1) -> [ r, 1, r, 1, r, 1, r ]`
+
 ### `brown( min, max=1, int=1 )`
 ### `white( min, max=1 )`
 ### `chop( size, chunks=16 )`
