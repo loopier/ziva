@@ -69,13 +69,15 @@ Ziva {
 		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
 		ServerTree.add({this.makeTracks(4)});
 
-		MIDIClient.init;
-
 		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
-		Ziva.proxyspace.put(\mixer, { \in.ar(0!2) });
+		Ziva.proxyspace.put(\mixer, { \in.ar(0!outputChannels) });
 		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 		Ziva.proxyspace.clock = Ziva.clock;
 		Pdefn(\root, 0);
+
+		MIDIClient.init;
+		MIDIIn.connectAll;
+		this.initMidifighter;
 
 		this.server.waitForBoot{
 			var allFxGroup;
@@ -112,7 +114,7 @@ Ziva {
 
 			// add a limiter to the end of the chain (not realy the end, but its not
 			// likely there are hundreds of sources in the mixer Ndef)
-			Ziva.proxyspace.at(\mixer).play;
+			Ziva.proxyspace.at(\mixer).play(numChannels: outputChannels);
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
 		};
@@ -700,5 +702,15 @@ Ziva {
 		pairs.debug("hamrmonic pairs");
 		Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play;
 		^Pfunc { ~harmony[\degree] };
+	}
+
+	*initMidifighter {
+		(..127).do{ |i|
+			var key = (\mf++i).asSymbol.debug(i);
+			Ziva.proxyspace.put(key, 0);
+			// Ziva.proxyspace.put(\mixer, { \in.ar(0!outputChannels) });
+			MIDIdef.cc(key, {|ccval| Ziva.proxyspace[key] = ccval.linlin(0,127,0.0,1.0)}, i, 0);
+			// MIDIdef.cc(key, {|ccval| Ziva.proxyspace[key] = ccval.linlin(0,127,0.0,1.0)}, i, 0);
+		}
 	}
 }

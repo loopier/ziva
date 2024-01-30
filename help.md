@@ -13,7 +13,7 @@ Example:
 - `bj(3,7) -> [ 1, 0, 1, 0, 1, 0, 0 ]`
 - `bj(3,7,1) -> [ 0, 1, 0, 1, 0, 1, 0 ]`
 
-### bjr( hits, beats, offset=0 )
+### bjr( `hits`, `beats`, `offset=0` )
 
 Returns an array of hits evently distributed in an amount of beats, filling the rest with `rest`s. 
 - **hits** - `int` or `array` - number of hits (`1`s). If it's an array, it iterates over it puting one value on each hit.

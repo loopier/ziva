@@ -1,4 +1,5 @@
 + Number {
+
 	// utils
 	bj { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
 	bjr { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
@@ -104,4 +105,30 @@
 	}
 	// symetric fold
 	fold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
+}
+
++ Integer {
+	// controllers
+	midifighter { | min=0.0, max=1.0, curve=\lin |
+		// var key = (\midifighter++this).asSymbol.debug(this);
+		var key = (\mf++this).asSymbol.debug(this);
+		var nodeproxy = Ziva.proxyspace[key];
+		// MIDIdef.cc(key, {|ccval| Ziva.proxyspace[key] = ccval.linlin(0,127,0.0,1.0)}, i, 0);
+		MIDIdef.cc(
+			key: key,
+			func: {|ccval|
+				if( curve == \lin ) {
+					nodeproxy[0] = ccval.linlin(0,127,min,max);
+				}{
+					nodeproxy[0] = ccval.linexp(0,127, max(min, 0.001), max);
+				}
+			},
+			ccNum: this,
+			chan: 0,
+		);
+		Ziva.proxyspace[key].source.postcs;
+		^Ziva.proxyspace[key]
+	}
+
+	mf { | min=0.0, max=1.0, curve=\lin | this.midifighter(min,max,curve) }
 }
