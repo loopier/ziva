@@ -176,17 +176,7 @@
 		this.[index.asInteger] = nil;
 	}
 
-	// // second argument is adverb
-	// // usage:
-	// //
-	// // ~mixer <=.2 ~sound
-	// //
-	// // this will set Ndef(\sound).source to slot Ndef(\mixer)[2]
-	// <= { |source, index=\1|
-	// 	if( this[0].isNil ) { this[0] = Pbind(\amp, 0) };
-	// 	this.addSource(index.asInteger, source);
-	// }
-
+	/// \brief	send a signal to a destination
 	to { |destination, index=\1, mixAmt=1|
 		destination.addSource(index.asInteger, this);
 		destination.mix(index.asInteger, mixAmt);
@@ -226,15 +216,15 @@
 		};
 	}
 
-	mix { |index, gain=0.1|
-		if(this[0].isNil) {
-			this[0] = { \in.ar(0!2) };
-		};
+	// mix { |index, gain=0.1|
+	// 	if(this[0].isNil) {
+	// 		this[0] = { \in.ar(0!2) };
+	// 	};
 
-		if( gain.isNil.not ) {
-			this.set((\mix++index).asSymbol, gain);
-		};
-	}
+	// 	if( gain.isNil.not ) {
+	// 		this.set((\mix++index).asSymbol, gain);
+	// 	};
+	// }
 
 	/// \brief	set an LFO with a function
 	/// \description	LFOs can be used to modulate parameters.
