@@ -71,6 +71,11 @@ Ziva {
 
 		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
 		Ziva.proxyspace.put(\mixer, { \in.ar(0!outputChannels) });
+		Ziva.proxyspace[\mixer][1000] = \filter -> {|in|
+			var sig = LPF.ar(in, 18000);
+			sig = HPF.ar(sig, 5);
+			sig * \gain.kr(1);
+		};
 		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 		Ziva.proxyspace.clock = Ziva.clock;
 		Pdefn(\root, 0);
@@ -696,13 +701,14 @@ Ziva {
 	// \param 	degs	harmonic progression rootnotes
 	// \param 	dur		harmonic rhythm
 	// \param 	pairs	any other Pbind parameter
-	*harmony { |degs, durs ... pairs|
-		degs.debug("hamrmonic degs");
-		durs.debug("hamrmonic durs");
-		pairs.debug("hamrmonic pairs");
-		Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play;
-		^Pfunc { ~harmony[\degree] };
-	}
+	// *harmony { |degs, durs ... pairs|
+	// 	degs.debug("hamrmonic degs");
+	// 	durs.debug("hamrmonic durs");
+	// 	pairs.debug("hamrmonic pairs");
+	// 	// Pdef(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| ~harmony = event })).play;
+	// 	Ziva.proxyspace.put(\harmony, Pbind(\amp, 0, \degree, degs, \dur, durs).collect({|event| h = event })).play;
+	// 	^Pfunc { h[\degree] };
+	// }
 
 	*initMidifighter {
 		(..127).do{ |i|
