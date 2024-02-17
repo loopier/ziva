@@ -24,6 +24,7 @@
 	// after Mercury's total-serialism
 	arp { |notesPerOctave=7| ^([0,2,4].dup(this) + ((..this-1) * notesPerOctave)).flat} // this = octave
 	spread { |low=0.0, hi=0.1| ^interp(this, low, hi) }
+	spread2 { |value=0.1| ^interp(this, value.neg, value) }
 	dice { |sides=6| ^(1..sides).choosen(this) }
 	twelveTone{ ^(..12).scramble }
 
@@ -72,20 +73,24 @@
 	// bitcrush {| x | ^{| in | Latch.ar(in, Impulse.ar(11000*0.5)).round(0.5 ** 6.7)}}
 	// antique {| x | ^{| in | LPF.ar(in, 1700) + Dust.ar(7, 0.6)}}
 	crush {^{| in | in.round(0.5 ** (this-1));}}
-	// chorus {^{| in | Mix.fill(7, {
+	// chorus2 {^{| in | Mix.fill(7, {
 	// 	var maxdelaytime = rrand(0.005,0.02);
 	// 	DelayC.ar(in, maxdelaytime, LFNoise1.kr(Rand(4.5,10.5),0.25*maxdelaytime,0.75*maxdelaytime) );
 	// })}}
-	// chorus2 {^{| in | Mix.fill(7, {
-	// 	var maxdelaytime= rrand(0.005,0.02);
-	// 	Splay.ar(Array.fill(4,{
-	// 		var maxdelaytime= rrand(0.005,0.02);
-	// 		var del = DelayC.ar(in[0], maxdelaytime,LFNoise1.kr(Rand(0.1,0.6),0.25*maxdelaytime,0.75*maxdelaytime));
-	// 		// LinXFade2.ar(in, del, \chorusamt.kr(0.0).linlin(0.0,1.0, -1.0,1.0))
-	// 		LinXFade2.ar(in, del, this.linlin(0.0,1.0, -1.0,1.0));
-	// 		del;
-	// 	}))
-	// })}}
+	chorus { | min=1, max=20, spread=0.1, gain=1 |
+		^{| in | Mix.fill(7, {
+			// var maxdelaytime= rrand(0.005,0.02);
+			Splay.ar(
+				Array.fill(this,{
+					var maxdelaytime= rrand(min * 0.001, max * 0.001);
+					var del = DelayC.ar(in[0], maxdelaytime,LFNoise1.kr(Rand(0.1,0.6),0.25*maxdelaytime,0.75*maxdelaytime));
+					// LinXFade2.ar(in, del, this.linlin(0.0,1.0, -1.0,1.0));
+					del * gain;
+				}),
+				spread
+			)
+		})}
+	}
 	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
 	compress2{ | below=1, above=0.5 | ^{arg in; Compander.ar(in, in, this, below, above, 0.01, 0.01) }}
 	limiter {| dur=0.01 | ^limit(dur)}
