@@ -35,9 +35,9 @@
     }
 
     motif { | bars=1 |
-        var dur = [1, 1/4!4, 1/2!2].choosen(bars*4).flat.scramble;
-        var deg = this.choosen(dur.size);
-        ^(dur: Pseq(dur,inf), degree: Pseq(deg,inf));
+        var size = bars * 4;
+        var deg = this.add(\r).choosen(size).sort.replace(size.rand, size.rand);
+        ^deg;
     }
 
     ziva { |key, quant=1|
