@@ -55,6 +55,12 @@
 		}
 	}
 
+	motif{ |size|
+		var motif = motif(size);
+		this.prSetPbindParam(\dur, motif.dur);
+		this.prSetPbindParam(\degree, motif.degree);
+	}
+
 	/// \brief	set a rythm with hexadecimal symbol
 	/// \descritpion	hexadecimal values will be converted to 8-beat (sic) rythms where 0 is rest and 1 is hit
 	/// \param	args:	a symbol representing a hexadecimal number. E.g.: '808a808f'
