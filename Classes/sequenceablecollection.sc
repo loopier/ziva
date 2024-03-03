@@ -36,7 +36,7 @@
 
     motif { | bars=1 |
         var size = bars * 4;
-        var deg = this.add(\r).choosen(size).sort.replace(size.rand, size.rand);
+        var deg = this.choosen(size).sort.swap(size.rand, size.rand);
         ^deg;
     }
 
