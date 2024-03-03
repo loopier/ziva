@@ -1,5 +1,12 @@
 + Number {
 
+	!! { | repeats | ^Pseq([this], repeats) }
+	motif { | degs = #[0,2,4,7] |
+        var dur = [1, 1/4, 1/2].choosen(this);
+        var deg = degs.choosen(this);
+        ^(dur: Pseq(dur,inf), degree: Pseq(deg,inf));
+	}
+
 	// utils
 	bj { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset) }
 	bjr { | beats, offset=0 | ^Bjorklund(this, beats).rotate(offset).replace(0,\r) }
