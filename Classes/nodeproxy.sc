@@ -117,7 +117,11 @@
 			Ziva.synthControls(this[0].patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
 			Zynaddsubfx.oscInterfaceDict.includesKey(selector)
 		) {
-			this.prSetPbindParam(selector, args);
+			if( args.isSymbol ) {
+				this.prSetPbindParam(selector, Pkey(args));
+			}{
+				this.prSetPbindParam(selector, args);
+			}
 		};
 	}
 
