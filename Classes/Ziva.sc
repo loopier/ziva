@@ -82,7 +82,7 @@ Ziva {
 
 		MIDIClient.init;
 		MIDIIn.connectAll;
-		this.initMidifighter;
+		// this.initMidifighter;
 
 		this.server.waitForBoot{
 			var allFxGroup;
