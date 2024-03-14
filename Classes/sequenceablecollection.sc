@@ -228,7 +228,12 @@
     //     [size, list, stepPattern, directionPattern, startPos].collect(_.debug(_));
     // }
 
+    // NodeProxy
+    dseq { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dseq(this, inf)) } }
+    drand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Drand(this, inf)) } }
+    dxrand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dxrand(this, inf)) } }
 
+    // pattern
     pdef{ |key|
         ^Pdef(key, Ppar(this));
     }

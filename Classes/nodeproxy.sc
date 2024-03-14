@@ -75,6 +75,9 @@
 		this.prSetPbindParam(\r, args.replace(0,\r).debug("rhythm").pseq);
 	}
 
+	fast{ |args| this.prSetPbindParam(\stretch, 1/args) }
+	slow{ |args| this.prSetPbindParam(\stretch, args) }
+
 	doesNotUnderstand { |selector, args|
 		// it's an efect with 'fxN'
 		if("^fx\\d+".matchRegexp(selector.asString)) {
@@ -251,11 +254,22 @@
 		this[0] = func;
 	}
 
+	line	{ | end=1.0, dur=10 | ^{Line.ar(this, end, dur)}}
+	sine	{ | min=(-1), max=1, amp=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) * amp}}
+	tri		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) * amp}}
+	saw		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFSaw.ar(this, phase).range(min,max) * amp}}
+	pulse	{ | min=(-1), max=1, amp=1, width=0.5, phase=0 | ^{LFPulse.ar(this, phase, width).range(min,max) * amp}}
+	noise0	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise0.ar(this).range(min,max) * amp}}
+	noise1	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise1.ar(this).range(min,max) * amp}}
+	noise2	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise2.ar(this).range(min,max) * amp}}
+
 	/// \brief	set a seed to get persistent randomness
 	/// \description	keep the same random values when reevaluating
 	/// \usage			~snd.seed(1234) s: \bass degree: [0,2,4].pick(8) >>>.1 1
 	/// \param	num:	same results will come back when restoring a number
     seed { |num| thisThread.randSeed = num }
+
+	unison{ |detune=0.1| this.prSetPbindParam(\detune, detune);}
 
 	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }

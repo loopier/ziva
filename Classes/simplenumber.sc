@@ -39,6 +39,7 @@
 	line	{ | end=1.0, dur=10 | ^{Line.ar(this, end, dur)}}
 	sine	{ | min=(-1), max=1, amp=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) * amp}}
 	tri		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) * amp}}
+	varsaw	{ | min=(-1), max=1, amp=1, width=0.5| ^{VarSaw.ar(this,width: width).range(min,max)} }
 	saw		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFSaw.ar(this, phase).range(min,max) * amp}}
 	pulse	{ | min=(-1), max=1, amp=1, width=0.5, phase=0 | ^{LFPulse.ar(this, phase, width).range(min,max) * amp}}
 	noise0	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise0.ar(this).range(min,max) * amp}}
@@ -48,7 +49,7 @@
 	// fx
 	gain { ^{| in | in * this } }
 	// amp { ^{| in | in * this} }
-	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
+	freeverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
 	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay)}}
@@ -105,6 +106,10 @@
 }
 
 + Float {
+	// freeverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
+	// reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
+	// gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
+
 	distor { |post=1, spread=0.2| ^{|in| Splay.ar((in * this.abs).distort, spread) * post }}
 	// asymetric fold
 	// \param neg	absolute value of the negative pole value, will be converted to negative
@@ -116,7 +121,7 @@
 		}
 	}
 	// symetric fold
-	fold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
+	wavefold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
 }
 
 + Integer {
