@@ -23,6 +23,10 @@
 		};
 	}
 
+	mono { |snd|
+		this[0] = PmonoArtic(snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+	}
+
 	/// \brief	set a sample index
 	/// \param	num:	the index of the samples in the folder (alphabetiaclly ordered)
 	n { |num| this.prSetPbindParam(\n, num) }
