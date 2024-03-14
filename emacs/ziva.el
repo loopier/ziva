@@ -26,66 +26,66 @@
 
 (define-minor-mode ziva-mode
   "Toggles local ziva-mode."
-  nil   ; Initial value, disabled
+  :init-value nil   ; Initial value, disabled
   :global nil
-  :group 'ziva
-  :lighter "ziva"
-  ;; :keymap
+  ;; :group 'ziva
+  :lighter " ziva"
+  ;; :keymap 'ziva-mode-map
 
-  (if ziva-mode
-      (message "ziva-mode activated")
-    (message "ziva-mode deactivated")))
+  ;; (if ziva-mode
+  ;;     (message "ziva-mode activated")
+  ;;   (message "ziva-mode deactivated")))
+  )
 
-(add-hook 'ziva-mode-hook (lambda () (message "Ziva hook executed")))
-(add-hook 'ziva-mode-on-hook (lambda () (message "Ziva turned on")))
-(add-hook 'ziva-mode-off-hook (lambda () (message "Ziva turned off")))
+(defvar-keymap ziva-mode-map
+  :parent sclang-mode-map)
 
 (setq ziva-mixer-next-available-track 0)
 
-;; (map! :leader :n "o s" 'sclang-start :desc "Open Supercollider") ;; global under 'SPC-o' menu
-;; (map! (:map ziva-mode-map :localleader :n "m" 'sclang-start))
-;; (map! :map sclang-mode-map :localleader :n "z" 'ziva-livecoder)
+(map! :leader :n "o s" 'sclang-start :desc "Open Supercollider") ;; global under 'SPC-o' menu
+(map! (:map ziva-mode-map :localleader :n "m" 'sclang-start))
+(map! :map ziva-mode-map :localleader :n "z" 'ziva-livecoder)
 (map! :map ziva-mode-map :localleader :n "a" 'ziva-agent)
 (map! :map ziva-mode-map :localleader :n "i" 'ziva-insert)
 
-(map! (:map sclang-mode-map :localleader :n "z b" 'ziva-boot))
+;; (map! (:map ziva-mode-map :localleader :n "z b" 'ziva-boot))
 ;; track
-(map! (:map sclang-mode-map :localleader :n "t i" 'ziva-insert-track))
-(map! (:map sclang-mode-map :localleader :n "t 1" 'ziva-insert-track-1))
-(map! (:map sclang-mode-map :localleader :n "t 2" 'ziva-insert-track-2))
-(map! (:map sclang-mode-map :localleader :n "t 3" 'ziva-insert-track-3))
-(map! (:map sclang-mode-map :localleader :n "t 4" 'ziva-insert-track-4))
-(map! (:map sclang-mode-map :localleader :n "t 5" 'ziva-insert-track-5))
-(map! (:map sclang-mode-map :localleader :n "t 6" 'ziva-insert-track-6))
-(map! (:map sclang-mode-map :localleader :n "t 7" 'ziva-insert-track-7))
-(map! (:map sclang-mode-map :localleader :n "t 8" 'ziva-insert-track-8))
-(map! (:map sclang-mode-map :localleader :n "t 9" 'ziva-insert-track-9))
-(map! (:map sclang-mode-map :localleader :n "t t" 'ziva-goto-track))
+(map! (:map ziva-mode-map :localleader :n "t i" 'ziva-insert-track))
+(map! (:map ziva-mode-map :localleader :n "t 1" 'ziva-insert-track-1))
+(map! (:map ziva-mode-map :localleader :n "t 2" 'ziva-insert-track-2))
+(map! (:map ziva-mode-map :localleader :n "t 3" 'ziva-insert-track-3))
+(map! (:map ziva-mode-map :localleader :n "t 4" 'ziva-insert-track-4))
+(map! (:map ziva-mode-map :localleader :n "t 5" 'ziva-insert-track-5))
+(map! (:map ziva-mode-map :localleader :n "t 6" 'ziva-insert-track-6))
+(map! (:map ziva-mode-map :localleader :n "t 7" 'ziva-insert-track-7))
+(map! (:map ziva-mode-map :localleader :n "t 8" 'ziva-insert-track-8))
+(map! (:map ziva-mode-map :localleader :n "t 9" 'ziva-insert-track-9))
+(map! (:map ziva-mode-map :localleader :n "t t" 'ziva-goto-track))
 ;; track parameters
-(map! (:map sclang-mode-map :localleader :n "t I" 'ziva-goto-track-instrument))
-(map! (:map sclang-mode-map :localleader :n "t u" 'ziva-goto-track-dur))
-(map! (:map sclang-mode-map :localleader :n "t d" 'ziva-goto-track-degree))
-(map! (:map sclang-mode-map :localleader :n "t o" 'ziva-goto-track-octave))
-(map! (:map sclang-mode-map :localleader :n "t a" 'ziva-goto-track-amp))
-(map! (:map sclang-mode-map :localleader :n "t f" 'ziva-goto-track-freq))
-(map! (:map sclang-mode-map :localleader :n "t l" 'ziva-goto-track-legato))
-(map! (:map sclang-mode-map :localleader :n "t k" 'ziva-goto-track-atk))
-(map! (:map sclang-mode-map :localleader :n "t D" 'ziva-goto-track-dec))
-(map! (:map sclang-mode-map :localleader :n "t s" 'ziva-goto-track-sus))
-(map! (:map sclang-mode-map :localleader :n "t r" 'ziva-goto-track-rel))
+(map! (:map ziva-mode-map :localleader :n "t I" 'ziva-goto-track-instrument))
+(map! (:map ziva-mode-map :localleader :n "t u" 'ziva-goto-track-dur))
+(map! (:map ziva-mode-map :localleader :n "t d" 'ziva-goto-track-degree))
+(map! (:map ziva-mode-map :localleader :n "t o" 'ziva-goto-track-octave))
+(map! (:map ziva-mode-map :localleader :n "t a" 'ziva-goto-track-amp))
+(map! (:map ziva-mode-map :localleader :n "t f" 'ziva-goto-track-freq))
+(map! (:map ziva-mode-map :localleader :n "t l" 'ziva-goto-track-legato))
+(map! (:map ziva-mode-map :localleader :n "t k" 'ziva-goto-track-atk))
+(map! (:map ziva-mode-map :localleader :n "t D" 'ziva-goto-track-dec))
+(map! (:map ziva-mode-map :localleader :n "t s" 'ziva-goto-track-sus))
+(map! (:map ziva-mode-map :localleader :n "t r" 'ziva-goto-track-rel))
 ;; lfo
-(map! (:map sclang-mode-map :localleader :n "l v" 'ziva-lfo-value))
-(map! (:map sclang-mode-map :localleader :n "l s" 'ziva-lfo-sine))
-(map! (:map sclang-mode-map :localleader :n "l t" 'ziva-lfo-tri))
-(map! (:map sclang-mode-map :localleader :n "l z" 'ziva-lfo-saw))
-(map! (:map sclang-mode-map :localleader :n "l p" 'ziva-lfo-pulse))
-(map! (:map sclang-mode-map :localleader :n "l n r" 'ziva-lfo-noise0))
-(map! (:map sclang-mode-map :localleader :n "l n l" 'ziva-lfo-noise1))
-(map! (:map sclang-mode-map :localleader :n "l n e" 'ziva-lfo-noise2))
-(map! (:map sclang-mode-map :localleader :n "l f" 'ziva-lfo-freq))
-(map! (:map sclang-mode-map :localleader :n "l l" 'ziva-lfo-line))
-(map! (:map sclang-mode-map :localleader :n "l i" 'ziva-lfo-line-out))
-(map! (:map sclang-mode-map :localleader :n "l o" 'ziva-lfo-line-in))
+(map! (:map ziva-mode-map :localleader :n "l v" 'ziva-lfo-value))
+(map! (:map ziva-mode-map :localleader :n "l s" 'ziva-lfo-sine))
+(map! (:map ziva-mode-map :localleader :n "l t" 'ziva-lfo-tri))
+(map! (:map ziva-mode-map :localleader :n "l z" 'ziva-lfo-saw))
+(map! (:map ziva-mode-map :localleader :n "l p" 'ziva-lfo-pulse))
+(map! (:map ziva-mode-map :localleader :n "l n r" 'ziva-lfo-noise0))
+(map! (:map ziva-mode-map :localleader :n "l n l" 'ziva-lfo-noise1))
+(map! (:map ziva-mode-map :localleader :n "l n e" 'ziva-lfo-noise2))
+(map! (:map ziva-mode-map :localleader :n "l f" 'ziva-lfo-freq))
+(map! (:map ziva-mode-map :localleader :n "l l" 'ziva-lfo-line))
+(map! (:map ziva-mode-map :localleader :n "l i" 'ziva-lfo-line-out))
+(map! (:map ziva-mode-map :localleader :n "l o" 'ziva-lfo-line-in))
 
 (defun ziva-boot () (interactive) (insert "Ziva.boot;"))
 
@@ -102,7 +102,7 @@
   (if (search-forward-regexp "^$" nil t)
       nil
     (search-forward-regexp"$")
-  (insert (format "~%s s: \\%s >>>.%d 1;" track instrument ziva-mixer-next-available-track)))
+  (insert (format "~%s s: \\%s >>>.%d 1;" track instrument ziva-mixer-next-available-track))))
 
 (defun ziva-insert-track-num (num)
   (setq track (format "tk%d" num))
@@ -181,8 +181,10 @@
 (defun ziva-lfo-line-in (name) (interactive "sName: ") (ziva-lfo-value name "line(, 0, 0.1)"))
 (defun ziva-lfo-line-out (name) (interactive "sName: ") (ziva-lfo-value name "line(, 0.1, 0)"))
 
-(defun ziva-increment
-    ())
+(add-hook 'ziva-mode-hook (lambda () (message "Ziva hook executed")))
+(add-hook 'ziva-mode-on-hook (lambda () (message "Ziva turned on")))
+(add-hook 'ziva-mode-off-hook (lambda () (message "Ziva turned off")))
+
 
 (provide 'ziva)
 ;;; ziva.el ends here
