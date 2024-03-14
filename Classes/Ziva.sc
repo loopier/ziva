@@ -333,7 +333,7 @@ Ziva {
 
 	*sounds {
 		this.synths;
-		this.samples;
+		this.listSamples;
 	}
 
 	/// \brief return a random synth name
