@@ -57,6 +57,22 @@ SynthDef(\sine, {
 	Out.ar(out, Pan2.ar(sig * env, pan));
 }).add;
 
+SynthDef(\tri, {
+	var out = \out.kr(0);
+	var pan = \pan.kr(0);
+	var amp = \amp.kr(1) * (-0.dbamp);
+	var freq = \freq.kr(440);
+	var width = \width.kr(0.5);
+	var gate = \gate.kr(1);
+	var attack = \atk.kr(0.01);
+	var decay = \dec.kr(0.3);
+	var sustain = \sus.kr(1);
+	var release = \rel.kr(0);
+	var env = EnvGen.kr(Env.adsr(attack, decay, sustain, release), gate, doneAction:2);
+	var sig = VarSaw.ar(freq, 0, width, amp);
+	Out.ar(out, Pan2.ar(sig * env, pan));
+}).add;
+
 SynthDef(\saw, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
