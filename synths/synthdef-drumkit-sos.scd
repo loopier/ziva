@@ -23,7 +23,7 @@ SynthDef(\soskick,
 	).add;
 
 SynthDef(\sossnare,
-	{arg out = 0, sustain = 0.1, drum_mode_level = 0.25,
+	{arg out = 0, pan = 0, sustain = 0.1, drum_mode_level = 0.25,
 	snare_level = 40, snare_tightness = 1000,
 	freq = 405, amp = 0.8;
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
@@ -51,12 +51,12 @@ SynthDef(\sossnare,
 	snare_brf_4 = BRF.ar(in: snare_brf_3, freq: 2000, mul: snare_env, rq: 0.0001);
 	snare_reson = Resonz.ar(snare_brf_4, snare_tightness, mul: snare_level) ;
 	snare_drum_mix = Mix.new([drum_mode_mix, snare_reson]) * 5 * amp;
-	Out.ar(out, [snare_drum_mix, snare_drum_mix])
+	Out.ar(out, Pan2.ar([snare_drum_mix, snare_drum_mix], pan))
 	}
 ).add;
 
 SynthDef(\soshats,
-	{arg out = 0, freq = 6000, sustain = 0.1, amp = 0.8;
+	{arg out = 0, pan = 0, freq = 6000, sustain = 0.1, amp = 0.8;
 	var root_cymbal, root_cymbal_square, root_cymbal_pmosc;
 	var initial_bpf_contour, initial_bpf, initial_env;
 	var body_hpf, body_env;
@@ -75,11 +75,11 @@ SynthDef(\soshats,
 	body_env = EnvGen.ar(Env.perc(0.005, sustain, 1, -2), 1.0, doneAction: 2);
 	body_hpf = HPF.ar(in: root_cymbal, freq: Line.kr(9000, 12000, sustain),mul: body_env, add: 0);
 	cymbal_mix = Mix.new([initial_bpf, body_hpf]) * amp;
-	Out.ar(out, [cymbal_mix, cymbal_mix])
+	Out.ar(out, Pan2.ar([cymbal_mix, cymbal_mix], pan))
 	}).add;
 
 SynthDef(\sostom,
-	{arg out = 0, sustain = 0.4, drum_mode_level = 0.25,
+	{arg out = 0, pan = 0, sustain = 0.4, drum_mode_level = 0.25,
 	freq = 90, drum_timbre = 1.0, amp = 0.8;
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
 	var stick_noise, stick_env;
@@ -97,7 +97,7 @@ SynthDef(\sostom,
 	stick_noise = Crackle.ar(2.01, 1);
 	stick_env = EnvGen.ar(Env.perc(0.005, 0.01), 1.0) * 3;
 	tom_mix = Mix.new([drum_mode_mix, stick_env]) * 2 * amp;
-	Out.ar(out, [tom_mix, tom_mix])
+	Out.ar(out, Pan2.ar([tom_mix, tom_mix], pan))
 	}
 ).add;
 )
