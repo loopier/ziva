@@ -39,6 +39,11 @@
 		this[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
+	midiout { |midiout| this.prSetPbindParam(\midiout, MIDIOut(midiout)) }
+
+	finish { |func| this.prSetPbindParam(\finish, func) }
+	callback { |func| this.prSetPbindParam(\callback, func) }
+
 	/// \brief	see `zyn`
 	z { |ch| this.zyn(ch); }
 
@@ -125,7 +130,9 @@
 			}{
 				this.prSetPbindParam(selector, args);
 			}
-		};
+		}//{
+		// 	^super.doesNotUnderstand;
+		// };
 	}
 
 	///	\brief	set an effect with an index

@@ -37,14 +37,17 @@
 
 	// funcs
 	line	{ | end=1.0, dur=10 | ^{Line.ar(this, end, dur)}}
-	sine	{ | min=(-1), max=1, amp=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) * amp}}
-	tri		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) * amp}}
-	varsaw	{ | min=(-1), max=1, amp=1, width=0.5| ^{VarSaw.ar(this,width: width).range(min,max)} }
-	saw		{ | min=(-1), max=1, amp=1, phase=0 | ^{LFSaw.ar(this, phase).range(min,max) * amp}}
-	pulse	{ | min=(-1), max=1, amp=1, width=0.5, phase=0 | ^{LFPulse.ar(this, phase, width).range(min,max) * amp}}
-	noise0	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise0.ar(this).range(min,max) * amp}}
-	noise1	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise1.ar(this).range(min,max) * amp}}
-	noise2	{ | min=(-1), max=1, amp=1, phase=0 | ^{LFNoise2.ar(this).range(min,max) * amp}}
+	xline	{ | end=1.0, dur=10 | ^{XLine.ar(this, end, dur)}}
+	sine	{ | min=(-1), max=1, phase=0 | ^{SinOsc.ar(this, phase).range(min,max) }}
+	tri		{ | min=(-1), max=1, phase=0 | ^{LFTri.ar(this, phase).range(min,max) }}
+	varsaw	{ | min=(-1), max=1, width=0.5| ^{VarSaw.ar(this,width: width).range(min,max)} }
+	saw		{ | min=(-1), max=1, phase=0 | ^{LFSaw.ar(this, phase).range(min,max) }}
+	pulse	{ | min=(-1), max=1, width=0.5, phase=0 | ^{LFPulse.ar(this, phase, width).range(min,max) }}
+	noise0	{ | min=(-1), max=1 | ^{LFNoise0.ar(this).range(min,max) }}
+	noise1	{ | min=(-1), max=1 | ^{LFNoise1.ar(this).range(min,max) }}
+	noise2	{ | min=(-1), max=1 | ^{LFNoise2.ar(this).range(min,max) }}
+	// envelopes env
+	adsr { | dec=0.3, sus=0.5, rel=1, gate, doneAction=0 | ^{ Env.adsr(this, dec, sus, rel).ar(doneAction, gate) } }
 
 	// fx
 	gain { ^{| in | in * this } }

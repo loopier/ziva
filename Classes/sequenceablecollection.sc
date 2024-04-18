@@ -218,6 +218,8 @@
 
     once { arg repeats=1; ^Pseq(this, repeats) }
 
+    sine { ^{SinOsc.ar(this)} }
+
     // add trailing rests
     // every { arg beats=4;
     //     ^this++(\r!beats).flat;
@@ -228,10 +230,10 @@
     //     [size, list, stepPattern, directionPattern, startPos].collect(_.debug(_));
     // }
 
-    // NodeProxy
-    dseq { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dseq(this, inf)) } }
-    drand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Drand(this, inf)) } }
-    dxrand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dxrand(this, inf)) } }
+    //
+    dseq { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dseq(this, repeats)) } }
+    drand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Drand(this, repeats)) } }
+    dxrand { |repeats=inf, reset=0| ^{ Demand.kr(\in.kr(1), reset, Dxrand(this, repeats)) } }
 
     // pattern
     pdef{ |key|

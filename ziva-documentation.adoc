@@ -1,0 +1,607 @@
+= Živa
+Syntax sugar for live coding in SuperCollider.
+:docinfo: shared
+:toc: left
+:toclevels: 4
+:experimental:
+:table-caption!:
+:table-frame: ends
+:table-grid: none
+// :table-options: autowidth
+:source-highlighter: highlightjs
+// :highlightjs-theme: xcode
+:ziva: Živa
+
+== Quick Start
+Copy this code into the SuperCollider editor.
+[source,sclang]
+Ziva.boot; // <.>
+~lola s: \tri >>>.1 1; // <.>
+
+<1> Boots the server
+<2> Initializes and instrument named `~lola` which plays a variable saw oscillator on the first channel of the mixer.
+
+Press kbd:[Ctl+Enter] while the cursor is on the first line to evaluate `Ziva.boot`.
+
+Press kbd:[Ctl+Enter] again while the cursor is on the second line line.
+
+You should hear a triangle wave oscillator playing.
+
+`Ziva.boot` boots the server, starting the sound engine, initializing MIDI and loading default synth sounds.
+
+The second line initializes an instrument named `~lola` which plays a synth with a variable triangle wave on the first channel of the mixer:
+
+- `~lola` is the name of the instrument. It can be anything, but has to be lead by a `~`.
+- `s:` is the method that sets the `sound` that the instrument will play.
+- `\tri` is the sound name. See <<Ziva.sounds>>
+- `>>>.1 1` sends this instrument's output to the mixer. The first number -- after the dot `.` --  is the `channel number`. The second is the `gain`.
+
+== Cheat Sheet
+|===
+|`Ziva.boot`| boot the server
+|`Ziva.scale`| check the current scale
+|`Ziva.scale = \minor`| set the minor scale
+|`Ziva.bpm`| check the current tempo
+|`Ziva.bpm = 140`| set the tempo to 140 BPM
+|`~lola s: \tri >>>.1 0.5`|create and play a sawtooth-triangle variable wave oscillator with an instrument called ~lola on channel 1 with a gain of 0.5
+|`~lola s: \tri degree: 0 >>>.1 1`|play the root note
+|`~lola s: \tri degree: [0,2,4] >>>.1 1`|play a chord
+|`~lola s: \tri degree: [0,2b,4s] >>>.1 1`|play a chord with a flat 3rd and a sharp 5th
+|`~lola s: \tri degree: [0,2b,4s] >>>.1 1`|play a chord with a flat 3rd and a sharp 5th
+|`~lola s: \tri degree: [0,2,4].pseq >>>.1 1`|play an arpeggio
+|`~lola s: \tri degree: [0,2,4].pseq(2) >>>.1 1`|play an arpeggio twice and stop playing this instrument
+|`~lola s: \tri degree: [0,2!!2,4].pseq >>>.1 1`|play an arpeggio repeating the 3rd twice each time
+|===
+
+
+
+== Syntax basics
+There are two types of instructions: *system interaction* and *sound creation and management*.
+
+All the functions for the system interaction start with `Ziva.`. See <<System Interaction>> below for details on each one.
+
+The syntax for creating and playing instruments can be devided into two parts: _defining_ the instrument sound and _playing_ it.
+
+In any case, the line starts with the *name* of the instrument. It can be anything, but it *MUST* start with a `~` (tilde).
+
+.Example
+[source,sclang]
+~lola
+
+=== Defining an instrument
+
+To define an instrument, its name is followed by a combination of parameters.
+
+.Syntax
+[source,sclang]
+<INSTRUMENT> <PARAMETER_1>: <VALUE_1> ... <PARAMETER_N>: <VALUE_N>
+
+Any number of parameters can be chained in any order, except for `s:`, which *ALLWAYS MUST* follow the sound name.
+
+In the example below, an instrument named `~lola` is playing a variable triangle wave synth, with a `width` of 0.6, an amplitude of 0.8, and an ADSR envelope with the attack set to 0.1, the sustain all the way down to 0, a decay of 0.8 and the default release -- non specified parameters will use the sound default values.
+
+.Example
+[source,sclang]
+~lola s: \tri width: 0.6 amp: 0.8 atk: 0.1 sus: 0 dec: 0.8
+
+See <<Synths>> for a full list of available synths and their parameters.
+
+=== Playing an instrument
+
+To play the instrument, its output needs to be _plugged_ to a mixer channel using the `>>>` operator.
+
+.Syntax
+[source,sclang]
+<INSTRUMENT> >>>.<CHANNEL> <GAIN>
+
+Note the `.` (dot) between the `>>>` operator and the `<CHANNEL>` number.
+
+The example below sends the output of `~lola` to channel #2 of the mixer with a gain of `0.5`.
+[source,sclang]
+~lola >>>.2 0.5
+
+This operator can be put at the end of any line that starts with an instrument name, and it will route that instrument to the given mixer channel.
+
+The instrument in the example above can be defined and played in one single line.
+
+.Example
+[source,sclang]
+~lola s: \tri width: 0.6 amp: 0.8 atk: 0.1 sus: 0 dec: 0.8 >>>.2 0.5
+
+== LFOs
+
+Most instrument parameters can be modulated with a low frequency oscillator or *LFO*.
+
+An LFO is created win a name and a function.
+
+.Syntax
+[source,sclang]
+<LFO_NAME> = <FUNCTION>
+
+The is like an instrument name, and it must also start with `~`.
+
+The *function* of the oscillator can be any SuperCollider function, but a small collection of predefined ones are avaliable. See below for details.
+
+When an LFO has been created it can be added to an instrument paramenter:
+
+[source,sclang]
+~lfo = tri(0.1, 0, 1); // <.>
+~lola s: \sine feedback: ~lfo >>>.1 1; // <.>
+
+<1> create an LFO named `~lfo`
+<2> use `~lfo` to modulate the feedback of the instrument
+
+=== line
+Changes a value from `start` to `end` during a given time.
+
+.Args
+|===
+|`start`| float | starting value
+|`end`| float | ending value. Defaults to `1.0`
+|`dur`| float | duration in seconds. Defaults to `10`
+|===
+
+.Usage
+[source,sclang]
+~lfo = line(0, 1, 20)
+
+=== sine
+Generates a sine wave.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = sine(0.1, 300, 8000)
+
+=== tri
+Triangle oscillator.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = tri(0.1, , 8000)
+
+=== varsaw
+Sawtooth-triangle oscillator with variable duty.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|`width`| float | pulse width duty cycle from `0` to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = varsaw(1, 0, 1, 0.1)
+
+=== saw
+Sawtooth oscillator.
+
+A ramp can be created by setting  `min` to be greater than `max`.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = saw(0.1, 300, 8000)
+
+=== pulse
+Pulse oscillatoer with variable width.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|`width`| float | pulse width duty cycle from `0` to `1`
+|`phase`| float | initial phase offset
+|===
+
+.Usage
+[source,sclang]
+~lfo = pulse(4, 0, 1, 0.2)
+
+=== noise0
+Generates random values between `min` and `max` at a given rate.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = noise0(4, 0, 1)
+
+=== noise1
+Generates linearly interpolated random values at a given rate.
+
+In other words, moves from one value to the other in a line. It's like a random wave of points connected by straight lines.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = noise1(4, 0, 1)
+
+=== noise2
+
+Generates quadratically interpolated random values at a given rate.
+
+In other words, moves from one value to the other kind of smoothly.
+
+.Args
+|===
+|`frequency`| float | the frequency of the oscillator
+|`min`| float | the minimium value of the oscillation. Defaults to `-1`
+|`max`| float | the maximum value of the oscillation. Defaults to `1`
+|===
+
+.Usage
+[source,sclang]
+~lfo = noise1(4, 0, 1)
+
+== Chords and Apreggios
+
+To create chords, just put a list of values on any parameter.
+
+WARNING: some parameters, like `s:` and `dur:` don't accept chords.
+
+.Example
+[source,sclang]
+~lola s: \tri degree: [0,2,4] >>>.1 1
+
+To create arpeggios, see <<Patterns>>.
+
+== Sequencing with Patterns
+
+Patterns are just ways of sequencing values in different ways.
+
+They can be applied to any instrument parameter.
+
+NOTE: Regular SuperCollider patterns can also be used. See SuperCollider's https://doc.sccode.org/Tutorials/A-Practical-Guide/PG_01_Introduction.html[Pattern Guide]
+
+.Syntax
+[source,sclang]
+<LIST>.<PATTERN>([PATTERN_PARAMATER_1,...,PATTERN_PARAMETER_N])
+
+Most patterns have at least one argument: `repeats`. It determines how many times that pattern is repeated. The instrument will play the *shortest* sequence and the will stop. If set to `inf` the pattern will repeat forever.
+
+.Example
+[source,sclang]
+[0,2,4].pseq // <.>
+
+<1> play each value one after the other.
+
+=== !!
+Syntax sugar for <<pseq>>.
+
+It *must* be followed by an `number`.
+
+.Usage
+[source,sclang]
+[0,2,4]!!2 // <.>
+
+<1> Play the sequence in order twice, then stop.
+
+Patterns can be chained and embedded to create more complex sequences.
+
+.Example
+[source,sclang]
+~lola s: \tri degree: (..7).prand.pdup([1,4].prand) >>>.1 1 // <.>
+~lola s: \tri degree: (..7).prand.pdup([1!!4,4].prand) stretch: (1/4) >>>.1 1 // <.>
+
+<1> Plays a sequence of random notes, either duplicating each one 4 times, or playing it just once.
+<2> plays a sequence of random notes; but it either plays for random notes once (`1!!4`) or it plays one random notes 4 times.
+
+=== pseq
+
+Sequence values in order.
+
+.Args
+|===
+|`repeats`    |int    | number of times the sequence is repeated. Defaults to `inf`
+|`offset`    |int    | if not `0` it will start the sequence from that position
+|===
+
+=== prand
+
+Sequence values in a random order.
+
+.Args
+|===
+|`repeats`    |int    | number of times the sequence is repeated. Defaults to `inf`
+|===
+
+=== pser
+
+Sequence values in order -- like <<pseq>> -- but instead of playing the full sequence, it plays the given number of items.
+
+.Args
+|===
+|`items`    |int    | number of times the sequence is repeated. Defaults to `inf`
+|`offset`    |int    | if not `0` it will start the sequence from that position
+|===
+
+=== ptuple
+
+
+== Lists
+=== bj
+=== bjr
+
+== System Interaction
+Živa offers a collection of methods to interact with the server and the livecoding environment.
+=== Ziva.boot
+
+.Args
+|===
+|`inputChannels`    |int    | number of input channels. Defaults to `2`
+|`outputChannels`	|int    | number of output channels. Defaults to `2`.
+|`server`	        |Server | SuperCollider server instance. Defaults to `Server.default`.
+|===
+
+.Usage
+[source,sclang]
+Ziva.boot;
+
+with optional arguments:
+[source,sclang]
+Ziva.boot(outputChannels:2)
+
+with ordered arguments, 2 inputs and 2 outputs:
+[source,sclang]
+Ziva.boot(2, 2)
+
+=== Ziva.sounds
+List all available sounds, synths and samples.
+
+Samples will display the number of files in the corresponding directories.
+
+=== Ziva.controls
+
+.Args
+|===
+|`sound`|Symbol|the name of the sound
+|===
+
+.Usage
+[source,sclang]
+Ziva.controls(\acid)
+
+=== Ziva.samples
+Load samples from the given `path`.
+
+.Args
+|===
+|`path`|String|absolute path to the parent folder containing sample directories.
+|===
+
+.Usage
+The path has to point to a parent directory (folder) containing subdirectories with audio files. The subdirecotries' names will be then used to identify samples by name.
+
+Here's a structure example:
+
+.Tree
+ /home/lola/samples/
+   kick/
+    kick.wav
+   snare/
+    snare.wav
+   hh/
+    ch.wav
+    oh.wav
+   clap/
+    clap.wav
+   voices/
+    bla.wav
+    alo.wav
+
+Then the samples can be loaded with:
+
+[source,sclang]
+Ziva.samples("~/samples");
+
+=== Ziva.fx
+Get the list of sound effect presets.
+
+=== Ziva.scale
+=== Ziva.bpm
+
+== Instrument
+=== s:
+
+Set the sound of an instrument. It can be a synth or a sample. See <<Ziva.sounds>> for a full list of available sounds. See <<Synths>> for the parameters of each synth.
+
+// NOTE: `s:` and `sound:` do not accept patterns.
+
+.Arg
+|===
+|name|Symbol|Name of the synth or the sample
+|===
+
+.Example
+[source,sclang]
+~lola s: \tri       // a synth
+~lola s: \aekick    // a sample
+
+=== sound:
+
+See <<s:>>.
+
+=== octave:
+
+=== degree:
+
+=== note:
+
+=== midinote:
+
+=== detune:
+With an array it creates unison.
+
+=== amp:
+
+=== pan:
+
+=== dur:
+NOTE: this parameter does not accept `nil` or LFOs.
+
+=== stretch:
+
+=== legato:
+
+=== sustain:
+
+=== atk:
+
+=== sus:
+
+=== dec:
+
+=== rel:
+
+=== fxN:
+Set an effect on the signal chain of an instrument or the mixer.
+
+Replace the `N` by any number. This sets the order of the effects, so the dry signal goes into `fx1`, the output of `fx1` goes into `fx2` and so on. Numbers can be skipped;  setting `fx3` without setting `fx1` or `fx2` would feed the dry signal directly into `fx3`.
+
+To set the mix of dry and wet signals, see <<wetN>>.
+
+.Args
+The argument of the `fxN` method can be one of two things:
+// The argument of the `fxN` method can be one of three things:
+
+[start]
+. a preset, which is set with a symbol. For example: `\reverb`. See <<Ziva.fx>> for a full list of effect presets.
+. any of the <<fx>> functions
+// .. a supercollider proxy source object (a function) that would normally be set as a `NodeProxy` role. See `\filter` or `\filterIn` in  https://doc.sccode.org/Reference/NodeProxy_roles.html[NodeProxy roles].
+
+See <<fx>>.
+
+.Example
+[source,sclang]
+~lola fx1: fbdelay(0.1, 0.8) fx2: \reverb
+
+// ~lola fx1: {RLPF.ar(\in.ar, SinOsc.kr(0.1, 400, 9000))} fx2: fbdelay(0.1, 0.8) fx3: \reverb
+
+Send `~lola` 's signal to a feedback delay first, then pass the output of the delay through a reverb preset.
+
+CAUTION:  to completely remove an effect from the signal chain, it *MUST* be explicitly *set it to `nil`*. +
+          For example: `~lola fx1: nil`
+
+
+=== wetN:
+Set the effect's signal mix between dry (`0`) and wet (`1`).
+
+.Example
+[source,sclang]
+~lola fx1: delay(0.3, 1) wet1: 0.8
+
+=== >>>.channel gain
+Send a sound output to a mixer channel with a set `gain`.
+
+.Args
+|===
+|`channel`  |int    |number of the channels in the mixer.
+|`gain`     |float  |output gain.
+|===
+
+
+
+== fx
+=== delay
+.Args
+|===
+|`time`|float|delay time between repetitions
+|`decay`|float|time for the signal to fade away
+|===
+=== fbdelay
+.Args
+|===
+|`time`|float|delay time between repetitions
+|`feedback`|float|feedback amount. _WARNING: values greater than 1.0 will gradually increase the volume!_
+|===
+
+=== swdelay
+.Args
+|===
+|`time`|float|delay time between repetitions
+|`feedback`|float|feedback amount. _WARNING: values greater than 1.0 will gradually increase the volume!_
+|===
+=== reverb
+.Args
+|===
+|||
+|===
+=== limit
+.Args
+|===
+|||
+|===
+
+
+== Synths
+
+=== sample player
+If `s:` is a sample name, it will use the sample player synth.
+
+.Args
+|===
+|`speed`|float|playrate of the sample. It affects pitch. Defaults to `1`
+|`start`|float|start playing the sample from this point, `0.0` being the beginning, and `1.0` the end.
+|===
+
+=== sine
+SinOscFB is a sine oscillator that has phase modulation feedback; its output plugs back into the phase input. Basically this allows a modulation between a sine wave and a sawtooth like wave. Overmodulation causes chaotic oscillation. It may be useful if you want to simulate feedback FM synths.
+
+.Args
+|===
+|`feedback`|float|amplitude of the phase feedback in radians.
+|===
+
+.Example
+[source,sclang]
+~lola s: \sine feedback: 1 >>>.1 1
+~lola s: \sine feedback: 0.5 amp: 0 >>>.1 1
+
+=== tri
+Sawtooth-triangle oscillator with variable duty.
+.Args
+|===
+|`width`|float|duty cycle from `0` (saw) to `1` (ramp). `0.5` is triangle wave.
+|===
+
+.Example
+[source,sclang]
+~lola s: \tri width: 0.2 >>>.1 1
+~lola s: \tri width: 0.9 >>>.1 1
+~lola s: \tri width: 0.5 >>>.1 1
+
+=== fmx
