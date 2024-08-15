@@ -1,6 +1,12 @@
 (
-SynthDef(\soskick,
-	{ arg out = 0, freq = 50, mod_freq = 5, mod_index = 5, sustain = 0.4, amp = 0.8, beater_noise_level = 0.025;
+SynthDef(\soskick, {
+	var out = \out.kr(0);
+	var freq = \freq.kr(50)/4;
+	var mod_freq = \mod_freq.kr(5);
+	var mod_index = \mod_index.kr(5);
+	var sus = \sus.kr(0.2);
+	var amp = \amp.kr(0.8);
+	var beater = \beater.kr(0.025);
 	var pitch_contour, drum_osc, drum_lpf, drum_env;
 	var beater_source, beater_hpf, beater_lpf, lpf_cutoff_contour, beater_env;
 	var kick_mix;
@@ -11,8 +17,8 @@ SynthDef(\soskick,
 				mul: 1,
 				add: 0);
 	drum_lpf = LPF.ar(in: drum_osc, freq: 1000, mul: 1, add: 0);
-	drum_env = drum_lpf * EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
-	beater_source = WhiteNoise.ar(beater_noise_level);
+	drum_env = drum_lpf * EnvGen.ar(Env.perc(0.005, sus), 1.0, doneAction: 2);
+	beater_source = WhiteNoise.ar(beater);
 	beater_hpf = HPF.ar(in: beater_source, freq: 500, mul: 1, add: 0);
 	lpf_cutoff_contour = Line.kr(6000, 500, 0.03);
 	beater_lpf = LPF.ar(in: beater_hpf, freq: lpf_cutoff_contour, mul: 1, add: 0);
@@ -22,16 +28,21 @@ SynthDef(\soskick,
 	}
 	).add;
 
-SynthDef(\sossnare,
-	{arg out = 0, pan = 0, sustain = 0.1, drum_mode_level = 0.25,
-	snare_level = 40, snare_tightness = 1000,
-	freq = 405, amp = 0.8;
+SynthDef(\sossnare, {
+	var out = \out.kr(0);
+	var pan = \pan.kr(0);
+	var sus = \sus.kr(0.1);
+	var drum_mode_level = \mode_level.kr(0.25);
+	var snare_level = \level.kr(40);
+	var snare_tightness = \tightness.kr(1000);
+	var freq = \freq.kr(405);
+	var amp = \amp.kr(0.8);
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
 	var snare_noise, snare_brf_1, snare_brf_2, snare_brf_3, snare_brf_4, snare_reson;
 	var snare_env;
 	var snare_drum_mix;
 
-	drum_mode_env = EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
+	drum_mode_env = EnvGen.ar(Env.perc(0.005, sus), 1.0, doneAction: 2);
 	drum_mode_sin_1 = SinOsc.ar(freq*0.53, 0, drum_mode_env * 0.5);
 	drum_mode_sin_2 = SinOsc.ar(freq, 0, drum_mode_env * 0.5);
 	drum_mode_pmosc = PMOsc.ar(	Saw.ar(freq*0.85),
@@ -44,7 +55,7 @@ SynthDef(\sossnare,
 // choose either noise source below
 //	snare_noise = Crackle.ar(2.01, 1);
 	snare_noise = LFNoise0.ar(20000, 0.1);
-	snare_env = EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
+	snare_env = EnvGen.ar(Env.perc(0.005, sus), 1.0, doneAction: 2);
 	snare_brf_1 = BRF.ar(in: snare_noise, freq: 8000, mul: 0.5, rq: 0.1);
 	snare_brf_2 = BRF.ar(in: snare_brf_1, freq: 5000, mul: 0.5, rq: 0.1);
 	snare_brf_3 = BRF.ar(in: snare_brf_2, freq: 3600, mul: 0.5, rq: 0.1);
@@ -55,8 +66,12 @@ SynthDef(\sossnare,
 	}
 ).add;
 
-SynthDef(\soshats,
-	{arg out = 0, pan = 0, freq = 6000, sustain = 0.1, amp = 0.8;
+SynthDef(\soshats, {
+	var out = \out.kr(0);
+	var pan = \pan.kr(0);
+	var freq = \freq.kr(6000);
+	var sus = \sus.kr(0.1);
+	var amp = \amp.kr(0.8);
 	var root_cymbal, root_cymbal_square, root_cymbal_pmosc;
 	var initial_bpf_contour, initial_bpf, initial_env;
 	var body_hpf, body_env;
@@ -72,20 +87,25 @@ SynthDef(\soshats,
 	initial_bpf_contour = Line.kr(15000, 9000, 0.1);
 	initial_env = EnvGen.ar(Env.perc(0.005, 0.1), 1.0);
 	initial_bpf = BPF.ar(root_cymbal, initial_bpf_contour, mul:initial_env);
-	body_env = EnvGen.ar(Env.perc(0.005, sustain, 1, -2), 1.0, doneAction: 2);
-	body_hpf = HPF.ar(in: root_cymbal, freq: Line.kr(9000, 12000, sustain),mul: body_env, add: 0);
+	body_env = EnvGen.ar(Env.perc(0.005, sus, 1, -2), 1.0, doneAction: 2);
+	body_hpf = HPF.ar(in: root_cymbal, freq: Line.kr(9000, 12000, sus),mul: body_env, add: 0);
 	cymbal_mix = Mix.new([initial_bpf, body_hpf]) * amp;
 	Out.ar(out, Pan2.ar([cymbal_mix, cymbal_mix], pan))
 	}).add;
 
-SynthDef(\sostom,
-	{arg out = 0, pan = 0, sustain = 0.4, drum_mode_level = 0.25,
-	freq = 90, drum_timbre = 1.0, amp = 0.8;
+SynthDef(\sostom, {
+	var out = \out.kr(0);
+	var pan = \pan.kr(0);
+	var sus = \sus.kr(0.2);
+	var drum_mode_level = \drum_mode_level.kr(0.25);
+	var freq = \freq.kr(90)/;
+	var drum_timbre = \drum_timbre.kr(1.0);
+	var amp = \amp.kr(0.8);
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
 	var stick_noise, stick_env;
 	var drum_reson, tom_mix;
 
-	drum_mode_env = EnvGen.ar(Env.perc(0.005, sustain), 1.0, doneAction: 2);
+	drum_mode_env = EnvGen.ar(Env.perc(0.005, sus), 1.0, doneAction: 2);
 	drum_mode_sin_1 = SinOsc.ar(freq*0.8, 0, drum_mode_env * 0.5);
 	drum_mode_sin_2 = SinOsc.ar(freq, 0, drum_mode_env * 0.5);
 	drum_mode_pmosc = PMOsc.ar(	Saw.ar(freq*0.9),
