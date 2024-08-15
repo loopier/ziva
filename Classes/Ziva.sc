@@ -72,9 +72,11 @@ Ziva {
 		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
 		Ziva.proxyspace.put(\mixer, { \in.ar(0!outputChannels) });
 		Ziva.proxyspace[\mixer][1000] = \filter -> {|in|
-			var sig = LPF.ar(in, 18000);
+			var sig = in;
+			sig = LPF.ar(sig, 18000);
 			sig = HPF.ar(sig, 5);
-			sig * \gain.kr(1);
+			sig = sig * \gain.kr(1);
+			// sig = LinXFade2.ar(Compander.ar(sig,sig), sig, pan: \pan.kr(1), level: \gain.kr(1));
 		};
 		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
 		Ziva.proxyspace.clock = Ziva.clock;
