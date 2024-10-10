@@ -697,6 +697,9 @@ Ziva {
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
+	*root { ^Pdefn(\root).source.name }
+	*root_ { | root | Pdefn(\root, root) }
+
 
 	// \brief 	create a '~harmony' (and '~h' shortcut) global variable to hold a
 	// 			universal harmonic sequence

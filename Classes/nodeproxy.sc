@@ -17,9 +17,9 @@
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
-			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
 		} {
-			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
 		};
 	}
 
@@ -124,6 +124,7 @@
 			Event.partialEvents.serverEvent.keys.includes(selector) ||
 			Ziva.synthControls(this[0].patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
 			Zynaddsubfx.oscInterfaceDict.includesKey(selector)
+			// selector == \r || selector == \rh || selector == \rhythm
 		) {
 			if( args.isSymbol ) {
 				this.prSetPbindParam(selector, Pkey(args));
@@ -134,6 +135,8 @@
 		// 	^super.doesNotUnderstand;
 		// };
 	}
+
+	lag { |seconds| this.prSetPbindParam(\lag, seconds) }
 
 	///	\brief	set an effect with an index
 	/// \description	effects can be added in any order
