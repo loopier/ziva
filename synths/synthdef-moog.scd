@@ -3,7 +3,8 @@
 SynthDef(\moog, {
 	var gate = \gate.kr(1);
 	var out = \out.kr(0);
-	var ampLfoFreq = \ampLfoFreq.kr(0.1);
+	// var ampLfoFreq = \ampLfoFreq.kr(0.1);
+	var ampLfoFreq = \ampLfoFreq.kr(1);
 	var filterMode = \filterMode.kr(0);
 	var dataUpdateId = \dataUpdateId.kr(0);
 
@@ -29,11 +30,15 @@ SynthDef(\moog, {
 	var filterUpper = \filterUpper.kr(200);
 
 	var sig;
+	var amp = \amp.kr(1);
 	var atk = \atk.kr(0.01);
 	var sus = \sus.kr(1);
 	var rel = \rel.kr(1);
-	var env = Linen.kr(gate, atk, sus, rel, doneAction: 2);
-	var amp = SinOsc.kr(ampLfoFreq).range(0.5, 1);
+	var dec = \dec.kr(1);
+	var dur = \dur.kr(1);
+	// var env = Linen.kr(gate, atk, amp, rel, doneAction: 2);
+	var env = EnvGen.ar(Env.asr(atk, amp, rel), gate, timeScale: dur, doneAction:2);
+	var ampLfo = SinOsc.kr(ampLfoFreq).range(0.5, 1);
 
 	var filteredFreqLower = Lag2.kr(freqLower, 1);
 	var filteredFreqUpper = Lag2.kr(freqUpper, 1);
@@ -59,12 +64,10 @@ SynthDef(\moog, {
 		filter + SinOsc.kr(0.25).range(-10, 10),
 		reson,
 		filterMode);    // filter mode - lowpass
-	sig = sig * amp;
+	sig = sig * ampLfo;
 	sig = sig.tanh;
 	sig = (CombN.ar(sig, 0.4, [0.4,0.35],2) * 0.4) + (sig * 0.5);
 	sig = sig.tanh;
-
-	CtxDataUpdate.kr(dataUpdateId, 24, [freq, filter, reson, amp]);
 
 	Out.ar(out, sig * env);
 }).add;

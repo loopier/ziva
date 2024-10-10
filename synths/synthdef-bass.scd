@@ -16,6 +16,23 @@ SynthDef(\bass, {
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).store;
 
+SynthDef(\pbass, {
+    var out = \out.kr(0);
+    var pan = \pan.kr(0);
+    var freq = \freq.kr(440) / 4;
+    var amp = \amp.kr(1);// * (-10.dbamp);
+    var atk = \atk.kr(0.01);
+    var dec = \dec.kr(0.3);
+    var sus = \sus.kr(0.5);
+    var rel = \rel.kr(1.0);
+    var gate = \gate.kr(1);
+    var env = Env.adsr(atk, dec, sus, rel).ar(2, gate: gate);
+    var sig;
+    sig = Pulse.ar(freq + [Rand(-1.5,0),Rand(1.5)]);
+	pan = pan + [-0.6,0.6];
+    Out.ar(out, Pan2.ar(sig * env * amp, pan));
+}).store;
+
 SynthDef(\deepbass, {
     var out = \out.kr(0);
     var pan = \pan.kr(0) + Rand(-0.1,0.1);

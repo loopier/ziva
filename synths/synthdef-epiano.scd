@@ -73,14 +73,14 @@ SynthDef(\rhodes, {
     var atk = \atk.kr(0.01);
     var dec = \dec.kr(0.3);
     var sus = \sus.kr(0.5);
-    var sustain = \sustain.kr(1);
+    // var sustain = \sustain.kr(1);
     var rel = \rel.kr(1.0);
     var gate = \gate.kr(1);
 	var vel = \vel.kr(0.8);
-	var modIndex = \modindex.kr(0.2);
+	var modIndex = \modindex.kr(0.8);
 	var lfoSpeed = \lfospeed.kr(0.4);
 	var lfoDepth = \lfodepth.kr(0.1);
-	var mix = \mix.kr(0.2);
+	var mix = \mix.kr(0.05);
 
     var env1, env2, env3, env4;
     var osc1, osc2, osc3, osc4, snd;

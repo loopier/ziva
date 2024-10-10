@@ -1,7 +1,7 @@
 (
 SynthDef(\soskick, {
 	var out = \out.kr(0);
-	var freq = \freq.kr(50)/4;
+	var freq = \freq.kr(50) / 4;
 	var mod_freq = \mod_freq.kr(5);
 	var mod_index = \mod_index.kr(5);
 	var sus = \sus.kr(0.2);
@@ -26,7 +26,7 @@ SynthDef(\soskick, {
 	kick_mix = Mix.new([drum_env, beater_env]) * 2 * amp;
 	Out.ar(out, [kick_mix, kick_mix])
 	}
-	).add;
+).add;
 
 SynthDef(\sossnare, {
 	var out = \out.kr(0);
@@ -34,9 +34,9 @@ SynthDef(\sossnare, {
 	var sus = \sus.kr(0.1);
 	var drum_mode_level = \mode_level.kr(0.25);
 	var snare_level = \level.kr(40);
-	var snare_tightness = \tightness.kr(1000);
+	var snare_tightness = \tightness.kr(1) * 1000;
 	var freq = \freq.kr(405);
-	var amp = \amp.kr(0.8);
+	var amp = \amp.kr(0.8) * 0.1;
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
 	var snare_noise, snare_brf_1, snare_brf_2, snare_brf_3, snare_brf_4, snare_reson;
 	var snare_env;
@@ -98,7 +98,7 @@ SynthDef(\sostom, {
 	var pan = \pan.kr(0);
 	var sus = \sus.kr(0.2);
 	var drum_mode_level = \drum_mode_level.kr(0.25);
-	var freq = \freq.kr(90)/;
+	var freq = \freq.kr(90);
 	var drum_timbre = \drum_timbre.kr(1.0);
 	var amp = \amp.kr(0.8);
 	var drum_mode_sin_1, drum_mode_sin_2, drum_mode_pmosc, drum_mode_mix, drum_mode_env;
