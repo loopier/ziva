@@ -29,7 +29,7 @@ SynthDef(\pbass, {
     var env = Env.adsr(atk, dec, sus, rel).ar(2, gate: gate);
     var sig;
     sig = Pulse.ar(freq + [Rand(-1.5,0),Rand(1.5)]);
-	pan = pan + [-0.6,0.6];
+    pan = pan + [-0.6,0.6];
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).store;
 
