@@ -83,6 +83,10 @@
 	fast{ |args| this.prSetPbindParam(\stretch, 1/args) }
 	slow{ |args| this.prSetPbindParam(\stretch, args) }
 
+	/// \brief	stub to send a command to animatron
+	///
+	cmd { |func| this.prSetPbindParam(\finish, Pfunc(func)) }
+
 	doesNotUnderstand { |selector, args|
 		// it's an efect with 'fxN'
 		if("^fx\\d+".matchRegexp(selector.asString)) {
