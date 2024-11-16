@@ -28,8 +28,11 @@ SynthDef(\brass, {
 	);
 	var flfo = LFNoise2.kr(15).range(0.5, 1.5);
     var sig;
+	var blip = EnvGen.ar(Env.perc(0.01, 0.1), gate).linlin(0,1,1,1.2);
+	// var blip = 1;
 
-    sig = Saw.ar(freq);
+    sig = Saw.ar(freq * [1.01, blip]);
+	sig = Mix.ar(sig);
 	sig = LPF.ar(sig, freq * amp * 10, fenv * flfo);
 	sig = FreeVerb.ar(sig, 0.33, 0.5);
 
