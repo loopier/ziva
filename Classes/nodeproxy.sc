@@ -83,6 +83,19 @@
 	fast{ |args| this.prSetPbindParam(\stretch, 1/args) }
 	slow{ |args| this.prSetPbindParam(\stretch, args) }
 
+	chance{ |args = 1|
+		var chance = args.debug("chance");
+		if(args.isNumber) {
+			args = max(0, min(args, 1)).debug("chance is number");
+			chance = Pwrand([\rest,1], [1-args, args], inf);
+		};
+		if(args.isArray) {
+			"'chance' only accepts number or pattern".warn;
+			chance = 1;
+		};
+		this.prSetPbindParam(\chance, chance);
+	}
+
 	/// \brief	stub to send a command to animatron
 	///
 	cmd { |func| this.prSetPbindParam(\finish, Pfunc(func)) }
