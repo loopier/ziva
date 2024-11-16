@@ -59,4 +59,36 @@ SynthDef(\deepbass, {
 	sig = Limiter.ar(sub + sig);
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).store;
+
+SynthDef(\moogbass, {
+    var out = \out.kr(0);
+    var pan = \pan.kr(0);
+    var freq = \freq.kr(440);
+    var amp = \amp.kr(1);
+	var pwm = \pwm.kr(0.02);
+    var atk = \atk.kr(0.01);
+    var dec = \dec.kr(0.3);
+    var sus = \sus.kr(0.5);
+    var rel = \rel.kr(1.0);
+    var fatk = \fatk.kr(0.01);
+    var fdec = \fdec.kr(0.3);
+    var fsus = \fsus.kr(0.5);
+    var frel = \frel.kr(1.0);
+    var gate = \gate.kr(1);
+    var env = EnvGen.ar(
+        Env.adsr(atk, dec, sus, rel),
+        gate: gate,
+        doneAction: 2
+	);
+	var filterEnv = EnvGen.ar(
+        Env.adsr(fatk, fdec, fsus, frel),
+		gate,
+	);
+    var sig, fb;
+    sig = Pulse.ar(freq/3, SinOsc.kr(0.1) * 2 + 0.5 + pwm);
+    sig = sig + Saw.ar(freq/2 + Rand(-2.0,0));
+    sig = sig + Saw.ar(freq/2 + Rand(0.1,2.0));
+	sig = LPF.ar(sig, filterEnv.linexp(0,1,5,15000));
+    Out.ar(out, Pan2.ar(sig * env * amp, pan));
+}).add;
 )
