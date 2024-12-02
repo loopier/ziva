@@ -102,7 +102,8 @@ Ziva {
 			if(meter) {
 				this.meter = ServerMeter.new(server, 2,2);
 				this.meter.window.background = Color(0.25,0.25,0.25);
-				this.meter.window.bounds = Rect(1920-134,1080-230, 134,230);
+				// this.meter.window.bounds = Rect(1920-134,1080-230, 134,230);
+				this.meter.window.bounds = Rect(0,1080-230, 134,230);
 				this.meter.window.alwaysOnTop = true;
 			};
 
