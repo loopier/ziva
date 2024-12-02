@@ -19,7 +19,8 @@
 		if( Ziva.samples.includes(snd) ) {
 			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
 		} {
-			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
+			// this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
+			this[0] = snd;
 		};
 	}
 
@@ -127,30 +128,33 @@
 		};
 
 		// only convert event and synth keys
-		if(
-			Event.parentEvents.default.keys.includes(selector) ||
-			Event.parentEvents.synthEvent.keys.includes(selector) ||
-			Event.parentEvents.groupEvent.keys.includes(selector) ||
-			Event.partialEvents.ampEvent.keys.includes(selector) ||
-			Event.partialEvents.bufferEvent.keys.includes(selector) ||
-			Event.partialEvents.durEvent.keys.includes(selector) ||
-			Event.partialEvents.midiEvent.keys.includes(selector) ||
-			Event.partialEvents.nodeEvent.keys.includes(selector) ||
-			Event.partialEvents.pitchEvent.keys.includes(selector) ||
-			Event.partialEvents.playerEvent.keys.includes(selector) ||
-			Event.partialEvents.serverEvent.keys.includes(selector) ||
-			Ziva.synthControls(this[0].patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
-			Zynaddsubfx.oscInterfaceDict.includesKey(selector)
-			// selector == \r || selector == \rh || selector == \rhythm
-		) {
-			if( args.isSymbol ) {
-				this.prSetPbindParam(selector, Pkey(args));
-			}{
-				this.prSetPbindParam(selector, args);
+		if(this.source.isClassName == Pbind){
+			if(
+				Event.parentEvents.default.keys.includes(selector) ||
+				Event.parentEvents.synthEvent.keys.includes(selector) ||
+				Event.parentEvents.groupEvent.keys.includes(selector) ||
+				Event.partialEvents.ampEvent.keys.includes(selector) ||
+				Event.partialEvents.bufferEvent.keys.includes(selector) ||
+				Event.partialEvents.durEvent.keys.includes(selector) ||
+				Event.partialEvents.midiEvent.keys.includes(selector) ||
+				Event.partialEvents.nodeEvent.keys.includes(selector) ||
+				Event.partialEvents.pitchEvent.keys.includes(selector) ||
+				Event.partialEvents.playerEvent.keys.includes(selector) ||
+				Event.partialEvents.serverEvent.keys.includes(selector) ||
+				Ziva.synthControls(this[0].patternpairs.asDict[\instrument] ? \zivaplaybuf).flat.asDict.keys.includes(selector) ||
+				Zynaddsubfx.oscInterfaceDict.includesKey(selector)
+				// selector == \r || selector == \rh || selector == \rhythm
+			) {
+				if( args.isSymbol ) {
+					this.prSetPbindParam(selector, Pkey(args));
+				}{
+					this.prSetPbindParam(selector, args);
+				}
 			}
-		}//{
-		// 	^super.doesNotUnderstand;
-		// };
+		}{
+			this.set(selector, args);
+			// ^super.doesNotUnderstand;
+		};
 	}
 
 	lag { |seconds| this.prSetPbindParam(\lag, seconds) }
