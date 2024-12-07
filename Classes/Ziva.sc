@@ -69,7 +69,10 @@ Ziva {
 		// see: https://doc.sccode.org/Overviews/Methods.html#initTree
 		ServerTree.add({this.makeTracks(4)});
 
-		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock).quant_(1);
+		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
+		Ziva.proxyspace.clock = Ziva.clock;
+		Ziva.proxyspace = ProxySpace.push(server, \ziva, Ziva.clock);
+		Ziva.proxyspace.quant = 1;
 		Ziva.proxyspace.put(\mixer, { \in.ar(0!outputChannels) });
 		Ziva.proxyspace[\mixer][1000] = \filter -> {|in|
 			var sig = in;
