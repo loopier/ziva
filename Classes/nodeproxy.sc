@@ -17,10 +17,10 @@
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
 		if( Ziva.samples.includes(snd) ) {
-			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus);
 		} {
-			// this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1);
-			this[0] = snd;
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus);
+			// this[0] = snd;
 		};
 	}
 
