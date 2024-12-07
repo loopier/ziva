@@ -81,13 +81,17 @@ Ziva {
 			sig = sig * \gain.kr(1);
 			// sig = LinXFade2.ar(Compander.ar(sig,sig), sig, pan: \pan.kr(1), level: \gain.kr(1));
 		};
-		Ziva.clock = TempoClock.new(rrand(60,190).debug("bpm")/60).permanent_(true);
-		Ziva.proxyspace.clock = Ziva.clock;
+		Ziva.proxyspace.put(\reverb, { \in.ar(0!outputChannels) });
+		Ziva.proxyspace[\reverb][1000] = \filter -> {|in| FreeVerb.ar(in, \mix.kr(0.33), \room.kr(0.5), \damp.kr(0.5)) };
+		Ziva.proxyspace.put(\delay, { \in.ar(0!outputChannels) });
+		Ziva.proxyspace[\delay][1000] = \filter -> {|in| AllpassC.ar(in, 2, \time.kr(Ziva.clock.tempo / 0.75), \decay.kr(1.3)) };
 		Pdefn(\root, 0);
 
 		MIDIClient.init;
 		MIDIIn.connectAll;
 		// this.initMidifighter;
+
+		Ziva.animatron = Animatron.boot;
 
 		this.server.waitForBoot{
 			var allFxGroup;
@@ -126,6 +130,8 @@ Ziva {
 			// add a limiter to the end of the chain (not realy the end, but its not
 			// likely there are hundreds of sources in the mixer Ndef)
 			Ziva.proxyspace.at(\mixer).play(numChannels: outputChannels);
+			Ziva.proxyspace.at(\delay).play;
+			Ziva.proxyspace.at(\reverb).play;
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
 		};
