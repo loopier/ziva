@@ -42,6 +42,8 @@ Ziva {
 
 	classvar <> proxyspace;
 
+	classvar <> animatron;
+
 	// *new { |sound|
 	// 	^super.new.synth(sound);
 	// }
