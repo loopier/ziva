@@ -16,10 +16,21 @@
 	/// \brief	set the sound
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
+		var key = this.key;
 		if( Ziva.samples.includes(snd) ) {
-			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus);
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus,
+			\finish, {|e|
+				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+				}
+			});
 		} {
-			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus);
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \amp, 1, \reverbBus, Ziva.proxyspace[\reverb].bus,
+			\finish, {|e|
+				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+				}
+			});
 			// this[0] = snd;
 		};
 	}
@@ -51,7 +62,14 @@
 	/// \brief	send MIDI events and OSC messages to ZynAddSubFx (OSC 127.0.0.1:4001)
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
-		this[0] = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		var key = this.key;
+		this[0] = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root),
+			\finish, {|e|
+				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+				}
+			}
+		);
 	}
 
 	/// \brief	Disable gate on MIDI messages.
@@ -303,42 +321,42 @@
 	// freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	// reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	reverb {| wet=0 | ^this.prSetPbindParam(\reverb, wet) }
-	// gverb {| time, damp | ^{| in | HPF.ar(GVerb.ar(in, roomsize:this, revtime:time, damping:damp, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
-	// delay {| decay=0 | ^{| in | AllpassC.ar(in, 4, this, decay )}}
-	// fbdelay {| fb=0.8 |
-	// 	^{| in |
-	// 		var local;
-	// 		// read feedback , add to source
-	// 		local = LocalIn.ar(2) + in;
-	// 		// delay sound
-	// 		local = DelayN.ar(local, 4, this);
-	// 		// reverse channels to give ping pong effect, apply decay factor
-	// 		// LocalOut.ar(local.reverse * fb);
-	// 		LocalOut.ar(local * fb);
-	// 		local
-	// 	}
-	// }
-	// lpf {| res = 1 | ^{| in | RLPF.ar(in, this, res)}}
-	// hpf {| res = 1 | ^{| in | RHPF.ar(in, this, res)}}
-	// bpf {| res = 1 | ^{| in | BPF.ar(in, this, res)}}
-	// brf {| res = 1 | ^{| in | BRF.ar(in, this, res)}}
-	// vcf {| res=0.7, mul=1 |  ^{| in | MoogVCF.ar(in, this, res, mul: mul)} }
-	// tremolo {| depth=0.3 | ^{| in | in * SinOsc.ar(this, 0, depth, 0)}}
-	// vibrato {| depth=0.3 | ^{| in | PitchShift.ar(in, 0.008, SinOsc.ar(this, 0, depth, 1))}}
-	// crush {^{| in | in.round(0.5 ** (this-1));}}
-	// compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
-	// limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
-	// distor { |smooth=0.5, post=1| ^{|in| CrossoverDistortion.ar(in, this, smooth) * post }}
-	// // asymetric fold
-	// // \param neg	absolute value of the negative pole value, will be converted to negative
-	// // -- old version -- fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
-	// afold { |neg, post=1|
-	// 	var posPre = this.max(0.01);
-	// 	var negPre = neg.max(0.01).neg;
-	// 	^{| in |
-	// 		LeakDC.ar(in.fold(negPre, posPre) * (1/negPre.abs + posPre)) * post
-	// 	}
-	// }
+	gverb {| time, damp | ^{| in | HPF.ar(GVerb.ar(in, roomsize:this, revtime:time, damping:damp, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
+	delay {| decay=0 | ^{| in | AllpassC.ar(in, 4, this, decay )}}
+	fbdelay {| fb=0.8 |
+		^{| in |
+			var local;
+			// read feedback , add to source
+			local = LocalIn.ar(2) + in;
+			// delay sound
+			local = DelayN.ar(local, 4, this);
+			// reverse channels to give ping pong effect, apply decay factor
+			// LocalOut.ar(local.reverse * fb);
+			LocalOut.ar(local * fb);
+			local
+		}
+	}
+	lpf {| res = 1 | ^{| in | RLPF.ar(in, this, res)}}
+	hpf {| res = 1 | ^{| in | RHPF.ar(in, this, res)}}
+	bpf {| res = 1 | ^{| in | BPF.ar(in, this, res)}}
+	brf {| res = 1 | ^{| in | BRF.ar(in, this, res)}}
+	vcf {| res=0.7, mul=1 |  ^{| in | MoogVCF.ar(in, this, res, mul: mul)} }
+	tremolo {| depth=0.3 | ^{| in | in * SinOsc.ar(this, 0, depth, 0)}}
+	vibrato {| depth=0.3 | ^{| in | PitchShift.ar(in, 0.008, SinOsc.ar(this, 0, depth, 1))}}
+	crush {^{| in | in.round(0.5 ** (this-1));}}
+	compress {^{| in | Compander.ar(4*(in),in,0.4,1,4,mul:this)}}
+	limit {| dur=0.01 | ^{| in | Limiter(in, this, dur)}}
+	distor { |smooth=0.5, post=1| ^{|in| CrossoverDistortion.ar(in, this, smooth) * post }}
+	// asymetric fold
+	// \param neg	absolute value of the negative pole value, will be converted to negative
+	// -- old version -- fold {| max=1 | ^{| in | LeakDC.ar( in.fold(this, max) )}}
+	afold { |neg, post=1|
+		var posPre = this.max(0.01);
+		var negPre = neg.max(0.01).neg;
+		^{| in |
+			LeakDC.ar(in.fold(negPre, posPre) * (1/negPre.abs + posPre)) * post
+		}
+	}
 	// // symetric fold
 	wavefold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
 }
