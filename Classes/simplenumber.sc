@@ -128,6 +128,39 @@
 }
 
 + Integer {
+	/// \brief	see `sound`
+	s { |snd| ^this.sound(snd) }
+
+	/// \brief	set the sound
+	/// \param	snd:	can be either a synth or a sample
+	sound {|snd|
+		var key = (\track++this).asSymbol;
+		var source = if( Ziva.samples.includes(snd) ) {
+			Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \reverbBus, Ziva.proxyspace[\reverb].bus,
+				\finish, {|e|
+					if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+						Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+					}
+				});
+		} {
+			Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \reverbBus, Ziva.proxyspace[\reverb].bus,
+				\finish, {|e|
+					if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+						Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+					}
+				});
+		};
+
+		if (Ziva.proxyspace.keys.includes(key)) {
+			Ziva.proxyspace.at(key).resume;
+		} {
+			Ziva.proxyspace.put( key, source);
+		};
+
+		Ziva.proxyspace.at(key).mixer(this,1);
+		^Ziva.proxyspace.at(key);
+	}
+
 	// controllers
 	midifighter { | min=0.0, max=1.0, curve=\lin |
 		// var key = (\midifighter++this).asSymbol.debug(this);
