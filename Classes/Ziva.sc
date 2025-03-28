@@ -43,6 +43,8 @@ Ziva {
 	classvar <> proxyspace;
 
 	classvar <> animatron;
+	classvar <> zynaddsubfxPort = 56120;
+	classvar <> zynaddsubfxMIDIOut;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -138,6 +140,25 @@ Ziva {
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
 		};
 		^this.server;
+	}
+
+	// boot zynaddsubfx
+	*zyn {
+		var processId = "zynaddsubfx -a -b 1024 -P %".format(this.zynaddsubfxPort).unixCmd;
+		MIDIClient.init;
+		Tdef(\start_zyn, {
+			inf.do{
+				MIDIClient.destinations.do{|endpoint, i|
+					if( endpoint.name == "ZynAddSubFX" ) {
+						this.zynaddsubfxMIDIOut = MIDIOut.newByName(endpoint.name, endpoint.name);
+						// this.zynaddsubfxMIDIOut = MIDIOut.newByName("ZynAddSubFx","ZynAddSubFx")
+						"Connected MIDI".debug(endpoint.name);
+						Tdef(\start_zyn).stop;
+					};
+				};
+				0.1.wait;
+			};
+		}).play;
 	}
 
 	// get out of Ziva ProxySpace

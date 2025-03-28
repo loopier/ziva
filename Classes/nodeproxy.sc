@@ -63,11 +63,16 @@
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		var key = this.key;
-		this[0] = Pbind(\type, \zynaddsubfx, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root),
+		this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root),
 			\finish, {|e|
+				var zynsynth = "/part%".format(e[\chan]);
+				// zynsynth.debug("zyn");
+
 				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
 					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-				}
+				};
+
+
 			}
 		);
 	}
