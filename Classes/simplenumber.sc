@@ -135,9 +135,6 @@
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
 		var key = (\track++this).asSymbol;
-		// if (Ziva.proxyspace.at(key).isNil) {
-		// 	Ziva.proxyspace.put(key, Pbind(\amp, 0));
-		// };
 		Ziva.proxyspace.at(key).resume;
 		Ziva.proxyspace.at(key).sound(snd);
 		Ziva.proxyspace.at(key).mixer(this, 1);
@@ -152,17 +149,7 @@
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key)[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root),
-			\finish, {|e|
-				var zynsynth = "/part%".format(e[\chan]);
-				// zynsynth.debug("zyn");
-
-				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-				};
-			};
-		);
-		Ziva.proxyspace.at(key);
+		Ziva.proxyspace.at(key).zyn(ch);
 	}
 
 	/// \brief	connect to MIDI(0)
@@ -171,7 +158,7 @@
 
 	midi {|ch|
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key)[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		Ziva.proxyspace.at(key).midi(ch);
 	}
 	// controllers
 	midifighter { | min=0.0, max=1.0, curve=\lin |
