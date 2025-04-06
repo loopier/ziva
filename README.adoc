@@ -1,0 +1,59 @@
+= Živa
+
+Syntax sugar for live coding in supercollider.
+
+== Quick Start
+
+[source,sclang]
+----
+// boot the server
+Ziva.boot;
+
+// check the current BPM
+Ziva.bpm;
+// set the BPM - defaults to random value on every boot
+Ziva.bpm = 96;
+
+// set scale - defaults to \major
+Ziva.scale = \minor;
+// set the root (0 = C, 1 = C#, .. 11 = B) - defaults to 0 (C)
+Ziva.root = 2;
+
+// load samples - no samples by default
+Ziva.samples("/path/to/your/samples/dir");
+// list samples
+Ziva.listSamples;
+
+// list synth sounds
+Ziva.synths;
+// get list of controls of a synth
+Ziva.controls(\pulse);
+
+// create and play (or unmute) a track starting the
+// line with a number followed by a sound: (or s:)
+1 s: \tri
+// mute the track with a leading backslaxh
+\1 s: \tri
+
+// add parameters and unmute (removing the forward slash)
+// arrays provide chords
+// r: creates a rhythm from a hex with a leading backslash
+// sus: and dec: are ADSR values (there's also atk: and rel:)
+1 s: \tri octave: 3 degree: [0,2,4] dur: (1/2) sus: 0 dec: 0.4 r: \fa
+
+// add an effect
+1 s: \tri octave 3 degree: [0,2,4] sus: 0 fx1: reverb(0.9) wet1: 0.6
+
+// remove the previous effect
+1 s: \tri octave 3 degree: [0,2,4] sus: 0 fx1: nil wet1: 0.6
+
+// sequence notes in the scale
+1 s: \tri degree: [0,2,4].pseq
+// random sequence
+1 s: \tri degree: [0,2,4].prand
+// lace sequence
+1 s: \tri degree: [0,2,[0,7]].place
+// etc...
+// this also works with sclang Pattern syntax
+1 s: \tri degree: Pseq([0,2,4], inf)
+----
