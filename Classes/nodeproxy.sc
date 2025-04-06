@@ -98,11 +98,36 @@
 	/// \descritpion	hexadecimal values will be converted to 8-beat (sic) rythms where 0 is rest and 1 is hit
 	/// \param	args:	a symbol representing a hexadecimal number. E.g.: '808a808f'
 	r { |args|
-		if( args.isSymbol) {
+		if( args.isString ) { args.asSymbol };
+		if( args.isSymbol ) {
 			if (args == \r) {args = \0};
 			args = this.prSymbolToBinaryDigits(args);
 		};
 		this.prSetPbindParam(\r, args.replace(0,\r).debug("rhythm").pseq);
+	}
+
+	/// \brief Same as `degree` but move by intervals instead of giving absolute notes.
+	/// \description
+	/// 	Examples:
+	/// 	- \u121d31 == (up step leap step) (down leap step)
+	/// \param	distances	a symbol describing a sequence of distances.
+	/// 					\u set up direction
+	/// 					\d sets down direction
+	/// 					numbers are steps.
+	interval { |distances|
+		var dirs = [\u, 1, \d, -1].asDict;
+		var dir = 1;
+		var deg = 0;
+		var degs = List.new;
+		distances.asSymbol.asString.do{|c|
+			dirs[c.asSymbol].isNil.if {
+				deg = deg + (c.asString.asInteger * dir);
+				degs.add(deg);
+			} {
+				dir = dirs[c.asSymbol]
+			}
+		};
+		this.prSetPbindParam(\degree, Pseq(degs,inf));
 	}
 
 	fast{ |args| this.prSetPbindParam(\stretch, 1/args) }
