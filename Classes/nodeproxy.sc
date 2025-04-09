@@ -20,14 +20,14 @@
 	sound {|snd|
 		var key = this.key;
 		if( Ziva.samples.includes(snd) ) {
-			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \reverbBus, Ziva.proxyspace[\reverb].bus,
+			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root),
 			\finish, {|e|
 				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
 					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
 				}
 			});
 		} {
-			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \reverbBus, Ziva.proxyspace[\reverb].bus,
+			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root),
 			\finish, {|e|
 				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
 					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
@@ -201,9 +201,6 @@
 			}{
 				this.prSetPbindParam(selector, args);
 			}
-		}{
-			this.set(selector, args);
-			// ^super.doesNotUnderstand;
 		};
 	}
 
