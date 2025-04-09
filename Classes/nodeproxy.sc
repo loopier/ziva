@@ -1,8 +1,10 @@
 + NodeProxy {
 	prSetPbindParam { |param, value|
-		var pairs = this[0].patternpairs.asDict.put(param.asSymbol, value).asPairs;
-		this[0].patternpairs = pairs;
-		this[0].patternpairs;
+		if( this.source.class == Pbind ) {
+			var pairs = this[0].patternpairs.asDict.put(param.asSymbol, value).asPairs;
+			this[0].patternpairs = pairs;
+			this[0].patternpairs;
+		};
 	}
 
 	prSymbolToBinaryDigits { |symbol|
@@ -176,9 +178,10 @@
 			^this;
 		};
 
+		if(this.source.class == Function) { ^this.set(selector, args) };
+
 		// only convert event and synth keys
-		if(
-			Event.parentEvents.default.keys.includes(selector) ||
+		if( Event.parentEvents.default.keys.includes(selector) ||
 			Event.parentEvents.synthEvent.keys.includes(selector) ||
 			Event.parentEvents.groupEvent.keys.includes(selector) ||
 			Event.partialEvents.ampEvent.keys.includes(selector) ||
