@@ -34,7 +34,7 @@
 			type = \sample;
 			instrument = \sound;
 		};
-		this[0] = Pbind(\type, type, instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this[0] = Pbind(\type, type, instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, true, \finish, {|e| Ziva.eventToAnimatron(key, e)});
 	}
 
 	mono { |snd|

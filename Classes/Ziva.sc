@@ -52,9 +52,7 @@ Ziva {
 
 	*initClass {
 		this.makeRhythmsDict;
-
-		Ziva.animatron = Animatron.boot;
-		Ziva.initAnimatronOscListener;
+		Ziva.initAnimatron;
 	}
 
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
@@ -771,11 +769,42 @@ Ziva {
 		}
 	}
 
+	*initAnimatron {
+		Ziva.animatron = Animatron.boot;
+		Ziva.initAnimatronOscListener;
+	}
+
 	// Control Ziva from Animatron.
 	*initAnimatronOscListener {
 		OSCdef(\ziva_osc, {|... args|
 			args.debug("Animatron");
 			args[0][1].asString.debug("Animatron").interpret;
 		}, '/ziva', Ziva.animatron.osc);
+	}
+
+	*eventToAnimatron { |track, event|
+		var dict = event.asDict;
+		dict.removeAt(\scale);
+		dict.removeAt(\finish);
+		dict.removeAt(\i_out);
+		dict.removeAt(\group);
+		dict.removeAt(\proxy);
+		dict.removeAt(\type);
+		dict.removeAt(\server);
+		dict.removeAt(\fadeTime);
+		dict.removeAt(\out);
+		dict[\trig] = 1;
+		dict[\octave] = event.octave ? 5;
+		dict[\amp] = event.amp ? 0.1;
+		dict[\deg] = event.degree ? 0;
+		dict[\note] = if(event.not.isNil && dict[\deg] != \r) { event.scale.degrees[dict[\deg]] };
+		dict[\midinote] = event.midinote;
+		dict[\pan] = event.pan ? 0;
+		dict[\pan] = event.pan ? 0;
+		dict.keysValuesDo{ |key,val|
+			if(val != \r) {
+				Ziva.animatron.cmd("/%/% %", track, key, val);
+			};
+		};
 	}
 }
