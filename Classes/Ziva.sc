@@ -784,6 +784,7 @@ Ziva {
 
 	*eventToAnimatron { |track, event|
 		var dict = event.asDict;
+		if(event[\animatron] == false) {^nil};
 		dict.removeAt(\scale);
 		dict.removeAt(\finish);
 		dict.removeAt(\i_out);

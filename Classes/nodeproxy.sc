@@ -79,15 +79,12 @@
 		);
 	}
 
+
 	/// \brief 	send messages to animatron
-	animatron { |onOrOff|
-		// TODO
-		// var key = this.key;
-		// 	\finish, {|e|
-		// 		if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-		// 			Ziva.animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-		// 		}
-		// 	});
+	a { |onOrOff = true| this.animatron(onOrOff) }
+
+	animatron { |onOrOff = true|
+		this.prSetPbindParam(\animatron, onOrOff);
 	}
 
 	/// \brief	Disable gate on MIDI messages.
