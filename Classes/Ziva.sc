@@ -52,6 +52,9 @@ Ziva {
 
 	*initClass {
 		this.makeRhythmsDict;
+
+		Ziva.animatron = Animatron.boot;
+		Ziva.initAnimatronOscListener;
 	}
 
 	*start { |inputChannels = 2, outputChannels = 2, server = nil|
@@ -766,5 +769,13 @@ Ziva {
 			MIDIdef.cc(key, {|ccval| Ziva.proxyspace[key] = ccval.linlin(0,127,0.0,1.0)}, i, 0);
 			// MIDIdef.cc(key, {|ccval| Ziva.proxyspace[key] = ccval.linlin(0,127,0.0,1.0)}, i, 0);
 		}
+	}
+
+	// Control Ziva from Animatron.
+	*initAnimatronOscListener {
+		OSCdef(\ziva_osc, {|... args|
+			args.debug("Animatron");
+			args[0][1].asString.debug("Animatron").interpret;
+		}, '/ziva', Ziva.animatron.osc);
 	}
 }

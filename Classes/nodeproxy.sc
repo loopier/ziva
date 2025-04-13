@@ -71,12 +71,23 @@
 				// zynsynth.debug("zyn");
 
 				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+					Ziva.animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
 				};
 
 
 			}
 		);
+	}
+
+	/// \brief 	send messages to animatron
+	animatron { |onOrOff|
+		// TODO
+		// var key = this.key;
+		// 	\finish, {|e|
+		// 		if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
+		// 			Ziva.animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
+		// 		}
+		// 	});
 	}
 
 	/// \brief	Disable gate on MIDI messages.
