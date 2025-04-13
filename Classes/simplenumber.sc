@@ -183,4 +183,14 @@
 	}
 
 	mf { | min=0.0, max=1.0, curve=\lin | this.midifighter(min,max,curve) }
+
+	mute {
+		var key = (\track++this).asSymbol;
+		Ziva.proxyspace.at(key).pause;
+	}
+
+	unmute {
+		var key = (\track++this).asSymbol;
+		Ziva.proxyspace.at(key).resume;
+	}
 }
