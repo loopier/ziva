@@ -53,7 +53,7 @@
 	gain { ^{| in | in * this } }
 	// amp { ^{| in | in * this} }
 	freeverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
-	reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
+	// reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
 	gverb {| room | ^{| in | HPF.ar(GVerb.ar(in, roomsize:20, revtime:2, damping:0.3, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
 	delay {| decay=0 | ^{| in | AllpassC.ar(in, min(this,4), this, decay)}}
 	swdelay {| fb=0.7, dry=1, wet=1 | ^{|in| SwitchDelay.ar(in, dry, wet, this, fb )}}
@@ -142,6 +142,8 @@
 		^Ziva.proxyspace.at(key);
 	}
 
+	reverb { "alo".debug }
+
 	/// \brief	see `zyn`
 	z { |ch| ^this.zyn(ch); }
 
@@ -149,7 +151,7 @@
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key).zyn(ch);
+		^Ziva.proxyspace.at(key).zyn(ch);
 	}
 
 	/// \brief	connect to MIDI(0)
@@ -158,7 +160,7 @@
 
 	midi {|ch|
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key).midi(ch);
+		^Ziva.proxyspace.at(key).midi(ch);
 	}
 	// controllers
 	midifighter { | min=0.0, max=1.0, curve=\lin |

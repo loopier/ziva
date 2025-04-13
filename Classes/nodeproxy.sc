@@ -7,6 +7,15 @@
 		};
 	}
 
+	prGetPbindParam { |param|
+		if( this.sourc.class == Pbind ) {
+			var pairs = this[0].patternpairs.asDict;
+			if( pairs.includesKey(param) ) {
+				^pairs.at(param);
+			}
+		};
+	}
+
 	prSymbolToBinaryDigits { |symbol|
 		symbol = "0x".catArgs(symbol.asString);
 		^symbol.interpret.asBinaryDigits(symbol.replace("0x","").size * 4);
@@ -230,6 +239,32 @@
 		this.set((\wet++index).asSymbol, amt)
 	}
 
+	gain { |gain|
+		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
+		var mixer = Ziva.proxyspace.at(\mixer);
+		mixer.set((\mix++index).asSymbol, gain);
+	}
+
+	/// \brief	set the amount	/// \brief	set the amount of reverb.
+	delay { |wet|
+		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
+		var amp = this.prGetPbindParam(\amp) * (1 - wet);
+		var dry = amp * (1 - wet);
+		Ziva.proxyspace[\delay][index] = \mix -> Ziva.proxyspace[this.key];
+		Ziva.proxyspace[\delay].set((\mix++index).asSymbol, wet);
+		this.amp = dry;
+	}
+
+	/// \brief	set the amount of reverb.
+	reverb { |wet|
+		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
+		var amp = this.prGetPbindParam(\amp) * (1 - wet);
+		var dry = amp * (1 - wet);
+		Ziva.proxyspace[\reverb][index] = \mix -> Ziva.proxyspace[this.key];
+		Ziva.proxyspace[\reverb].set((\mix++index).asSymbol, wet);
+		this.amp = dry;
+	}
+
 	/// \brief	send output to destination
 	/// \descriptions	send the signal on the left to the Nth slot of the signal on the right.
 	/// 	This can be used to send signals through a common fx chain before sending it to the mixer.
@@ -340,11 +375,8 @@
 
 	unison{ |detune=0.1| this.prSetPbindParam(\detune, detune);}
 
-	// freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
-	// reverb {| room=0.86, damp=0.3 | ^this.freeverb(room, damp) }
-	reverb {| wet=0 | ^this.prSetPbindParam(\reverb, wet) }
+	freereverb {| room=0.86, damp=0.3 | ^{| in | (in*0.6) + FreeVerb.ar(in, this, room, damp)} }
 	gverb {| time, damp | ^{| in | HPF.ar(GVerb.ar(in, roomsize:this, revtime:time, damping:damp, inputbw:0.02, drylevel:0.7, earlyreflevel:0.7, taillevel:0.5), 100)}}
-	delay {| decay=0 | ^{| in | AllpassC.ar(in, 4, this, decay )}}
 	fbdelay {| fb=0.8 |
 		^{| in |
 			var local;
