@@ -142,8 +142,6 @@
 		^Ziva.proxyspace.at(key);
 	}
 
-	reverb { "alo".debug }
-
 	/// \brief	see `zyn`
 	z { |ch| ^this.zyn(ch); }
 

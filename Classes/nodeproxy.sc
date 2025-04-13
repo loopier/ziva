@@ -21,20 +21,24 @@
 		^symbol.interpret.asBinaryDigits(symbol.replace("0x","").size * 4);
 	}
 
+	prCreatePbind { |pairs|
+		var key = this.key;
+		var basePairs = [\scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, true, \finish, {|e| Ziva.eventToAnimatron(key, e)}];
+		this[0] = Pbind(*(basePairs ++ pairs));
+		this.reverb(0);
+	}
+
 	/// \brief	see `sound`
 	s { |snd| this.sound(snd);}
 
 	/// \brief	set the sound
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
-		var key = this.key;
-		var type = \note;
-		var instrument = \instrument;
 		if( Ziva.samples.includes(snd) ) {
-			type = \sample;
-			instrument = \sound;
+			this.prCreatePbind([\type, \sample, \sound, snd]);
+		} {
+			this.prCreatePbind([\type, \note, \instrument, snd]);
 		};
-		this[0] = Pbind(\type, type, instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, true, \finish, {|e| Ziva.eventToAnimatron(key, e)});
 	}
 
 	mono { |snd|
@@ -65,18 +69,7 @@
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		var key = this.key;
-		this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root),
-			\finish, {|e|
-				var zynsynth = "/part%".format(e[\chan]);
-				// zynsynth.debug("zyn");
-
-				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-					Ziva.animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-				};
-
-
-			}
-		);
+		this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 
@@ -233,6 +226,7 @@
 			this[index] = nil;
 		} {
 			this[index] = \filterIn -> (Ziva.fxDict[effect.asSymbol] ? effect);
+			this.drywet(0.5);
 		};
 	}
 
@@ -247,30 +241,33 @@
 		this.set((\wet++index).asSymbol, amt)
 	}
 
-	gain { |gain|
+	gain { |gain = 1|
 		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
 		var mixer = Ziva.proxyspace.at(\mixer);
 		mixer.set((\mix++index).asSymbol, gain);
 	}
 
-	/// \brief	set the amount	/// \brief	set the amount of reverb.
-	delay { |wet|
-		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
-		var amp = this.prGetPbindParam(\amp) * (1 - wet);
-		var dry = amp * (1 - wet);
-		Ziva.proxyspace[\delay][index] = \mix -> Ziva.proxyspace[this.key];
-		Ziva.proxyspace[\delay].set((\mix++index).asSymbol, wet);
-		this.amp = dry;
-	}
-
 	/// \brief	set the amount of reverb.
-	reverb { |wet|
+	reverb { |wet = 0.0|
 		var index = ("track\\d+").matchRegexp(this.key.asString).if { this.key.asString.findRegexp("\\d+")[0][1].asInteger };
 		var amp = this.prGetPbindParam(\amp) * (1 - wet);
 		var dry = amp * (1 - wet);
 		Ziva.proxyspace[\reverb][index] = \mix -> Ziva.proxyspace[this.key];
 		Ziva.proxyspace[\reverb].set((\mix++index).asSymbol, wet);
 		this.amp = dry;
+	}
+
+	fadein { |dur|
+		var fadekey = this.key++\fadein;
+		Ziva.proxyspace[fadekey] = {Line(0,1,dur,doneAction:2)};
+		this.prSetPbindParam(\gain, Ziva.proxyspace[fadekey]);
+	}
+
+	fadeout { |dur|
+		var fadekey = this.key++\fadeout;
+		var currentgain = this.prGetPbindParam(\gain);
+		Ziva.proxyspace[fadekey] = {Line(currentgain,0,dur,doneAction:2)};
+		this.gain(Ziva.proxyspace[fadekey]);
 	}
 
 	/// \brief	send output to destination

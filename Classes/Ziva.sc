@@ -88,19 +88,6 @@ Ziva {
 		};
 		Ziva.proxyspace.put(\reverb, { \in.ar(0!outputChannels) });
 		Ziva.proxyspace[\reverb][1000] = \filter -> {|in| FreeVerb.ar(in, \mix.kr(1.0), \room.kr(0.5), \damp.kr(0.5)) };
-		Ziva.proxyspace.put(\delay, { \in.ar(0!outputChannels) });
-		Ziva.proxyspace[\delay][1000] = \filter -> {| in |
-			var local;
-			// read feedback , add to source
-			local = LocalIn.ar(2) + in;
-			// delay sound
-			local = DelayN.ar(local, 4, \time.ar(Ziva.tempo * 0.75));
-			// reverse channels to give ping pong effect, apply decay factor
-			// LocalOut.ar(local.reverse * fb);
-			LocalOut.ar(local * \fb.ar(0.6));
-			local
-		};
-		Ziva.proxyspace[\reverb][999] = \mix -> Ziva.proxyspace[\delay];
 
 		Pdefn(\root, 0);
 
@@ -145,7 +132,6 @@ Ziva {
 			// add a limiter to the end of the chain (not realy the end, but its not
 			// likely there are hundreds of sources in the mixer Ndef)
 			Ziva.proxyspace.at(\mixer).play(numChannels: outputChannels);
-			Ziva.proxyspace.at(\delay).play;
 			Ziva.proxyspace.at(\reverb).play;
 
 			// Ndef(\main, {Limiter.ar(\in.ar(0!outputChannels, \level.kr(1), \dur.kr(1)))}).play;
