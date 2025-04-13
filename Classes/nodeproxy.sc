@@ -19,22 +19,13 @@
 	/// \param	snd:	can be either a synth or a sample
 	sound {|snd|
 		var key = this.key;
+		var type = \note;
+		var instrument = \instrument;
 		if( Ziva.samples.includes(snd) ) {
-			this[0] = Pbind(\type, \sample, \sound, snd, \scale, Pdefn(\scale), \root, Pdefn(\root),
-			\finish, {|e|
-				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-				}
-			});
-		} {
-			this[0] = Pbind(\type, \note, \instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root),
-			\finish, {|e|
-				if(e[\amp].class != Symbol || e[\degree].class != Symbol) {
-					Animatron.cmd("/% % % %", key, e[\amp], e[\degree], e[\dur]);
-				}
-			});
-			// this[0] = snd;
+			type = \sample;
+			instrument = \sound;
 		};
+		this[0] = Pbind(\type, type, instrument, snd, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
 	mono { |snd|
