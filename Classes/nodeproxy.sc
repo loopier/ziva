@@ -25,6 +25,9 @@
 		var key = this.key;
 		var basePairs = [\scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, true, \finish, {|e| Ziva.eventToAnimatron(key, e)}];
 		this[0] = Pbind(*(basePairs ++ pairs));
+		// \fxsend is set to 0 when muting and to 1 when unmuting
+		// this allows to mute track without killing the effects (best with delays)
+		this[99] = \filterIn -> {|in| in * \fxsend.kr(1)};
 		this.reverb(0);
 	}
 
@@ -78,6 +81,15 @@
 
 	animatron { |onOrOff = true|
 		this.prSetPbindParam(\animatron, onOrOff);
+	}
+
+	// see prCreatePbind docs.
+	mute {
+		this.set(\fxsend, 0);
+	}
+
+	unmute {
+		this.set(\fxsend, 1);
 	}
 
 	/// \brief	Disable gate on MIDI messages.

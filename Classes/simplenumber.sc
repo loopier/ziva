@@ -186,11 +186,11 @@
 
 	mute {
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key).pause;
+		Ziva.proxyspace.at(key).mute;
 	}
 
 	unmute {
 		var key = (\track++this).asSymbol;
-		Ziva.proxyspace.at(key).resume;
+		Ziva.proxyspace.at(key).unmute;
 	}
 }
