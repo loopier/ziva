@@ -58,7 +58,7 @@ SynthDef(\sine, {
 	Out.ar(out, Pan2.ar(sig * env, pan));
 }).add;
 
-SynthDef(\tri, {
+SynthDef(\trisaw, {
 	var out = \out.kr(0);
 	var pan = \pan.kr(0);
 	var amp = \amp.kr(1) * (-0.dbamp);
