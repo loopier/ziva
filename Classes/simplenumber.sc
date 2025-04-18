@@ -159,6 +159,16 @@
 		^Ziva.proxyspace.at(key).zyn(ch);
 	}
 
+	analog4 { |ch|
+		var key = (\track++this).asSymbol;
+		^Ziva.proxyspace.at(key).analog4(ch);
+	}
+
+	digitone { |ch|
+		var key = (\track++this).asSymbol;
+		^Ziva.proxyspace.at(key).digitone(ch);
+	}
+
 	/// \brief	connect to MIDI(0)
 	/// \param	ch:		channel number [0..15]
 	m { |ch| this.midi(ch) }

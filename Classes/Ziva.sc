@@ -45,6 +45,8 @@ Ziva {
 	classvar <> animatron;
 	classvar <> zynaddsubfxPort = 56120;
 	classvar <> zynaddsubfxMIDIOut;
+	classvar <> analog4MIDIOut;
+	classvar <> digitoneMIDIOut;
 
 	// *new { |sound|
 	// 	^super.new.synth(sound);
@@ -142,7 +144,7 @@ Ziva {
 	// boot zynaddsubfx
 	*zyn {
 		var processId = "zynaddsubfx -a -b 1024 -P %".format(this.zynaddsubfxPort).unixCmd;
-		MIDIClient.init;
+		if(MIDIClinet.initialized.not) { MIDIClient.init };
 		Tdef(\start_zyn, {
 			inf.do{
 				MIDIClient.destinations.do{|endpoint, i|
@@ -151,6 +153,42 @@ Ziva {
 						// this.zynaddsubfxMIDIOut = MIDIOut.newByName("ZynAddSubFx","ZynAddSubFx")
 						"Connected MIDI".debug(endpoint.name);
 						Tdef(\start_zyn).stop;
+					};
+				};
+				0.1.wait;
+			};
+		}).play;
+	}
+
+
+	*initAnalog4 { Ziva.initElektron(
+		name: "analog4",
+		midiout: MIDIEndPoint("Elektron Analog Four MKII", "Elektron Analog Four MKII MIDI ")
+	)}
+	*initDigitone { Ziva.initElektron(
+		name: "digitone",
+		midiout: MIDIEndPoint("Elektron Digitone", "Elektron Digitone MIDI 1")
+	)}
+
+	*initElektron { |name, midiout| // Analog4, Digitone
+		var task = "%_task".format(name).asSymbol;
+
+		if(MIDIClient.initialized.not) { MIDIClient.init };
+		if(Event.partialEvents.playerEvent.eventTypes.includesKey(\elektron).not) { ElektronEventTypes.new };
+
+		Tdef(task, {
+			inf.do{|i|
+				MIDIClient.destinations.do{|endpoint, i|
+					if( endpoint.name == midiout.name ) {
+						if(endpoint.name.contains("Digitone")) {
+							Ziva.digitoneMIDIOut = MIDIOut.newByName(midiout.device, midiout.name);
+						};
+						if(endpoint.name.contains("Analog")) {
+							Ziva.analog4MIDIOut = MIDIOut.newByName(midiout.device, midiout.name);
+						};
+						// "Connected MIDI".debug(endpoint.name);
+						midiout.debug("Connected MIDI");
+						Tdef(task).stop;
 					};
 				};
 				0.1.wait;

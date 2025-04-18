@@ -75,6 +75,16 @@
 		this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
 	}
 
+	elektron { |midiout, ch|
+		var key = this.key;
+		ch = ch - 1; // comply with MIDI standards
+		ch.debug("% ch:".format(key));
+		this[0] = Pbind(\type, \elektron, \midiout, midiout, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+	}
+
+	analog4 { |ch| this.elektron(Ziva.analog4MIDIOut, ch) }
+	digitone { |ch| this.elektron(Ziva.digitoneMIDIOut, ch) }
+
 
 	/// \brief 	send messages to animatron
 	a { |onOrOff = true| this.animatron(onOrOff) }
