@@ -57,7 +57,8 @@
 	m { |ch| this.midi(ch) }
 
 	midi {|ch|
-		this[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		// this[0] = Pbind(\type, \midi, \midiout, MIDIOut(0), \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this.prCreatePbind([\type, \midi, \midiout, MIDIOut(0), \chan, ch]);
 	}
 
 	midiout { |midiout| this.prSetPbindParam(\midiout, MIDIOut(midiout)) }
@@ -72,14 +73,16 @@
 	/// \param	ch:		MIDI channel.
 	zyn { |ch|
 		var key = this.key;
-		this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		// this[0] = Pbind(\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this.prCreatePbind([\type, \zynaddsubfx, \midiout, Ziva.zynaddsubfxMIDIOut, \chan, ch]);
 	}
 
 	elektron { |midiout, ch|
 		var key = this.key;
 		ch = ch - 1; // comply with MIDI standards
 		ch.debug("% ch:".format(key));
-		this[0] = Pbind(\type, \elektron, \midiout, midiout, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		// this[0] = Pbind(\type, \elektron, \midiout, midiout, \chan, ch, \scale, Pdefn(\scale), \root, Pdefn(\root));
+		this.prCreatePbind([\type, \elektron, \midiout, midiout, \chan, ch]);
 	}
 
 	analog4 { |ch| this.elektron(Ziva.analog4MIDIOut, ch) }
