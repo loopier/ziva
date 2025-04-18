@@ -762,6 +762,17 @@ Ziva {
 	*tempo_ { |tempo| Ziva.clock.tempo = tempo}
 	*bpm { ^(Ziva.clock.tempo * 60) }
 	*bpm_ { |bpm| Ziva.clock.tempo = bpm / 60;}
+	*bpmTo {|newBpm|
+		Tdef(\bpm, {
+			var diff = newBpm - Ziva.bpm;
+			var increment = 4;
+			(diff.abs / increment).do{|i|
+				Ziva.bpm = Ziva.bpm + (increment * diff.sign);
+				Ziva.tempo.wait;
+				Ziva.bpm.debug("bpm");
+			};
+		}).play
+	}
 
 	*scale { ^Pdefn(\scale).source.name }
 	*scale_ { | scale | Pdefn(\scale, Scale.at(scale)) }
