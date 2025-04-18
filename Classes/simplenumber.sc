@@ -128,6 +128,13 @@
 }
 
 + Integer {
+	/// WARNING: it overrides Object.clear
+	clear {
+		var key = (\track++this).asSymbol;
+		Ziva.proxyspace.at(key).clear;
+		^super.clear;
+	}
+
 	/// \brief	see `sound`
 	s { |snd| ^this.sound(snd) }
 
