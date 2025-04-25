@@ -838,7 +838,10 @@ Ziva {
 		dict[\pan] = event.pan ? 0;
 		dict[\pan] = event.pan ? 0;
 		dict.keysValuesDo{ |key,val|
-			if(val != \r) {
+			if(val.isArray) {
+				Ziva.animatron.cmd("/%/% %", track, key, val.join(" "));
+			};
+			if(val != \r && val.isArray.not) {
 				Ziva.animatron.cmd("/%/% %", track, key, val);
 			};
 		};
