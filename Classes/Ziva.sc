@@ -94,7 +94,7 @@ Ziva {
 		Pdefn(\root, 0);
 
 		MIDIClient.init;
-		MIDIIn.connectAll;
+		// MIDIIn.connectAll;
 		// this.initMidifighter;
 
 		this.server.waitForBoot{
