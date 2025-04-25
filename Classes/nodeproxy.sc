@@ -23,7 +23,7 @@
 
 	prCreatePbind { |pairs|
 		var key = this.key;
-		var basePairs = [\scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, true, \finish, {|e| Ziva.eventToAnimatron(key, e)}];
+		var basePairs = [\scale, Pdefn(\scale), \root, Pdefn(\root), \animatron, false, \finish, {|e| Ziva.eventToAnimatron(key, e)}];
 		this[0] = Pbind(*(basePairs ++ pairs));
 		// \fxsend is set to 0 when muting and to 1 when unmuting
 		// this allows to mute track without killing the effects (best with delays)
