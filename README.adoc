@@ -26,7 +26,7 @@ Ziva.listSamples;
 
 // list synth sounds
 Ziva.synths;
-// get list of controls of a synth
+// get list of controls (parameters) of a synth
 Ziva.controls(\pulse);
 
 // create track #1 starting the
@@ -37,9 +37,9 @@ Ziva.controls(\pulse);
 // unmute the track
 1.unmute;
 
-// add parameters and unmute (removing the forward slash)
-// arrays provide chords
-// r: creates a rhythm from a hex with a leading backslash
+// add parameters
+// arrays result in chords
+// r: creates a rhythm from a hexadecimal string with a leading backslash
 // sus: and dec: are ADSR values (there's also atk: and rel:)
 1 s: \trisaw octave: 3 degree: [0,2,4] dur: (1/2) sus: 0 dec: 0.4 r: \fa;
 
@@ -49,7 +49,7 @@ Ziva.controls(\pulse);
 // remove the previous effect
 1 s: \trisaw octave: 3 degree: [0,2,4] sus: 0 fx1: nil;
 
-// reverb amount is included
+// reverb amount (same reverb for all tracks)
 1 s: \trisaw sus: 0 reverb: 1;
 
 // sequence notes in the scale
