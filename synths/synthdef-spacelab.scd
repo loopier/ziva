@@ -69,7 +69,8 @@ SynthDef(\kwstring, { | out=0 gate=1 freq=1000 amp=1 atk=0.2 sus=1 dec=0.5|
 SynthDef(\kwbass, { | out=0 gate=1 freq amp=1|
 	var aEnv, fEnv, osc, flt;
 	aEnv = EnvGen.kr(Env.asr(0, 1, 1), gate, doneAction: 2);
-	fEnv = EnvGen.kr(Env.perc(0, 3), levelScale: 6000);
+	// fEnv = EnvGen.kr(Env.perc(\atk.kr(0), \dec.kr(3)), levelScale: 6000);
+	fEnv = EnvGen.kr(Env.adsr(\atk.kr(0), \dec.kr(0.3), \sus.kr(1), \rel.kr(3)), levelScale: 6000);
 	osc = Mix([Saw.ar(freq * [1, 1.005]), Pulse.ar(freq / 2, 0.5)]);
 	flt = LPF.ar(osc, fEnv + 100, aEnv);
 	Out.ar(out, flt * amp);
