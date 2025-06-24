@@ -443,4 +443,7 @@
 	}
 	// // symetric fold
 	wavefold { |post=1| ^{| in | in.fold2(this.max(0.01)) * (1/this.max(0.01))  * post }}
+
+	left { |amt=1| this.pan(amt.neg) }
+	right { |amt=1| this.pan(amt) }
 }
