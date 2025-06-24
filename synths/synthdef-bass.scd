@@ -91,4 +91,5 @@ SynthDef(\moogbass, {
 	sig = LPF.ar(sig, filterEnv.linexp(0,1,5,15000));
     Out.ar(out, Pan2.ar(sig * env * amp, pan));
 }).add;
+
 )
