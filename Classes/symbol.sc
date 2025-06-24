@@ -9,6 +9,8 @@
 		^this.asString.asHexIfPossible;
 	}
 
+	chord { | inversion=0 | ^Ziva.chord(this, inversion) }
+
 	// doesNotUnderstand{ |selector ... args|
 	// 	var key = (\track++this).asSymbol;
 	// 	var isNdef = false;

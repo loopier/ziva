@@ -846,4 +846,17 @@ Ziva {
 			};
 		};
 	}
+
+	*chord { | chord=\triad, inversion=0 |
+		var chords = (
+			\triad: [0,2,4],
+			\quatriad: [0,2,5,6],
+			\sus2: [0,1,4],
+			\sus4: [0,3,4],
+			\sixth: [0,2,4,5],
+			\aug: [0,2,4s],
+		);
+		var octaves = (7!inversion).debug("7s").add(0).clipExtend(chords[chord].size);
+		^(chords[chord] + octaves);
+	}
 }
