@@ -43,6 +43,7 @@ Ziva {
 	classvar <> proxyspace;
 
 	classvar <> animatron;
+	classvar <> sendToAnimatron;
 	classvar <> zynaddsubfxPort = 56120;
 	classvar <> zynaddsubfxMIDIOut;
 	classvar <> analog4MIDIOut;
@@ -807,6 +808,7 @@ Ziva {
 	*initAnimatron {
 		Ziva.animatron = Animatron.boot;
 		Ziva.initAnimatronOscListener;
+		Ziva.sendToAnimatron = false;
 	}
 
 	// Control Ziva from Animatron.
@@ -819,7 +821,7 @@ Ziva {
 
 	*eventToAnimatron { |track, event|
 		var dict = event.asDict;
-		if(event[\animatron] == false) {^nil};
+		if(event[\animatron] == false && Ziva.sendToAnimatron == false) {^nil};
 		dict.removeAt(\scale);
 		dict.removeAt(\finish);
 		dict.removeAt(\i_out);
