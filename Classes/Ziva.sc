@@ -42,6 +42,8 @@ Ziva {
 
 	classvar <> proxyspace;
 
+	classvar <> midinotes;
+
 	classvar <> animatron;
 	classvar <> sendToAnimatron;
 	classvar <> zynaddsubfxPort = 56120;
@@ -95,7 +97,8 @@ Ziva {
 		Pdefn(\root, 0);
 
 		MIDIClient.init;
-		// MIDIIn.connectAll;
+		MIDIIn.connectAll;
+		Ziva.midinotes = Dictionary.new;
 		// this.initMidifighter;
 
 		this.server.waitForBoot{
@@ -857,8 +860,24 @@ Ziva {
 			\sus4: [0,3,4],
 			\sixth: [0,2,4,5],
 			\aug: [0,2,4s],
+			\power: [0,4,7],
 		);
 		var octaves = (7!inversion).debug("7s").add(0).clipExtend(chords[chord].size);
-		^(chords[chord] + octaves);
+		^(chords[chord] + octaves).debug("chord");
 	}
+
+	*midiInstrument { |name, sound=\trisaw, chan=0 ... args|
+		Ziva.midinotes[name] = 0!127;
+		MIDIdef.noteOn("%_noteon".format(name).asSymbol, {|vel,num|
+			var freq = num.midicps;
+			var amp = vel.linexp(0,127, 0.1,1);
+			Ziva.midinotes[name][num] = Synth(sound, [freq:freq, amp:amp, gate: 1] ++ args.asPairs);
+		}, chan: 0);
+
+		MIDIdef.noteOff("%_noteoff".format(name).asSymbol, {|vel,num|
+			Ziva.midinotes[name][num].free;
+		}, chan: 0);
+	}
+
+	*clearMidiInstrument { |name| Ziva.midinotes.remove(name) }
 }
